@@ -140,8 +140,6 @@ int main(void)
 			floor.init();
 			//portal->init();
 			//player->init();
-			camera.processKeyInput(window);
-			glUseProgram(shadersID);
 			break;
 
 		case GAMEPLAY:

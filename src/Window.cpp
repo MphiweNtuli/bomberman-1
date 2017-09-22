@@ -96,7 +96,6 @@ void Window::initiateSystems2()
 
     //std::cout << "window no full" << std::endl;
     _window = glfwCreateWindow(800, 600, "Bomberman", NULL, NULL);
-
     if (!_window)
     {
         terminateSystems();
