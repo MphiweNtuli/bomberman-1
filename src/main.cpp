@@ -138,7 +138,10 @@ int main(void)
 				destructible.draw();
 				destructible01.draw();
                 if (bomb->get_bombStatus() != 0)
+                {
                 	bomb->display();
+                    //explosion function here
+                }
                // glUseProgram(player->getProgramId());
 				//camera.cameraFunction(player->getProgramId());
 				player->init();
