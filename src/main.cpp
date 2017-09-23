@@ -11,11 +11,13 @@
 #include "Destructible.hpp"
 #include "camera.hpp"
 #include "Gamestate.hpp"
+#include "Bomb.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
+Bomb *bomb;
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -35,7 +37,10 @@ static void player_callback(GLFWwindow* window, int key, int scancode, int actio
         player->moveRight();
     if (key == GLFW_KEY_SPACE)
     {
-        std::cout << "Call the Bomb Class \n";
+        bomb->set_x(player->getXPos());
+        bomb->set_y(player->getYPos());
+        bomb->drop();
+        std::cout << "Space pressed\n";
     }
 }
 
@@ -76,6 +81,7 @@ int main(void)
 
 	graphics = new Graphics();
 	player = new Player();
+    bomb = new Bomb(3, 0, 0); // countdown, radius, x, y
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
@@ -107,7 +113,7 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
@@ -130,6 +136,23 @@ int main(void)
 				staticWall.draw();
 				portal.draw();
 				destructible.draw();
+                glUseProgram(bomb->getProgramId());
+                camera.cameraFunction(bomb->getProgramId());
+                if (bomb->get_bombStatus() != 0)
+                {
+                    bomb->transform();
+                    bomb->display();
+                    //std::cout << "bomb display in main" << std::endl;
+                    //explosion function here
+                }
+                if (bomb->get_timer() != 0)
+                {
+                    bomb->transform();
+                    bomb->displayExplosion();
+                    //std::cout << "bomb display in main" << std::endl;
+                    //explosion function here
+                }
+                
                 
                 glUseProgram(player->getProgramId());
                 camera.cameraFunction(player->getProgramId());
