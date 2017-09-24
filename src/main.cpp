@@ -16,11 +16,11 @@ GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
-Bomb *bomb;
+Bomb *bomb; 
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); 
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
 //move player callback
@@ -34,13 +34,14 @@ static void player_callback(GLFWwindow* window, int key, int scancode, int actio
     //     player->moveLeft();
     // if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
     //     player->moveRight();
-     if (key == GLFW_KEY_SPACE)
-     {
+    if (key == GLFW_KEY_SPACE)
+    {
         bomb->set_x(player->get_xPos());
 		bomb->set_y(player->get_yPos());
+		bomb->updateLocation();
 		bomb->drop();
 		std::cout << "Space pressed\n";
-     }
+     }    
 }
 
 //Key Checking input        :Cradebe
@@ -79,7 +80,7 @@ int main(void)
 
 	graphics = new Graphics();
 	// player = new Player();
-	bomb = new Bomb(3, 0, 0); // countdown, radius, x, y
+	bomb = new Bomb(3, 0, 0);
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
@@ -113,7 +114,7 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		bomb->explode();
+
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
@@ -137,11 +138,9 @@ int main(void)
 				portal.draw();
 				destructible.draw();
 				destructible01.draw();
-                if (bomb->get_bombStatus() != 0)
-                {
+				if (bomb->get_bombStatus() != 0)
                 	bomb->display();
-                    //explosion function here
-                }
+                
                // glUseProgram(player->getProgramId());
 				//camera.cameraFunction(player->getProgramId());
 				player->init();

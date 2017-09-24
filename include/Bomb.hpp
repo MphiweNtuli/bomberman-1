@@ -41,6 +41,7 @@ class Bomb
 		Bomb(void);
 		~Bomb(void);
 		void display(void);
+		void updateLocation(void);
 
 		int get_countdown(void);
 		int get_radius(void);

@@ -50,10 +50,12 @@ glm::mat4	Camera::look(void) const
 
 void    Camera::perspectiveView(GLuint shadersID)
 {
-    //create transformations
     _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
-    _model = glm::rotate(_model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    _model = glm::rotate(_model, glm::radians(-40.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    //create transformations
+    // _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
+    // _model = glm::rotate(_model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    // _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     //_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     //_model = cameraRotate(_model);
     
@@ -77,12 +79,12 @@ glm::mat4 Camera::cameraRotate(glm::mat4 model)
 {
     float inc = 10.0f;
     _model = model;
-    /*if (glfwGetKey(_window, GLFW_KEY_A) == GLFW_PRESS)
+    if (glfwGetKey(_window, GLFW_KEY_A) == GLFW_PRESS)
         _model = glm::rotate(_model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     if (glfwGetKey(_window, GLFW_KEY_S) == GLFW_PRESS)
          _model = glm::rotate(_model, glm::radians(-70.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
-        _model = glm::rotate(_model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));*/
+        _model = glm::rotate(_model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     return _model;
 }
 

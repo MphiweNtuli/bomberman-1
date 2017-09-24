@@ -5,11 +5,13 @@
 #include "camera.hpp"
 #include "loader.hpp"
 
-#define PLAYER 0.03f
-#define WALL 0.1f
+#define WALL 0.08f
+#define PLAYER 0.1f
+#define OFS_X 0.017f
+#define OFS_Y -0.02f
 
 class Player
-{
+{ 
 public:
 	Player(std::list<Wall> walls);
 	~Player();
@@ -24,7 +26,6 @@ public:
 	GLfloat get_xPos(void);
 	GLfloat get_yPos(void);
 
-
 private:
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId;
@@ -37,7 +38,7 @@ private:
 	std::vector<glm::vec2> _uvbuffer;
 	std::vector<glm::vec3> normals;
 	int x;
-	int y;
+	int y; 
 	std::list<Wall> walls;
 };
 

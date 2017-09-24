@@ -22,6 +22,5 @@
 #include "controls.hpp"
 #include <list>
 #include "Wall.hpp"
-#include "Bomb.hpp"
 
 #endif
