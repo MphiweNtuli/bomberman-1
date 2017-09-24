@@ -82,6 +82,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
 	Sound *sound;
+    int soundVal;
 	GameState gs;	
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
@@ -114,7 +115,7 @@ int main(void)
 
 	gs.loadPlayerState(player);
 	graphics->initGlArrays();
-	mainMenu = new MainMenu(window, graphics);
+	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
 	wall.init();
 	staticWall.init();
@@ -126,7 +127,11 @@ int main(void)
 	destructible.init1();
     floor.init();
 	player->init();
-	Mix_VolumeMusic(10);
+	//Mix_VolumeMusic(10);
+    
+    //set the initial sound value
+    soundVal = mainMenu->getSoundVal();
+    Mix_VolumeMusic(soundVal);
     
     //=========================================================================================
     //build and compile our shader program
@@ -139,6 +144,13 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //only reset the sound setting if the value is different
+        if (soundVal != mainMenu->getSoundVal())
+        {
+            std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+            soundVal = mainMenu->getSoundVal();
+            Mix_VolumeMusic(soundVal);
+        }
         bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
@@ -146,6 +158,9 @@ int main(void)
 			case MAINMENU:
 				sound->playMusicForvever(MUSIC_MENU1);
 				mainMenu->LoadMainMenuImage();
+                myWindow = mainMenu->getGameWindow();
+                window = myWindow.getWindow();
+                glfwSetKeyCallback(window, key_callback);
 				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
