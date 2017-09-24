@@ -65,9 +65,20 @@ void initClasses(WindowKeyEvents &keyEvents, Sound *sound)
 	glfwSetKeyCallback(window, key_callback);
 }
 
-void initEntities()
+void initEntities(Camera &cam, Wall &wall, StaticWall &staticwall, Destructible &destructible, Floor &floor)
 {
-
+	Camera camera(cameraPos, cameraFront, cameraUp);
+	cam = camera;
+	graphics->initGlArrays();
+	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
+	//mainMenu = new MainMenu(window, myWindow, graphics);
+	//mainMenu->initMenuImage();
+	wall.init();
+	staticWall.init();
+	destructible.init();
+	floor.init();
+	portal->init();
+	player->init();
 }
 
 int main(void)
@@ -98,18 +109,12 @@ int main(void)
 	StaticWall staticWall;
 	Destructible destructible;
 	Floor floor;
-	Camera camera(cameraPos, cameraFront, cameraUp);
-
+	Camera camera;
+	initEntities(cam, wall, staticwall, destructible, floor)
 	graphics->initGlArrays();
 	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
-	wall.init();
-	staticWall.init();
-	destructible.init();
-	floor.init();
-	portal->init();
-	player->init();
 
 	//=========================================================================================
 	//build and compile our shader program
@@ -140,16 +145,15 @@ int main(void)
 			case MAINMENU:
 				sound->playMusicForvever(MUSIC_MENU1);
 				mainMenu->LoadMainMenuImage();
+
+				//use the new switched game window for displaying
 				myWindow = mainMenu->getGameWindow();
-				window = myWindow.getWindow();
-				keyEvents->keyEventsWrapper(window, sound, graphics);
-				glfwSetKeyCallback(window, key_callback);
-				wall.init();
-				staticWall.init();
-				destructible.init();
-				floor.init();
-				//portal->init();
-				//player->init();
+
+				//reinitialize all game classes when display mode is switched.
+				initClasses(keyEvents, sound);
+
+				//reinitialize all the game entities when display mode is switched.
+				initEntities(cam, wall, staticwall, destructible, floor)
 				break;
 
 			case GAMEPLAY:
