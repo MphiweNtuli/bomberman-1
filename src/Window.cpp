@@ -27,7 +27,7 @@ Window::~Window()
 void Window::runGame()
 {
 	// _sound->playMusicForvever(MUSIC_BEAR);
-	initiateSystems();
+	initiateSystemsFullScreen();
 }
 
 //Initiates Screen  :Cradebe
@@ -123,13 +123,13 @@ void Window::changeWindowSize()
 	//glfwGetWindowSize(_window, &width, &height);
 	if (_fullWindow)
 	{
-		initiateSystems2();
+		initiateSystemsWindowed();
 		glfwDestroyWindow(_fullWindow);        
 		_fullWindow = nullptr;
 	}
 	else if (_window)
 	{
-		initiateSystems();
+		initiateSystemsFullScreen();
 		glfwDestroyWindow(_window);        
 		_window = nullptr;
 	}
