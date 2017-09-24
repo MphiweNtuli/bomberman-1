@@ -13,6 +13,7 @@
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
+#include "PowerUp.hpp"
 
 
 GLFWwindow* window;
@@ -22,6 +23,7 @@ Player *player;
 Bomb *bomb; 
 Health health;
 Timer timer;
+PowerUp power;
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -106,7 +108,7 @@ int main(void)
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
-	destructible.init1();
+	//destructible.init1();
 	destructible01.init1();
     floor.init();
 	//player->init();
@@ -125,6 +127,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
+
 		switch (graphics->getDrawMode())
 		{
 			case MAINMENU:
@@ -145,8 +148,25 @@ int main(void)
 				wall.draw();
 				staticWall.draw();
 				portal.draw();
-				health.draw();
-				timer.draw();
+				
+				if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
+				 			&& (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284)) 
+					power.TimerDisplay(0);	
+				else
+				{
+					if (power.TimerDisplay(1) == 1)
+						timer.draw();
+				}
+
+				if ((player->get_yPos() < -0.5592 && player->get_yPos() > -0.7212)
+							&& (player->get_xPos() > -0.9312 && player->get_xPos() < -0.7728)) 
+					power.HealthDisplay(0);	
+				else
+				{
+					if (power.HealthDisplay(1) == 1)
+						health.draw();
+				}
+
 				destructible.draw();
 				destructible01.draw();
 				if (bomb->get_bombStatus() != 0)
@@ -157,6 +177,10 @@ int main(void)
 				//camera.cameraFunction(player->getProgramId());
 				player->init();
 				player->player_callback(window);
+				std::cout << "Y_POZ ";
+				std::cout << player->get_yPos()  << std::endl;
+				std::cout << "X_POZ ";
+				std::cout << player->get_xPos()  << std::endl;
 
 			default:
 				break;
