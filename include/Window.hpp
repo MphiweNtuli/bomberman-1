@@ -17,8 +17,8 @@ public:
     ~Window();
 
     void runGame();
-    void initiateSystems();
-    void initiateSystems2();    
+    void initiateSystemsFullScreen();
+    void initiateSystemsWindowed();    
     void terminateSystems();
     void setGraphics(Graphics g);
     void changeWindowSize();
