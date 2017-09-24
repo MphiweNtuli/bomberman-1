@@ -58,7 +58,6 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 
 void initClasses(WindowKeyEvents &keyEvents, Sound *sound)
 {
-	myWindow.runGame();
 	sound = myWindow.getSound();
 	window = myWindow.getEvents();
 	keyEvents = myWindow.getEvents();
@@ -87,6 +86,7 @@ int main(void)
 	int soundVal;
 	WindowKeyEvents *keyEvents;
 
+	myWindow.runGame();
 	//initialise the required classes
 	initClasses(keyEvents, sound);
 
