@@ -16,6 +16,7 @@ MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Portal *portal;
+Window *myWindow;
 
 // camera
 glm::vec3 cameraPos = glm::vec3(-1.0f, 2.0f, 3.0f);
@@ -55,19 +56,28 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
+void initClasses(WindowKeyEvents &keyEvents, Sound *sound)
+{
+	myWindow.runGame();
+	sound = myWindow.getSound();
+	window = myWindow.getEvents();
+	keyEvents = myWindow.getEvents();
+	glfwSetKeyCallback(window, key_callback);
+}
+
+void initEntities()
+{
+
+}
+
 int main(void)
 {
 	Sound *sound;
 	int soundVal;
-	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
-	myWindow.runGame();
-	sound = myWindow.getSound();
-	window = myWindow.getWindow();
-	keyEvents = myWindow.getEvents();
-
-	glfwSetKeyCallback(window, key_callback);
+	//initialise the required classes
+	initClasses(keyEvents, sound);
 
 	// Initialize GLEW
 	//reuben to revisit to create a function
@@ -127,47 +137,47 @@ int main(void)
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
-		case MAINMENU:
-			sound->playMusicForvever(MUSIC_MENU1);
-			mainMenu->LoadMainMenuImage();
-			myWindow = mainMenu->getGameWindow();
-			window = myWindow.getWindow();
-			keyEvents->keyEventsWrapper(window, sound, graphics);
-			glfwSetKeyCallback(window, key_callback);
-			wall.init();
-			staticWall.init();
-			destructible.init();
-			floor.init();
-			//portal->init();
-			//player->init();
-			break;
+			case MAINMENU:
+				sound->playMusicForvever(MUSIC_MENU1);
+				mainMenu->LoadMainMenuImage();
+				myWindow = mainMenu->getGameWindow();
+				window = myWindow.getWindow();
+				keyEvents->keyEventsWrapper(window, sound, graphics);
+				glfwSetKeyCallback(window, key_callback);
+				wall.init();
+				staticWall.init();
+				destructible.init();
+				floor.init();
+				//portal->init();
+				//player->init();
+				break;
 
-		case GAMEPLAY:
-			sound->playMusicForvever(MUSIC_BACK);
-			// Use our shader
-			//glUseProgram(programID);
-			//------------------------------
-			camera.processKeyInput(window);
-			glUseProgram(shadersID);
-			camera.cameraTimeLogic();
-			camera.cameraFunction(shadersID);
-			floor.draw();
-			//---------------------------------
-			wall.draw();
-			staticWall.draw();
-			destructible.draw();
-		//graphics->drawElements();
+			case GAMEPLAY:
+				sound->playMusicForvever(MUSIC_BACK);
+				// Use our shader
+				//glUseProgram(programID);
+				//------------------------------
+				camera.processKeyInput(window);
+				glUseProgram(shadersID);
+				camera.cameraTimeLogic();
+				camera.cameraFunction(shadersID);
+				floor.draw();
+				//---------------------------------
+				wall.draw();
+				staticWall.draw();
+				destructible.draw();
+				//graphics->drawElements();
 
-		//player transformations
-		//player->transform();
-		//draw player
-		//player->draw();
+				//player transformations
+				//player->transform();
+				//draw player
+				//player->draw();
 
-		//Portal trans and draw
-		//	portal->transform();
-		//	portal->draw();
-		default:
-			break;
+				//Portal trans and draw
+				//	portal->transform();
+				//	portal->draw();
+			default:
+				break;
 		}
 
 		// Swap buffers
@@ -176,7 +186,7 @@ int main(void)
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0);
+			glfwWindowShouldClose(window) == 0);
 
 	// Cleanup VBO
 	delete graphics;
