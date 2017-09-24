@@ -10,11 +10,28 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
+#include "Bomb.hpp"
+#include "health.hpp"
+#include "timer.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
+Bomb *bomb;
+Health health;
+Timer timer;
+
+bool clockTimer = false;
+
+static bool timeout(int seconds)
+{
+    static int time = glfwGetTime();
+    
+    if (glfwGetTime() - time >= seconds)
+        return (true);
+    return (false);
+}
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -36,6 +53,14 @@ static void player_callback(GLFWwindow* window, int key, int scancode, int actio
     // {
     //     std::cout << "Call the Bomb Class \n";
     // }
+    if (key == GLFW_KEY_SPACE)
+    {
+        bomb->set_x(player->get_xPos());
+        bomb->set_y(player->get_yPos());
+        bomb->updateLocation();
+        bomb->drop();
+        std::cout << "Space pressed\n";
+    }
 }
 
 //Key Checking input        :Cradebe
@@ -74,6 +99,8 @@ int main(void)
 
 	graphics = new Graphics();
 	// player = new Player();
+    bomb = new Bomb(3, 0, 0);
+    //health = new Health();
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
@@ -87,6 +114,8 @@ int main(void)
 	mainMenu = new MainMenu(window, graphics);
 	mainMenu->initMenuImage();
 	wall.init();
+    health.init();
+    timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
@@ -108,7 +137,7 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+        bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
@@ -130,8 +159,17 @@ int main(void)
 				wall.draw();
 				staticWall.draw();
 				portal.draw();
+                health.draw();
+                timer.draw();
 				destructible.draw();
 				destructible01.draw();
+                
+                if (timeout(10) == true)
+                    graphics->setDrawMode(MAINMENU);
+                if (bomb->get_bombStatus() != 0)
+                    bomb->display();
+                // health->display();
+  
                 
                // glUseProgram(player->getProgramId());
 				//camera.cameraFunction(player->getProgramId());

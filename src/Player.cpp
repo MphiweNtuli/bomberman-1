@@ -257,3 +257,13 @@ void Player::draw()
 	glUseProgram(texture_programID);
 	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() );
 }
+
+GLfloat Player::get_xPos(void)
+{
+    return this->xPos;
+}
+
+GLfloat Player::get_yPos(void)
+{
+    return this->yPos;
+}
