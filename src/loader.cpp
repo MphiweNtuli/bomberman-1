@@ -31,7 +31,7 @@ bool loadOBJ(
 		return false;
 	}
 
-	while( 1 )
+	while( 1 ) 
 	{
 
 		char lineHeader[328];

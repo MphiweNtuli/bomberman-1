@@ -2,7 +2,6 @@
 
 Bomb::Bomb(int radius, GLfloat x, GLfloat y)
 {
-	std::cout << "top of constructer \n";
 	this->countdown = 3;
 	this->radius = radius;
 	this->x = x;
