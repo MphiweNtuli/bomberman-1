@@ -16,6 +16,7 @@
 #include "PowerUp.hpp"
 
 
+
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
@@ -24,6 +25,17 @@ Bomb *bomb;
 Health health;
 Timer timer;
 PowerUp power;
+
+bool clockTimer = false;
+
+static bool timeout(int seconds)
+{
+	static int time = glfwGetTime();
+	
+	if (glfwGetTime() - time >= seconds)
+		return (true);
+	return (false);
+}
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -108,7 +120,7 @@ int main(void)
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
-	//destructible.init1();
+	destructible.init1();
 	destructible01.init1();
     floor.init();
 	//player->init();
@@ -177,11 +189,6 @@ int main(void)
 				//camera.cameraFunction(player->getProgramId());
 				player->init();
 				player->player_callback(window);
-				std::cout << "Y_POZ ";
-				std::cout << player->get_yPos()  << std::endl;
-				std::cout << "X_POZ ";
-				std::cout << player->get_xPos()  << std::endl;
-
 			default:
 				break;
 		}
