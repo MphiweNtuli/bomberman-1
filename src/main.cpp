@@ -12,12 +12,14 @@
 #include "camera.hpp"
 #include "Gamestate.hpp"
 #include "Bomb.hpp"
+#include "Maze.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Bomb *bomb;
+Maze *maze;
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -28,13 +30,25 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 static void player_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
-        player->moveDown();
+    {
+        if (maze->canPlayerMoveDown())
+            player->moveDown();
+    }
     if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
-        player->moveUp();
+    {
+        if (maze->canPlayerMoveUp())
+            player->moveUp();
+    }
     if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-        player->moveLeft();
+    {
+        if (maze->canPlayerMoveLeft())
+            player->moveLeft();
+    }
     if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-        player->moveRight();
+    {
+        if (maze->canPlayerMoveRight())
+            player->moveRight();
+    }
     if (key == GLFW_KEY_SPACE)
     {
         bomb->set_x(player->getXPos());
@@ -82,6 +96,7 @@ int main(void)
 	graphics = new Graphics();
 	player = new Player();
     bomb = new Bomb(3, 0, 0); // countdown, radius, x, y
+    maze = new Maze(player);
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
@@ -91,11 +106,12 @@ int main(void)
 
 	gs.loadPlayerState(player);
 	graphics->initGlArrays();
-	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
 	mainMenu = new MainMenu(window, graphics);
 	mainMenu->initMenuImage();
 	wall.init();
 	staticWall.init();
+    maze->setWalls(staticWall.getMaze().getWalls());
+    //maze->addDestructibles(destructible.getMaze().getWalls());
 	portal.init();
 	destructible.init1();
     floor.init();
@@ -140,14 +156,14 @@ int main(void)
                 camera.cameraFunction(bomb->getProgramId());
                 if (bomb->get_bombStatus() != 0)
                 {
-                    bomb->transform();
+                    bomb->transformBomb();
                     bomb->display();
                     //std::cout << "bomb display in main" << std::endl;
                     //explosion function here
                 }
                 if (bomb->get_timer() != 0)
                 {
-                    bomb->transform();
+                    bomb->transformExplosion();
                     bomb->displayExplosion();
                     //std::cout << "bomb display in main" << std::endl;
                     //explosion function here

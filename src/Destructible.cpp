@@ -23,11 +23,6 @@ Destructible::~Destructible()
 void Destructible::init1()
 {
     Texture texture("crate.png", &destructibleTexture);
-    
-    GLfloat vertices[STATIC_WALLS][180];
-    GLfloat xLeft = -0.7f;
-    GLfloat xRight = -0.6f;
-    GLfloat fUnit = 0.2;
 
     GLfloat vertexData[] ={
 
@@ -2715,6 +2710,15 @@ void Destructible::init1()
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    
+    int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
+    int i = 20;
+    
+    while (i < dataSize)
+    {
+        maze.addWall(vertexData[i], vertexData[i + 1], true);
+        i += 180;
+    }
     
 }
 
@@ -5416,6 +5420,15 @@ void Destructible::init2()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     
+    int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
+    int i = 20;
+    
+    while (i < dataSize)
+    {
+        maze.addWall(vertexData[i], vertexData[i + 1], true);
+        i += 180;
+    }
+    
 }
 
 void Destructible::init3()
@@ -8116,6 +8129,15 @@ void Destructible::init3()
     // texture coord attribute
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    
+    int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
+    int i = 20;
+    
+    while (i < dataSize)
+    {
+        maze.addWall(vertexData[i], vertexData[i + 1], true);
+        i += 180;
+    }
 
 }
 
@@ -8126,4 +8148,9 @@ void Destructible::draw()
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 1944);
 
+}
+
+Maze Destructible::getMaze()
+{
+    return maze;
 }

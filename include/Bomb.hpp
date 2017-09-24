@@ -42,7 +42,8 @@ class Bomb
 	public:
 		Bomb(int radius, GLfloat x, GLfloat y);
 		Bomb(void);
-    void transform();
+    void transformBomb();
+    void transformExplosion();
 		~Bomb(void);
 		void display(void);
     void displayExplosion(void);
