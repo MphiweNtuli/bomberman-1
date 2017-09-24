@@ -31,12 +31,17 @@ void MainMenu::gameSettings(int input)
     switch (input)
     {
     case command.ToggleSound:
-        modSound();
+		//toggles the sound mode of the game.
+		modSound();
         if (getSoundVal() > 0)
             std::cout << "Sound is ON" << std::endl;
         else
             std::cout << "Sound is OFF" << std::endl;
         break;
+	case command.ToggleScreen:
+		//toggles the display mode of the game.
+		_gameWindow.changeWindowSize();
+		break;
     }
 }
 Window MainMenu::getGameWindow()
@@ -58,8 +63,10 @@ void MainMenu::executeCommand(int input)
         break;
     case command.Settings:
         std::cout << "Settings" << std::endl;
-        gameSettings(5);
-        _gameWindow.changeWindowSize();
+        //mode sound (6th element in enum) for testing
+		gameSettings(5);
+		//toggle display mode (7th element in enum) for testing
+		gameSettings(6);
         break;
     case command.Exit:
         std::cout << "Exit" << std::endl;
