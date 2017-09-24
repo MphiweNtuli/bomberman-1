@@ -13,6 +13,8 @@
 #include "Gamestate.hpp"
 #include "Bomb.hpp"
 #include "Maze.hpp"
+#include "health.hpp"
+#include "timer.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
@@ -20,6 +22,8 @@ Graphics *graphics;
 Player *player;
 Bomb *bomb;
 Maze *maze;
+// Token *Health;
+// Token *Timer;
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -97,9 +101,13 @@ int main(void)
 	player = new Player();
     bomb = new Bomb(3, 0, 0); // countdown, radius, x, y
     maze = new Maze(player);
+    // Health = new Token("Health");
+    // Timer = new Token("Timer");
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
+	Health health;
+	Timer timer;
 	Destructible destructible;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
@@ -113,6 +121,8 @@ int main(void)
     maze->setWalls(staticWall.getMaze().getWalls());
     //maze->addDestructibles(destructible.getMaze().getWalls());
 	portal.init();
+	health.init();
+	timer.init();
 	destructible.init1();
     floor.init();
 	player->init();
@@ -149,10 +159,13 @@ int main(void)
                 floor.draw();
                 //---------------------------------
 				wall.draw();
+				
 				staticWall.draw();
 				portal.draw();
+				health.draw();
+				timer.draw();
 				destructible.draw();
-                glUseProgram(bomb->getProgramId());
+                
                 camera.cameraFunction(bomb->getProgramId());
                 if (bomb->get_bombStatus() != 0)
                 {
@@ -168,6 +181,16 @@ int main(void)
                     //std::cout << "bomb display in main" << std::endl;
                     //explosion function here
                 }
+
+                // glUseProgram(Timer->getProgramId());
+                // camera.cameraFunction(Timer->getProgramId());
+                // Timer->transform();
+                // Timer->display();
+
+                // glUseProgram(Health->getProgramId());
+                // camera.cameraFunction(Health->getProgramId());
+                // Health->transform();
+                // Health->display();
                 
                 
                 glUseProgram(player->getProgramId());
