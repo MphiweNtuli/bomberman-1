@@ -23,6 +23,15 @@ Bomb *bomb;
 Health health;
 Timer timer;
 
+static bool timeout(int seconds)
+{
+	static int time = glfwGetTime();
+	
+	if (glfwGetTime() - time >= seconds)
+		return (true);
+	return (false);
+}
+
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); 
@@ -168,7 +177,7 @@ int main(void)
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-		glfwWindowShouldClose(window) == 0);
+		glfwWindowShouldClose(window) == 0 && timeout(10) != true);
 
 	// Cleanup VBO
 	delete graphics;
