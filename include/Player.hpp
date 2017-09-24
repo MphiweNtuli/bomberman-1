@@ -5,8 +5,10 @@
 #include "camera.hpp"
 #include "loader.hpp"
 
+#define WALL 0.08f
 #define PLAYER 0.1f
-#define WALL 0.1f
+#define OFS_X 0.017f
+#define OFS_Y -0.02f
 
 class Player
 {
