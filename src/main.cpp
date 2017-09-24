@@ -56,7 +56,7 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
-void initClasses(WindowKeyEvents &keyEvents, Sound *sound)
+void initClasses(WindowKeyEvents *keyEvents, Sound *sound)
 {
 	sound = myWindow->getSound();
 	window = myWindow->getWindow();
