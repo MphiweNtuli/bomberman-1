@@ -15,6 +15,7 @@
 #include "timer.hpp"
 
 
+
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
@@ -22,6 +23,8 @@ Player *player;
 Bomb *bomb; 
 Health health;
 Timer timer;
+
+bool clockTimer = false;
 
 static bool timeout(int seconds)
 {
@@ -145,19 +148,33 @@ int main(void)
 				// Use our shader
 				//glUseProgram(programID);
                 //------------------------------
-                camera.processKeyInput();
-                glUseProgram(shadersID);
-                camera.cameraTimeLogic();
-                camera.cameraFunction(shadersID);
-                floor.draw();
-                //---------------------------------
-				wall.draw();
-				staticWall.draw();
-				portal.draw();
-				health.draw();
-				timer.draw();
-				destructible.draw();
-				destructible01.draw();
+                // if (clockTimer != true)
+	               // {
+				
+		               	camera.processKeyInput();
+		                glUseProgram(shadersID);
+		                camera.cameraTimeLogic();
+		                camera.cameraFunction(shadersID);
+		                floor.draw();
+		                //---------------------------------
+						wall.draw();
+						staticWall.draw();
+						portal.draw();
+						health.draw();
+						timer.draw();
+						destructible.draw();
+						destructible01.draw();
+						// if (timeout(10) != true)
+						// {	
+
+						// 	clockTimer = false;
+						// }
+
+				//	}
+				// if (timeout(10) == true)
+    //             	graphics->setDrawMode(MAINMENU)
+				if (timeout(10) == true)
+                	graphics->setDrawMode(MAINMENU);
 				if (bomb->get_bombStatus() != 0)
                 	bomb->display();
                 // health->display();
@@ -177,7 +194,7 @@ int main(void)
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-		glfwWindowShouldClose(window) == 0 && timeout(10) != true);
+		glfwWindowShouldClose(window) == 0);
 
 	// Cleanup VBO
 	delete graphics;
