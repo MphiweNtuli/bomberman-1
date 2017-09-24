@@ -23,6 +23,7 @@ public:
 	void transform();
 	void player_callback(GLFWwindow* window);
 	void draw();
+	void setWalls(std::list<Wall> walls);
 
 private:
 	GLfloat xPos, yPos;

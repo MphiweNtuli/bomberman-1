@@ -92,6 +92,7 @@ int main(void)
 	portal.init();
 	destructible.init1();
 	destructible01.init1();
+	player->setWalls(destructible.getWalls());
     floor.init();
 	//player->init();
 	Mix_VolumeMusic(10);
