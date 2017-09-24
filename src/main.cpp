@@ -58,13 +58,13 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 
 void initClasses(WindowKeyEvents &keyEvents, Sound *sound)
 {
-	sound = myWindow.getSound();
-	window = myWindow.getEvents();
-	keyEvents = myWindow.getEvents();
+	sound = myWindow->getSound();
+	window = myWindow->getWindow();
+	keyEvents = myWindow->getEvents();
 	glfwSetKeyCallback(window, key_callback);
 }
 
-void initEntities(Camera &cam, Wall &wall, StaticWall &staticwall, Destructible &destructible, Floor &floor)
+void initEntities(Camera &cam, Wall &wall, StaticWall &staticWall, Destructible &destructible, Floor &floor)
 {
 	Camera camera(cameraPos, cameraFront, cameraUp);
 	cam = camera;
@@ -110,7 +110,7 @@ int main(void)
 	Destructible destructible;
 	Floor floor;
 	Camera camera;
-	initEntities(cam, wall, staticwall, destructible, floor)
+	initEntities(camera, wall, staticWall, destructible, floor);
 	graphics->initGlArrays();
 	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
 	mainMenu = new MainMenu(window, myWindow, graphics);
@@ -153,7 +153,7 @@ int main(void)
 				initClasses(keyEvents, sound);
 
 				//reinitialize all the game entities when display mode is switched.
-				initEntities(cam, wall, staticwall, destructible, floor)
+				initEntities(camera, wall, staticWall, destructible, floor)
 				break;
 
 			case GAMEPLAY:
