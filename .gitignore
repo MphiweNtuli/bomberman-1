@@ -1,11 +1,11 @@
 # Prerequisites
 *.d
+*.dat
 
 # Compiled Object files
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -19,6 +19,8 @@
 # Fortran module files
 *.mod
 *.smod
+
+*.iso
 
 # Compiled Static libraries
 *.lai

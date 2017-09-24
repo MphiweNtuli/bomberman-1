@@ -3,17 +3,17 @@
 void Sound::loadEffects(void)
 {
     this->effects = new Mix_Chunk*[NUM_EFFECTS];
-    (this->effects)[EFFECT_WALK] = Mix_LoadWAV("sounds/walk.wav");
-    (this->effects)[EFFECT_SCROLL] = Mix_LoadWAV("sounds/scroll.wav");
-    (this->effects)[EFFECT_ENTER] = Mix_LoadWAV("sounds/enter.wav");
+    (this->effects)[EFFECT_WALK] = Mix_LoadWAV("sounds/walk.ogg");
+    (this->effects)[EFFECT_SCROLL] = Mix_LoadWAV("sounds/scroll.ogg");
+    (this->effects)[EFFECT_ENTER] = Mix_LoadWAV("sounds/enter.ogg");
 }
 
 void Sound::loadMusic(void)
 {
     this->music = new Mix_Music*[NUM_MUSIC];
     (this->music)[MUSIC_BACK] = Mix_LoadMUS("sounds/background.wav");
-    (this->music)[MUSIC_MENU1] = Mix_LoadMUS("sounds/menu.wav");
-    (this->music)[MUSIC_MENU2] = Mix_LoadMUS("sounds/menu2.wav");
+    (this->music)[MUSIC_MENU1] = Mix_LoadMUS("sounds/menu.ogg");
+    // (this->music)[MUSIC_MENU2] = Mix_LoadMUS("sounds/menu2.ogg");
 }
 
 Sound::Sound(void)

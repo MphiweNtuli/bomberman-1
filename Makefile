@@ -20,10 +20,10 @@ SRC_FOLDER = src
 INCLUDE_FOLDER = include
 
 SRCDIR = src/
-SRCS = main.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp \
-	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp \
+SRCS = main.cpp Controls.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp \
+	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp Maze.cpp Bomb.cpp\
 	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp \
-	  camera.cpp
+	  camera.cpp GameState.cpp loader.cpp health.cpp timer.cpp
 
 SRC	= $(addprefix $(SRCDIR), $(SRCS))
 INCLUDE = $(wildcard $(INCLUDE_FOLDER)/*.hpp)
@@ -40,6 +40,10 @@ _GLFW_FOLDER = $(BREW)/Cellar/glfw
 GLFW_FOLDER = $(_GLFW_FOLDER)/$(shell ls -r $(_GLFW_FOLDER) | head -n 1)
 GLFW = -L $(GLFW_FOLDER)/lib -lglfw -I $(GLFW_FOLDER)/include/GLFW
 
+_BOOST_FOLDER = $(BREW)/Cellar/boost
+BOOST_FOLDER = $(_BOOST_FOLDER)/$(shell ls -r $(_BOOST_FOLDER) | head -n 1)
+BOOST = -L $(BOOST_FOLDER)/lib -lboost_serialization -I $(BOOST_FOLDER)/include/
+
 _SDL2_FOLDER = $(BREW)/Cellar/sdl2
 SDL2_FOLDER = $(_SDL2_FOLDER)/$(shell ls -r $(_SDL2_FOLDER) | head -n 1)
 SDL2 = -L $(SDL2_FOLDER)/lib -lSDL2 -I $(SDL2_FOLDER)/include/SDL2
@@ -54,12 +58,15 @@ GLM = -I $(GLM_FOLDER)/include/GLM
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER)
-	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) -framework OpenGL
+$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_BOOST_FOLDER) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER)
+	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(BOOST) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) -framework OpenGL
 
 $(BREW):
 	git clone $(BREW_REPO) $(BREW_TMP)
 	sh $(BREW_TMP)/install.sh && rm -rf $(BREW_TMP)
+
+$(_BOOST_FOLDER):
+	brew install boost
 
 $(_GLM_FOLDER):
 	brew install glm

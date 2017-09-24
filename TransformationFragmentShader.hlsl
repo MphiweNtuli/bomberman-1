@@ -6,11 +6,12 @@ layout(location = 1) in vec2 vertexPosition_texture;
 
 out vec2 tex;
 
-uniform mat4 transform;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
-	gl_Position = transform * vec4(vertexPosition_modelspace, 1.0);
-	//gl_Position.w = 1.0;
+	gl_Position = projection * view * model * vec4(vertexPosition_modelspace, 1.0f);
 	tex = vec2(vertexPosition_texture.x, vertexPosition_texture.y);
 }
