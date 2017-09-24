@@ -107,8 +107,8 @@ int main(void)
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
-	destructible.init2();
-	destructible01.init2();
+	destructible.init3();
+	destructible01.init3();
 	player->setWalls(destructible.getWalls());
     floor.init();
 	Mix_VolumeMusic(10);
