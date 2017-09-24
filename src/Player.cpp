@@ -133,6 +133,11 @@ bool Player::moveUp()
 					return false;
 				}
 		}
+		if (yPos + 0.098 > 0.87)
+		{
+			std::cout << "Player Y->" << yPos << std::endl;
+			return false;
+		}
 		
 	
 	
@@ -157,8 +162,11 @@ bool Player::moveDown()
 					return false;
 				}
 		}
-		
-	
+		if (yPos - 0.098 < -0.98)
+		{
+			std::cout << "Player Y->" << yPos << std::endl;
+			return false;
+		}
 	
 		return true;
 
@@ -182,6 +190,11 @@ bool Player::moveLeft()
 						return false;
 					}
 		}
+		if (xPos - 0.098 < -0.98)
+		{
+			std::cout << "Player X->" << xPos << std::endl;
+			return false;
+		}
 		
 		return true;
 			
@@ -203,6 +216,11 @@ bool Player::moveRight()
 						std::cout << wall_it - 64 << "  : Wall number\n";
 					return false;
 				}
+		}
+		if (xPos + 0.098 > 0.88)
+		{
+			std::cout << "Player X->" << xPos << std::endl;
+			return false;
 		}
 	
 		return true;
