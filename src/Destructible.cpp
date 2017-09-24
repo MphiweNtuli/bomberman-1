@@ -2694,6 +2694,8 @@ void Destructible::init1()
         0.7f, -0.8f, -0.05f,      0.0f, 0.0f, //0
         
     };
+    
+    std::cout << "vertex " << vertexData[0] << std::endl;
 
     glGenVertexArrays(1, &vao);
     
@@ -8113,6 +8115,7 @@ void Destructible::init3()
         
     };
     
+    std::cout << "vertex " << vertexData[0] << std::endl;
     
     glGenVertexArrays(1, &vao);
     
@@ -8132,6 +8135,8 @@ void Destructible::init3()
     
     int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
     int i = 20;
+    
+    std::cout << "vertex " << vertexData[0] << std::endl;
     
     while (i < dataSize)
     {
