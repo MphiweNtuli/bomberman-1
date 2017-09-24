@@ -123,7 +123,7 @@ bool Player::moveUp()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
-			if(yPos + 0.09 > it->getYPos() + OFS_Y && yPos + 0.09 < it->getYPos() + OFS_Y + 0.09)
+			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos  > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
@@ -144,8 +144,8 @@ bool Player::moveDown()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 		//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
-			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.04 < it->getYPos() + OFS_Y + 0.09)
-				if(xPos  > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
+			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
+				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
@@ -166,7 +166,7 @@ bool Player::moveLeft()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
-				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.03 < it->getXPos() + OFS_X + 0.15)
+				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
@@ -186,7 +186,7 @@ bool Player::moveRight()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
-			if(xPos + 0.03 > it->getXPos() + OFS_X && xPos - 0.03 < it->getXPos() + OFS_X + 0.07)
+			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				return false;
 		}
