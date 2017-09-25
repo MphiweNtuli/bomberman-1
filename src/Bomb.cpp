@@ -145,7 +145,6 @@ void Bomb::explode(void)
 	// print particles and collision here
 	if (this->time_dropped == 0)
 		return;
-	std::cout << "explode\n";
 	if (glfwGetTime() - this->time_dropped >= (this->countdown * 2.0f))
 	{
 			

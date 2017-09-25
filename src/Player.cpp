@@ -1,6 +1,10 @@
 #include "Player.hpp"
 #include "Bomberman.hpp"
 
+Player::Player()
+{
+}
+
 Player::Player(std::list<Wall> walls)
 {
 	x = 0;
@@ -258,18 +262,58 @@ void Player::player_callback(GLFWwindow* window)
     
 }
 
-GLfloat Player::get_xPos(void)
+GLuint Player::getProgramId() const
 {
-    return this->xPos;
-}
-
-GLfloat Player::get_yPos(void)
-{
-    return this->yPos;
+    return texture_programID;
 }
 
 void Player::draw()
 {
 	glUseProgram(texture_programID);
 	glDrawArrays(GL_TRIANGLES, 0, _vertices.size() );
+}
+
+GLfloat Player::get_xPos(void) const
+{
+    return this->xPos;
+}
+
+GLfloat Player::get_yPos(void) const
+{
+    return this->yPos;
+}
+
+/* emsimang: experimental code*/
+
+GLuint Player::getPVAO() const
+{
+    return pVAO;
+}
+
+GLuint Player::getPUVO() const
+{
+    return pUVO;
+}
+
+GLuint Player::getPEBO() const
+{
+    return pEBO;
+}
+
+GLuint Player::getPTextureId() const
+{
+    return pTextureId;
+}
+
+/* emsimang: experimental code*/
+
+void Player::operator=(const Player &p)
+{
+    this->xPos = p.get_xPos();
+    this->yPos = p.get_yPos();
+    this->pVAO = p.getPVAO();
+    this->pVBO = p.getPUVO();
+    this->pEBO = p.getPEBO();
+    this->programID = p.getProgramId();
+    this->pTextureId = p.getPTextureId();
 }

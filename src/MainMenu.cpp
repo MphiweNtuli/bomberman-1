@@ -3,12 +3,14 @@
 
 MainMenu::MainMenu() {}
 
-MainMenu::MainMenu(GLFWwindow* window, Graphics *g)
+MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
 {
    Input command;
    this->_input = command.Start;
    this->_window = window;
+    this->_gameWindow = gameWindow;
    graphics = g;
+    _sound_val = 100;
 }
 
 MainMenu::~MainMenu(){
@@ -22,8 +24,23 @@ void MainMenu::gameStart(){
 void MainMenu::gameContinue(){
 
 }
-void MainMenu::gameSettings(){
-
+Window MainMenu::getGameWindow()
+{
+    return (_gameWindow);
+}
+void MainMenu::gameSettings(int input)
+{
+    Input command;
+    switch (input)
+    {
+        case command.ToggleSound:
+            modSound();
+            if (getSoundVal() > 0)
+                std::cout << "Sound is ON" << std::endl;
+            else
+                std::cout << "Sound is OFF" << std::endl;
+            break;
+    }
 }
 
 void MainMenu::executeCommand(int input){
@@ -39,6 +56,8 @@ void MainMenu::executeCommand(int input){
         break;
         case command.Settings :
              std::cout << "Settings" << std::endl;
+             gameSettings(5);
+            _gameWindow.changeWindowSize();
         break;
         case command.Exit :
             std::cout << "Exit" << std::endl;      
@@ -72,6 +91,18 @@ void MainMenu::toggleCommands(int key){
 void MainMenu::setGraphics(Graphics *g)
 {
     graphics = g;
+}
+
+void MainMenu::modSound()
+{
+    if (_sound_val == 100)
+        _sound_val = 0;
+    else if (_sound_val == 0)
+        _sound_val = 100;
+}
+int MainMenu::getSoundVal()
+{
+    return (_sound_val);
 }
 
 void MainMenu::initMenuImage()

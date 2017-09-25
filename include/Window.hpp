@@ -18,9 +18,11 @@ public:
 
     void runGame();
     void initiateSystems();
+    void initiateSystems2();
     void terminateSystems();
     void setGraphics(Graphics g);
     bool initializeGlew();
+    void changeWindowSize();
 
     Sound* getSound();
     GLFWwindow* getWindow();
@@ -32,6 +34,7 @@ private:
     Sound *_sound;
     Graphics *graphics;
     GLFWwindow* _window;
+    GLFWwindow* _fullWindow;
     WindowKeyEvents *_keyEvents;
 };
 

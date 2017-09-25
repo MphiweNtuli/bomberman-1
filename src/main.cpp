@@ -10,6 +10,7 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
+#include "Gamestate.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
@@ -71,6 +72,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
 	Sound *sound;
+    int soundVal;
+    GameState gs;
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
@@ -88,31 +91,47 @@ int main(void)
 	graphics = new Graphics();
 	// player = new Player();
     bomb = new Bomb(3, 0, 0);
-    //health = new Health();
+    // Health = new Token("Health");
+    // Timer = new Token("Timer");
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
+    Health health;
+    Timer timer;
 	Destructible destructible;
 	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
-
+    
+//====================================
+    //gs.loadPlayerState(player);
+    
+    //zamani please fix this because it causing a seg fault
+    //i think its due to changes of the coordinates system
+    //so it doesn't find the vertices
+//====================================
 	graphics->initGlArrays();
-	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
-	mainMenu = new MainMenu(window, graphics);
+	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
+    
 	wall.init();
     health.init();
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
-	destructible.init3();
-	destructible01.init3();
+    health.init();
+    timer.init();
+	destructible.init1();
+	destructible01.init1();
+    
 	player->setWalls(destructible.getWalls());
     floor.init();
-	Mix_VolumeMusic(10);
+	//player->init();
+	//Mix_VolumeMusic(10);
     
+    //set the initial sound value
+    soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
     GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
@@ -124,6 +143,13 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //only reset the sound setting if the value is different
+        if (soundVal != mainMenu->getSoundVal())
+        {
+            std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+            soundVal = mainMenu->getSoundVal();
+            Mix_VolumeMusic(soundVal);
+        }
         bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
@@ -131,6 +157,9 @@ int main(void)
 			case MAINMENU:
 				sound->playMusicForvever(MUSIC_MENU1);
 				mainMenu->LoadMainMenuImage();
+                myWindow = mainMenu->getGameWindow();
+                window = myWindow.getWindow();
+                glfwSetKeyCallback(window, key_callback);
 				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
@@ -151,12 +180,11 @@ int main(void)
 				destructible.draw();
 				destructible01.draw();
                 
-                if (timeout(100) == true)
+                if (timeout(20) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
-                // health->display();
-  
+                
                 
                // glUseProgram(player->getProgramId());
 				//camera.cameraFunction(player->getProgramId());
