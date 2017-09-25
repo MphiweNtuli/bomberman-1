@@ -2,6 +2,7 @@
 #define _PLAYER_HPP
 
 #include "Bomberman.hpp"
+#include "serialize.hpp"
 #include "camera.hpp"
 #include "loader.hpp"
 
@@ -32,12 +33,27 @@ public:
     /* emsimang: experimental code*/
     GLuint getPVAO() const;
     GLuint getPUVO() const;
-    GLuint getPEBO() const;
+    GLuint getPVBO() const;
+	GLuint getPEBO() const;
+    GLuint getPProgramId() const;
     GLuint getPTextureId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
     /* emsimang: experimental code*/
-    
+	
+	glm::mat4 getView() const;
+	glm::mat4 getModel() const;
+	glm::mat4 getProjection() const;
+	unsigned int getModelLoc() const;
+	unsigned int getVmodelLoc() const;
+	std::vector<glm::vec3> getVertices() const;
+	std::vector<glm::vec2> getUvbuffer() const;
+	std::vector<glm::vec3> getNormals() const;
+	int getX() const;
+	int getY() const;
+	std::list<Wall> getWalls() const;
+	
+	
 private:
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;

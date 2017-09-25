@@ -331,15 +331,82 @@ GLuint Player::getPTextureId() const
     return pTextureId;
 }
 
+GLuint Player::getPProgramId() const
+{
+	return (programID);
+}
+
+GLuint Player::getPVBO() const{
+	return this->pVBO;
+}
+
+glm::mat4 Player::getView() const{
+	return this->_view;
+}
+
+glm::mat4 Player::getModel() const{
+	return this->_model;
+}
+
+glm::mat4 Player::getProjection() const{
+	return this->_projection;
+}
+
+unsigned int Player::getModelLoc() const{
+	return this->_modelLoc;
+}
+
+unsigned int Player::getVmodelLoc() const{
+	return this->_vmodelLoc;
+}
+
+std::vector<glm::vec3> Player::getVertices() const{
+	return this->_vertices;
+}
+
+std::vector<glm::vec2> Player::getUvbuffer() const{
+	return this->_uvbuffer;
+}
+
+std::vector<glm::vec3> Player::getNormals() const{
+	return this->normals;
+}
+
+int Player::getX() const{
+	return this->x;
+}
+
+int Player::getY() const{
+	return this->y;
+}
+
+std::list<Wall> Player::getWalls() const{
+	return this->walls;
+}
+
+
 /* emsimang: experimental code*/
 
 void Player::operator=(const Player &p)
 {
     this->xPos = p.get_xPos();
-    this->yPos = p.get_yPos();
-    this->pVAO = p.getPVAO();
-    this->pVBO = p.getPUVO();
-    this->pEBO = p.getPEBO();
-    this->programID = p.getProgramId();
-    this->pTextureId = p.getPTextureId();
+    // this->yPos = p.get_yPos();
+    // this->pVAO = p.getPVAO();
+    // this->pVBO = p.getPVBO();
+    // this->pEBO = p.getPEBO();
+    // this->pUVO = p.getPUVO();
+    // this->texture_programID = p.getProgramId();
+	// this->pTextureId = p.getPTextureId();
+	// this->programID = p.getPProgramId();
+	// this->_view = p.getView();
+    // this->_model = p.getModel();
+    // this->_projection = p.getProjection();
+	// this->_modelLoc = p.getModelLoc();
+	// this->_vmodelLoc = p.getVmodelLoc();
+	// this->_vertices = p.getVertices();
+	// this->_uvbuffer = p.getUvbuffer();
+	// this->normals = p.getNormals();
+	// this->x = p.getX();
+	// this->y = p.getY();
+	// this->walls = p.getWalls();
 }

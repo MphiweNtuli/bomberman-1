@@ -104,12 +104,14 @@ int main(void)
     Camera camera(cameraPos, cameraFront, cameraUp, window);
     
 //====================================
-    //gs.loadPlayerState(player);
+    gs.loadPlayerState(player);
+    gs.loadWallState(&wall);
     
     //zamani please fix this because it causing a seg fault
     //i think its due to changes of the coordinates system
     //so it doesn't find the vertices
 //====================================
+
 	graphics->initGlArrays();
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
@@ -179,9 +181,6 @@ int main(void)
                 timer.draw();
 				destructible.draw();
 				destructible01.draw();
-                
-                if (timeout(20) == true)
-                    graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
                 
@@ -202,7 +201,13 @@ int main(void)
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
-
+	
+	//==========================================================
+	// the problem was the save function was removed, so the 
+	// load funtion was loading a non-existent file
+	gs.savePlayerState(*player);
+	gs.saveWallState(wall);
+	//==========================================================
 	// Cleanup VBO
 	delete graphics;
 	delete player;
