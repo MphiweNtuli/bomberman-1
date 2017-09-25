@@ -123,21 +123,16 @@ bool Player::moveUp()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
-				if(xPos  > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
+				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
 						std::cout << wall_it - 64 << "  : Wall number\n";
-					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
 		}
 		if (yPos + 0.098 > 0.87)
-		{
-			std::cout << "Player Y->" << yPos << std::endl;
 			return false;
-		}
 		
 	
 	
@@ -152,21 +147,16 @@ bool Player::moveDown()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-		//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
 						std::cout << wall_it - 64 << "  : Wall number\n";
-					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
 		}
 		if (yPos - 0.098 < -0.98)
-		{
-			std::cout << "Player Y->" << yPos << std::endl;
 			return false;
-		}
 	
 		return true;
 
@@ -180,21 +170,16 @@ bool Player::moveLeft()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						if(wall_it > 64)
 							std::cout << wall_it - 64 << "  : Wall number\n";
-						//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 						return false;
 					}
 		}
 		if (xPos - 0.098 < -0.98)
-		{
-			std::cout << "Player X->" << xPos << std::endl;
 			return false;
-		}
 		
 		return true;
 			
@@ -208,7 +193,6 @@ bool Player::moveRight()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				{
@@ -218,10 +202,7 @@ bool Player::moveRight()
 				}
 		}
 		if (xPos + 0.098 > 0.88)
-		{
-			std::cout << "Player X->" << xPos << std::endl;
 			return false;
-		}
 	
 		return true;
 }
@@ -232,7 +213,6 @@ void Player::player_callback(GLFWwindow* window)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		if(moveLeft()) {
-			//xPos -= 0.03f;
 			_model = glm::translate(_model, bills);
 			xPos = _model[3][0];
 		}
@@ -250,7 +230,7 @@ void Player::player_callback(GLFWwindow* window)
 		}
 
 		if (x != 3)
-		y = 3;
+			y = 3;
     }
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
@@ -261,21 +241,19 @@ void Player::player_callback(GLFWwindow* window)
 			yPos = _model[3][1];
 		}
 		if (x != 2)
-		y = 2;
+			y = 2;
     }
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
 		if(moveDown()) {
-			//yPos += 0.03f;
 			_model = glm::translate(_model, bills);
 			yPos = _model[3][1];
 		}
 		if (x != 4)
-		y = 4;
+			y = 4;
     }
- //   switch 
     
 }
 
