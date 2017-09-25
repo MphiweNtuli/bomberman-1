@@ -10,6 +10,7 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
+#include "Gamestate.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
@@ -41,18 +42,6 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 //move player callback
 static void player_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    // if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    //     player->moveDown();
-    // if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    //     player->moveUp();
-    // if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    //     player->moveLeft();
-    // if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    //     player->moveRight();
-    // if (key == GLFW_KEY_SPACE)
-    // {
-    //     std::cout << "Call the Bomb Class \n";
-    // }
     if (key == GLFW_KEY_SPACE)
     {
         bomb->set_x(player->get_xPos());
@@ -83,6 +72,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
 	Sound *sound;
+    int soundVal;
+    GameState gs;
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
@@ -100,18 +91,21 @@ int main(void)
 	graphics = new Graphics();
 	// player = new Player();
     bomb = new Bomb(3, 0, 0);
-    //health = new Health();
+    // Health = new Token("Health");
+    // Timer = new Token("Timer");
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
+    Health health;
+    Timer timer;
 	Destructible destructible;
 	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
 
+    gs.loadPlayerState(player);
 	graphics->initGlArrays();
-	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
-	mainMenu = new MainMenu(window, graphics);
+	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
 	wall.init();
     health.init();
@@ -119,13 +113,17 @@ int main(void)
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
+    health.init();
+    timer.init();
 	destructible.init1();
 	destructible01.init1();
 	player->setWalls(destructible.getWalls());
     floor.init();
 	//player->init();
-	Mix_VolumeMusic(10);
+	//Mix_VolumeMusic(10);
     
+    //set the initial sound value
+    soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
     GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
@@ -137,6 +135,13 @@ int main(void)
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //only reset the sound setting if the value is different
+        if (soundVal != mainMenu->getSoundVal())
+        {
+            std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+            soundVal = mainMenu->getSoundVal();
+            Mix_VolumeMusic(soundVal);
+        }
         bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
@@ -144,6 +149,9 @@ int main(void)
 			case MAINMENU:
 				sound->playMusicForvever(MUSIC_MENU1);
 				mainMenu->LoadMainMenuImage();
+                myWindow = mainMenu->getGameWindow();
+                window = myWindow.getWindow();
+                glfwSetKeyCallback(window, key_callback);
 				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
@@ -168,8 +176,7 @@ int main(void)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
-                // health->display();
-  
+                
                 
                // glUseProgram(player->getProgramId());
 				//camera.cameraFunction(player->getProgramId());

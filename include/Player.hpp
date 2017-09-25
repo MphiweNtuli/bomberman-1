@@ -13,6 +13,7 @@
 class Player
 {
 public:
+    Player();
 	Player(std::list<Wall> walls);
 	~Player();
 	void init();
@@ -23,13 +24,23 @@ public:
 	void transform();
 	void player_callback(GLFWwindow* window);
 	void draw();
-    GLfloat get_xPos(void);
-    GLfloat get_yPos(void);
+    GLfloat get_xPos(void) const;
+    GLfloat get_yPos(void) const;
+    GLuint getProgramId() const;
 	void setWalls(std::list<Wall> walls);
-
+    
+    /* emsimang: experimental code*/
+    GLuint getPVAO() const;
+    GLuint getPUVO() const;
+    GLuint getPEBO() const;
+    GLuint getPTextureId() const;
+    void operator=(const Player &p);
+    void setCoordinates(GLfloat x, GLfloat y);
+    /* emsimang: experimental code*/
+    
 private:
 	GLfloat xPos, yPos;
-	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId;
+	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
 	glm::mat4 _view;
     glm::mat4 _model;
     glm::mat4 _projection;
@@ -41,6 +52,8 @@ private:
 	int x;
 	int y;
 	std::list<Wall> walls;
+    template <class archive> friend
+    void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);
 };
 
 #endif

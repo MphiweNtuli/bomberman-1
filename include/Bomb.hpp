@@ -48,6 +48,7 @@ class Bomb
 		int get_bombStatus(void);
 		GLfloat get_x(void);
 		GLfloat get_y(void);
+    
 
 		void set_countdown(int countdown);
 		void set_radius(int radius);
