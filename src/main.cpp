@@ -102,11 +102,18 @@ int main(void)
 	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
-
-    gs.loadPlayerState(player);
+    
+//====================================
+    //gs.loadPlayerState(player);
+    
+    //zamani please fix this because it causing a seg fault
+    //i think its due to changes of the coordinates system
+    //so it doesn't find the vertices
+//====================================
 	graphics->initGlArrays();
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
+    
 	wall.init();
     health.init();
     timer.init();
@@ -117,6 +124,7 @@ int main(void)
     timer.init();
 	destructible.init1();
 	destructible01.init1();
+    
 	player->setWalls(destructible.getWalls());
     floor.init();
 	//player->init();
@@ -172,7 +180,7 @@ int main(void)
 				destructible.draw();
 				destructible01.draw();
                 
-                if (timeout(100) == true)
+                if (timeout(20) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
