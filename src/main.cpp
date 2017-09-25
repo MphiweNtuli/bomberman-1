@@ -22,8 +22,11 @@ Player *player;
 Bomb *bomb;
 Health health;
 Timer timer;
+Destructible destructible;
+Destructible destructible01;
 
 bool clockTimer = false;
+bool setBomb = false;
 
 static bool timeout(int seconds)
 {
@@ -45,9 +48,12 @@ static void player_callback(GLFWwindow* window, int key, int scancode, int actio
     if (key == GLFW_KEY_SPACE && bomb->get_bombStatus() == 0)
     {
         bomb->set_x(player->get_xPos());
-        bomb->set_y(player->get_yPos());
+		bomb->set_y(player->get_yPos());
+		destructible.set_xy(player->get_xPos(), player->get_yPos());
+		destructible01.set_xy(player->get_xPos(), player->get_yPos());
         bomb->updateLocation();
-        bomb->drop();
+		bomb->drop();
+		setBomb = true;
         std::cout << "Space pressed\n";
     }
 }
@@ -98,8 +104,6 @@ int main(void)
 	Portal portal;
     Health health;
     Timer timer;
-	Destructible destructible;
-	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
     
@@ -180,10 +184,16 @@ int main(void)
 				destructible.draw();
 				destructible01.draw();
                 
-                if (timeout(20) == true)
+                if (timeout(200) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
-                    bomb->display();
+					bomb->display();
+				else if (setBomb)
+				{
+					destructible.destroy();
+					destructible01.destroy();
+					setBomb = false;
+				}
                 
                 
                // glUseProgram(player->getProgramId());
