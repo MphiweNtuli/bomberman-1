@@ -328,11 +328,18 @@ void StaticWall::init()
             // texture coord attribute
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
-            maze.addWall(xLeft + i * fUnit, 0.7f - j * fUnit, false);
+
+            Wall wall(xLeft + i * fUnit, 0.7f - j * fUnit, false);
+            walls.push_back(wall);
             k++;
         }
     }
     
+}
+
+std::list<Wall>     StaticWall::getWalls() const
+{
+    return walls;
 }
 
 void StaticWall::draw()
@@ -343,9 +350,4 @@ void StaticWall::draw()
         glBindVertexArray(VAOs[i]);
         glDrawArrays(GL_TRIANGLES, 0, 180);
     }
-}
-
-Maze StaticWall::getMaze()
-{
-    return maze;
 }

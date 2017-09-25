@@ -1,4 +1,4 @@
-#include "Health.hpp"
+#include "health.hpp"
 
 Health::Health(){}
 
@@ -6,26 +6,21 @@ Health::~Health(){}
 
 void Health::init()
 {
-	Texture texture("Models/health.png", &destructibleTexture);
-    
-    GLfloat vertices[STATIC_WALLS][180];
-    GLfloat xLeft = -0.7f;
-    GLfloat xRight = -0.6f;
-    GLfloat fUnit = 0.2;
+    Texture texture("BombermanModels/powerUps/health.png", &destructibleTexture);
 
     GLfloat vertexData[] ={
 
         //first row
         //1
         //bottom
-        -0.9f, 0.0f, -0.05f,      0.0f, 0.0f, //0
-        -0.8f, 0.0f, -0.05f,      1.0f, 0.0f, //1
-        -0.8f, 0.1f, -0.05f,      1.0f, 1.0f, //2
-        -0.8f, 0.1f, -0.05f,      1.0f, 1.0f, //2
-        -0.9f, 0.1f, -0.05f,      0.0f, 1.0f, //3
-        -0.9f, 0.0f, -0.05f,      0.0f, 0.0f, //0
+        -0.9f, -0.6f, -0.05f,      0.0f, 0.0f, //0
+        -0.8f, -0.6f, -0.05f,      1.0f, 0.0f, //1
+        -0.8f, -0.7f, -0.05f,      1.0f, 1.0f, //2
+        -0.8f, -0.7f, -0.05f,      1.0f, 1.0f, //2
+        -0.9f, -0.7f, -0.05f,      0.0f, 1.0f, //3
+        -0.9f, -0.6f, -0.05f,      0.0f, 0.0f, //0
     };
- 
+
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
     glBindVertexArray(vao);
@@ -45,6 +40,6 @@ void Health::init()
 void Health::draw()
 {
     glBindTexture(GL_TEXTURE_2D, destructibleTexture);
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 1944);
+    glBindVertexArray(vao);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }

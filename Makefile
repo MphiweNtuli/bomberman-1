@@ -20,10 +20,10 @@ SRC_FOLDER = src
 INCLUDE_FOLDER = include
 
 SRCDIR = src/
-SRCS = main.cpp Controls.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp \
-	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp Maze.cpp Bomb.cpp\
-	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp \
-	  camera.cpp GameState.cpp loader.cpp health.cpp timer.cpp
+SRCS = main.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp loader.cpp\
+	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp controls.cpp\
+	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp\
+	  camera.cpp health.cpp timer.cpp Bomb.cpp GameState.cpp
 
 SRC	= $(addprefix $(SRCDIR), $(SRCS))
 INCLUDE = $(wildcard $(INCLUDE_FOLDER)/*.hpp)

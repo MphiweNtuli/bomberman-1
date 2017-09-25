@@ -5,7 +5,6 @@
 
 #include "Bomberman.hpp"
 #include "Player.hpp"
-#include "Maze.hpp"
 
 class Destructible
 {
@@ -18,13 +17,12 @@ public:
     void init3();
     void test();
     void draw();
-    
-    Maze getMaze();
+    std::list<Wall> getWalls() const;
     
 private:
     GLuint VertexArrayID, destructibleTexture;
     GLuint programID, VAOs[STATIC_WALLS], VBOs[STATIC_WALLS], EBOs[STATIC_WALLS], vao, vbo;
-    Maze maze;
+    std::list<Wall> walls;
 
 };
 

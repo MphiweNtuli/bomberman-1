@@ -8,10 +8,11 @@ out vec2 tex;
 
 uniform mat4 model;
 uniform mat4 view;
-uniform mat4 projection;
+uniform mat4 transform;
 
 void main()
 {
-	gl_Position = projection * view * model * vec4(vertexPosition_modelspace, 1.0f);
+	gl_Position = transform * view * model * vec4(vertexPosition_modelspace, 1.0f);
+	//gl_Position.w = 1.0;
 	tex = vec2(vertexPosition_texture.x, vertexPosition_texture.y);
 }

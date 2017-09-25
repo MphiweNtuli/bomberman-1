@@ -6,7 +6,7 @@ Timer::~Timer(){}
 
 void Timer::init()
 {
-	Texture texture("Models/cl.jpg", &destructibleTexture);
+	Texture texture("BombermanModels/powerUps/cl.jpg", &destructibleTexture);
     
     GLfloat vertices[STATIC_WALLS][180];
     GLfloat xLeft = -0.7f;

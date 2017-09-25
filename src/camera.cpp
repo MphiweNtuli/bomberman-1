@@ -50,9 +50,12 @@ glm::mat4	Camera::look(void) const
 
 void    Camera::perspectiveView(GLuint shadersID)
 {
-    //create transformations
     _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
-    _model = glm::rotate(_model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    //create transformations
+    // _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
+    // _model = glm::rotate(_model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    // _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     //_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
     //_model = cameraRotate(_model);
     

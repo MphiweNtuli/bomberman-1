@@ -29,7 +29,7 @@ namespace boost
             ar & p.pVAO;
             ar & p.pVBO;
             ar & p.pEBO;
-            ar & p.programID;
+            ar & p.texture_programID;
             ar & p.pTextureId;
         }
     }

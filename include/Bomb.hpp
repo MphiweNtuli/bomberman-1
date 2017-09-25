@@ -1,16 +1,9 @@
 #ifndef BOMB_HPP
 #define BOMB_HPP
 
-//#include "Texture.hpp"
-//#include "shader.hpp"
-//#include "glm/glm.hpp"
-//#include "glm/gtc/matrix_transform.hpp"
-//#include "glm/gtc/type_ptr.hpp"
 #include "Bomberman.hpp" 
-//#include "Bomberman.hpp"
 #include "camera.hpp"
 #include "loader.hpp"
-#include "controls.hpp"
 #include <GLUT/glut.h>
 
 
@@ -20,13 +13,12 @@ class Bomb
 		int countdown;
 		int radius;
 		int time_dropped;
-        int timer;
+
 		GLfloat x;
 		GLfloat y;
-        GLuint programID, bombTex, explosionTex;
 		/////////////////////////////////////////////////////////////////////////////
 		//GLfloat xPos, yPos;
-		GLuint bomb_programID, pUVO, pVAO, VAO, pVBO, VBO, pEBO, pBombId;
+		GLuint bomb_programID, pUVO, pVAO, pVBO, pEBO, pBombId;
 		glm::mat4 _view;
 	    glm::mat4 _model;
 	    glm::mat4 _projection;
@@ -42,18 +34,13 @@ class Bomb
 	public:
 		Bomb(int radius, GLfloat x, GLfloat y);
 		Bomb(void);
-    void transformBomb();
-    void transformExplosion();
 		~Bomb(void);
 		void display(void);
-    void displayExplosion(void);
-    void showExplosion(void);
-    int   get_timer(void);
+		void updateLocation(void);
 
 		int get_countdown(void);
 		int get_radius(void);
 		int get_bombStatus(void);
-    GLuint getProgramId() const;
 		GLfloat get_x(void);
 		GLfloat get_y(void);
 

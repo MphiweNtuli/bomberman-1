@@ -22,7 +22,6 @@ Window::~Window(){
     // delete _keyEvents;
 }
 
-//Runs Game         :Cradebe
 void Window::runGame()
 {
     int     win;
@@ -80,17 +79,8 @@ void Window::initiateSystems(){
 
     // Dark green background
     glClearColor(0.0f, 0.3f, 0.0f, 0.0f);
-    
-    //Keeps screen open
-    /*while (!glfwWindowShouldClose(_window))
-    {
-        glfwPollEvents();
-    }
-    glfwTerminate();
-    exit(EXIT_SUCCESS);*/
 }
 
-//Initiates Screen  :Cradebe
 void Window::initiateSystems2()
 {
     
@@ -110,7 +100,6 @@ void Window::initiateSystems2()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    //std::cout << "window no full" << std::endl;
     _window = glfwCreateWindow(800, 600, "Bomberman", NULL, NULL);
     
     if (!_window)
@@ -124,14 +113,6 @@ void Window::initiateSystems2()
     
     // Dark green background
     glClearColor(0.0f, 0.3f, 0.0f, 0.0f);
-    
-    //Keeps screen open
-    /*while (!glfwWindowShouldClose(_window))
-     {
-     glfwPollEvents();
-     }
-     glfwTerminate();
-     exit(EXIT_SUCCESS);*/
 }
 
 void Window::setGraphics(Graphics g)
@@ -144,7 +125,6 @@ void Window::terminateSystems()
 {
     fprintf(stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n");
     getchar();
-    //glfwDestroyWindow(_window);
     glfwTerminate();
     exit(EXIT_FAILURE);
 }
@@ -157,7 +137,6 @@ bool Window::initializeGlew()
         fprintf(stderr, "Failed to initialize GLEW\n");
         getchar();
         glfwTerminate();
-        //return -1;
         return false;
     }
     else
@@ -190,8 +169,9 @@ Sound* Window::getSound()
 GLFWwindow* Window::getWindow()
 {
     if (!_window)
-        return (_fullWindow);
-    return _window;}
+        return _fullWindow;
+    return _window;
+}
 
 WindowKeyEvents* Window::getEvents()
 {

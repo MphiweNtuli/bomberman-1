@@ -17,7 +17,7 @@ Wall::Wall()
 	glDeleteBuffers(1, &vertexbuffer);
 }
 
-Wall::Wall(int x, int y, bool isDec)
+Wall::Wall(GLfloat x, GLfloat y, bool isDec)
 {
 	xPos = x;
 	yPos = y;

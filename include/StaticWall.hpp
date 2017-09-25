@@ -4,7 +4,8 @@
 #define STATIC_WALLS 64
 
 #include "Player.hpp"
-#include "Maze.hpp"
+#include "Wall.hpp"
+#include <list>
 
 class StaticWall
 {
@@ -14,12 +15,12 @@ public:
     
     void init();
     void draw();
-    Maze getMaze();
+    std::list<Wall> getWalls() const;
     
 private:
     GLuint VertexArrayID, wallTexture;
     GLuint programID, VAOs[STATIC_WALLS], VBOs[STATIC_WALLS], EBOs[STATIC_WALLS];
-    Maze maze;
+    std::list<Wall> walls;
 
 };
 

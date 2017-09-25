@@ -12,7 +12,6 @@
 #include "camera.hpp"
 #include "Gamestate.hpp"
 #include "Bomb.hpp"
-#include "Maze.hpp"
 #include "health.hpp"
 #include "timer.hpp"
 
@@ -21,9 +20,19 @@ MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Bomb *bomb;
-Maze *maze;
-// Token *Health;
-// Token *Timer;
+Health health;
+Timer timer;
+
+bool clockTimer = false;
+
+static bool timeout(int seconds)
+{
+    static int time = glfwGetTime();
+    
+    if (glfwGetTime() - time >= seconds)
+        return (true);
+    return (false);
+}
 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
@@ -33,30 +42,11 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 //move player callback
 static void player_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    {
-        if (maze->canPlayerMoveDown())
-            player->moveDown();
-    }
-    if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    {
-        if (maze->canPlayerMoveUp())
-            player->moveUp();
-    }
-    if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    {
-        if (maze->canPlayerMoveLeft())
-            player->moveLeft();
-    }
-    if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
-    {
-        if (maze->canPlayerMoveRight())
-            player->moveRight();
-    }
     if (key == GLFW_KEY_SPACE)
     {
-        bomb->set_x(player->getXPos());
-        bomb->set_y(player->getYPos());
+        bomb->set_x(player->get_xPos());
+        bomb->set_y(player->get_yPos());
+        bomb->updateLocation();
         bomb->drop();
         std::cout << "Space pressed\n";
     }
@@ -83,7 +73,8 @@ int main(void)
 {
 	Sound *sound;
     int soundVal;
-	GameState gs;	
+    GameState gs;
+
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
@@ -99,40 +90,50 @@ int main(void)
         return -1;
 
 	graphics = new Graphics();
-	player = new Player();
-    bomb = new Bomb(3, 0, 0); // countdown, radius, x, y
-    maze = new Maze(player);
+	// player = new Player();
+    bomb = new Bomb(3, 0, 0);
     // Health = new Token("Health");
     // Timer = new Token("Timer");
 	Wall wall;
 	StaticWall staticWall;
 	Portal portal;
-	Health health;
-	Timer timer;
+    Health health;
+    Timer timer;
 	Destructible destructible;
+	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
+    
+//====================================
+    //gs.loadPlayerState(player);
+    
+    //zamani please fix this because it causing a seg fault
+    //i think its due to changes of the coordinates system
+    //so it doesn't find the vertices
+//====================================
 
-	gs.loadPlayerState(player);
 	graphics->initGlArrays();
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
+    
 	wall.init();
+    health.init();
+    timer.init();
 	staticWall.init();
-    maze->setWalls(staticWall.getMaze().getWalls());
-    //maze->addDestructibles(destructible.getMaze().getWalls());
+	player = new Player(staticWall.getWalls());
 	portal.init();
-	health.init();
-	timer.init();
+    health.init();
+    timer.init();
 	destructible.init1();
+	destructible01.init1();
+    
+	player->setWalls(destructible.getWalls());
     floor.init();
-	player->init();
+	//player->init();
 	//Mix_VolumeMusic(10);
     
     //set the initial sound value
     soundVal = mainMenu->getSoundVal();
-    Mix_VolumeMusic(soundVal);
-    
     //=========================================================================================
     //build and compile our shader program
     GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
@@ -177,44 +178,21 @@ int main(void)
 				
 				staticWall.draw();
 				portal.draw();
-				health.draw();
-				timer.draw();
+                health.draw();
+                timer.draw();
 				destructible.draw();
+				destructible01.draw();
                 
-                camera.cameraFunction(bomb->getProgramId());
+                if (timeout(100) == true)
+                    graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
-                {
-                    bomb->transformBomb();
                     bomb->display();
-                    //std::cout << "bomb display in main" << std::endl;
-                    //explosion function here
-                }
-                if (bomb->get_timer() != 0)
-                {
-                    bomb->transformExplosion();
-                    bomb->displayExplosion();
-                    //std::cout << "bomb display in main" << std::endl;
-                    //explosion function here
-                }
-
-                // glUseProgram(Timer->getProgramId());
-                // camera.cameraFunction(Timer->getProgramId());
-                // Timer->transform();
-                // Timer->display();
-
-                // glUseProgram(Health->getProgramId());
-                // camera.cameraFunction(Health->getProgramId());
-                // Health->transform();
-                // Health->display();
                 
                 
-                glUseProgram(player->getProgramId());
-                camera.cameraFunction(player->getProgramId());
-                //player transformations
-                player->transform();
-                //draw player
-                player->draw();
-
+               // glUseProgram(player->getProgramId());
+				//camera.cameraFunction(player->getProgramId());
+				player->init();
+				player->player_callback(window);
 
 			default:
 				break;

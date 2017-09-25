@@ -53,7 +53,7 @@ int GameState::loadPlayerState(Player *p)
         std::cout << "" << std::endl;
         std::cout << "**************************************" << std::endl;
         std::cout << "************* Debugging **************" << std::endl;
-        std::cout << "p.xPos: " << p->getXPos() << " p.yPos: " << p->getYPos() << std::endl;
+        std::cout << "p.xPos: " << p->get_xPos() << " p.yPos: " << p->get_yPos() << std::endl;
         std::cout << "**************************************" << std::endl;
         std::cout << "" << std::endl;
         std::cout << "" << std::endl;

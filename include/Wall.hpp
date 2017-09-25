@@ -1,13 +1,12 @@
 #ifndef _WALL_HPP
 #define _WALL_HPP
-
-#include "Player.hpp"
+#include "Bomberman.hpp"
 
 class Wall
 {
 public:
 	Wall();
-	Wall(int x, int y, bool isDec);
+	Wall(GLfloat x, GLfloat y, bool isDec);
 	~Wall();
 
 	void init();
@@ -16,8 +15,7 @@ public:
     GLfloat getYPos();
 
 private:
-	int xPos;
-	int yPos;
+	GLfloat xPos, yPos;
 	bool isDestructable;
 	GLuint VertexArrayID, vertexbuffer, wallTexture;
    	GLuint	elementBuffer;
