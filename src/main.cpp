@@ -41,7 +41,7 @@ glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 //move player callback
 static void player_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_SPACE)
+    if (key == GLFW_KEY_SPACE && bomb->get_bombStatus() == 0)
     {
         bomb->set_x(player->get_xPos());
         bomb->set_y(player->get_yPos());
