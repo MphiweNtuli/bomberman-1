@@ -31,7 +31,8 @@ class Sound
     private:
         Mix_Chunk **effects;
         Mix_Music **music;
-        
+    int _fade_time;
+    
         void loadEffects(void);
         void loadMusic(void);
 

@@ -1,6 +1,6 @@
 #include "Bomb.hpp"
 
-Bomb::Bomb(int radius, GLfloat x, GLfloat y)
+Bomb::Bomb(int radius)
 {
 	 std::cout << "top of constructer \n";
 	this->countdown = 3;
@@ -8,9 +8,11 @@ Bomb::Bomb(int radius, GLfloat x, GLfloat y)
 	this->time_dropped = 0;
 	bomb_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
-	Texture * text = new Texture("BombermanModels/bombs/bombText.png", &pBombId);
+	Texture text("BombermanModels/bombs/bombText.png", &pBombId);
 
-   bool res = loadOBJ("BombermanModels/bombs/bomb.obj", _vertices, _uvbuffer, normals);
+   load_result = loadOBJ("BombermanModels/bombs/bomb.obj", _vertices, _uvbuffer, normals);
+    if (load_result != true)
+        std::cout << "failed to load object model" << std::endl;
 
 
 }
@@ -143,7 +145,6 @@ void Bomb::display(void)
 		glBindBuffer(GL_ARRAY_BUFFER, pVAO);
 		glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glm::vec3), &_vertices[0], GL_STATIC_DRAW);
 
-		GLuint pUVO;
 		glGenBuffers(1, &pUVO);
 		glBindBuffer(GL_ARRAY_BUFFER, pUVO);
 		glBufferData(GL_ARRAY_BUFFER, _uvbuffer.size() * sizeof(glm::vec2), &_uvbuffer[0], GL_STATIC_DRAW);

@@ -5,13 +5,14 @@ Player::Player()
 {
 }
 
-Player::Player(std::list<Wall> walls)
+Player::Player(std::list<Wall> walls, Bomb *bomb)
 {
+    _bomb = bomb;
 	x = 0;
 	y = 0;
 	texture_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
-	Texture* text = new Texture("BombermanModels/bombermanText.png", &pTextureId);
+	Texture text("BombermanModels/bombermanText.png", &pTextureId);
 	this->xPos = 0.0f;
 	this->yPos = 0.0f;
 	_model = glm::mat4(1.0);
@@ -30,7 +31,9 @@ Player::Player(std::list<Wall> walls)
 		glm::vec3(0.0f, 1.0f,  1.0f)  // Head is up (set to 0,-1,0 to look upside-down)
    );
 
-   bool res = loadOBJ("BombermanModels/bomberman.obj", _vertices, _uvbuffer, normals);
+   load_result = loadOBJ("BombermanModels/bomberman.obj", _vertices, _uvbuffer, normals);
+    if (load_result != true)
+        std::cout << "failed to load model" << std::endl;
    this->walls = walls;
 }
 
@@ -253,6 +256,14 @@ void Player::player_callback(GLFWwindow* window)
 		}
 		if (x != 4)
 			y = 4;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && _bomb->get_bombStatus() == 0)
+    {
+        _bomb->set_x(get_xPos());
+        _bomb->set_y(get_yPos());
+        _bomb->updateLocation();
+        _bomb->drop();
+        std::cout << "Space pressed\n";
     }
     
 }

@@ -4,6 +4,7 @@
 #include "Bomberman.hpp"
 #include "camera.hpp"
 #include "loader.hpp"
+#include "Bomb.hpp"
 
 #define WALL 0.08f
 #define PLAYER 0.1f
@@ -14,7 +15,7 @@ class Player
 {
 public:
     Player();
-	Player(std::list<Wall> walls);
+	Player(std::list<Wall> walls, Bomb *bomb);
 	~Player();
 	void init();
 	bool moveUp(); 
@@ -27,7 +28,6 @@ public:
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
-    GLuint getProgramId() const;
 	void setWalls(std::list<Wall> walls);
     
     /* emsimang: experimental code*/
@@ -35,11 +35,13 @@ public:
     GLuint getPUVO() const;
     GLuint getPEBO() const;
     GLuint getPTextureId() const;
+    GLuint getProgramId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
     /* emsimang: experimental code*/
     
 private:
+    Bomb *_bomb;
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
 	glm::mat4 _view;
@@ -52,6 +54,7 @@ private:
 	std::vector<glm::vec3> normals;
 	int x;
 	int y;
+    bool load_result;
 	std::list<Wall> walls;
     template <class archive> friend
     void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);

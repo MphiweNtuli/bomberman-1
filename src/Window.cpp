@@ -5,6 +5,7 @@
 //Error checking         :Cradebe
 static void error_callback(int error, const char* description)
 {
+    (void)error;
     fputs(description, stderr);
 }
 

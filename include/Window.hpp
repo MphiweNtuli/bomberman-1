@@ -9,6 +9,7 @@
 #include "Graphics.hpp"
 #include "WindowKeyEvents.hpp"
 
+
 class Window
 {
 public:

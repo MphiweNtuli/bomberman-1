@@ -1,6 +1,19 @@
 #include "Texture.hpp"
 
 
+Texture::Texture(const Texture& other)
+{
+    *this = other;
+    return;
+}
+
+void Texture::operator=(const Texture& other)
+{
+    if (this != &other)
+        *this = other;
+    return;
+}
+
 Texture::Texture(const std::string& filename, GLuint *texture)
 {
     int width;

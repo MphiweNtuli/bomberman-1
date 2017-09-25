@@ -18,7 +18,6 @@ private:
 	GLfloat xPos, yPos;
 	bool isDestructable;
 	GLuint VertexArrayID, vertexbuffer, wallTexture;
-   	GLuint	elementBuffer;
 
 };
 

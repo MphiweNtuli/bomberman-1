@@ -11,7 +11,7 @@ class GameState {
         void cleanUpSave();
         int loadPlayerState(Player *p);
         int savePlayerState(Player &p);
-        void operator=(GameState *rhs);
+        void operator=(const GameState &rhs);
         bool isEmpty(std::ifstream &ifs);
 
     private:
@@ -24,13 +24,13 @@ namespace boost
         template <class archive>
         void serialize(archive &ar, Player &p, const unsigned int version)
         {
-            ar & p.xPos;
-            ar & p.yPos;
-            ar & p.pVAO;
-            ar & p.pVBO;
-            ar & p.pEBO;
-            ar & p.texture_programID;
-            ar & p.pTextureId;
+            ar & p.get_xPos();
+            ar & p.get_yPos();
+            ar & p.getPVAO();
+            ar & p.getPUVO();
+            ar & p.getPEBO();
+            ar & p.getProgramId();
+            ar & p.getPTextureId();
         }
     }
 }
