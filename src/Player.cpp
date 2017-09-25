@@ -123,16 +123,24 @@ void Player::init()
 bool Player::moveUp()
 {
 	std::list<Wall>::iterator it;
-
+	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
+			wall_it++;
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos  > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
-					std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
+					if(wall_it > 64)
+						std::cout << wall_it - 64 << "  : Wall number\n";
+					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
+		}
+		if (yPos + 0.098 > 0.87)
+		{
+			std::cout << "Player Y->" << yPos << std::endl;
+			return false;
 		}
 		
 	
@@ -144,19 +152,25 @@ bool Player::moveUp()
 bool Player::moveDown()
 {
 	std::list<Wall>::iterator it;
-
+	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
+			wall_it++;
 		//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
+					if(wall_it > 64)
+						std::cout << wall_it - 64 << "  : Wall number\n";
 					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
 		}
-		
-	
+		if (yPos - 0.098 < -0.98)
+		{
+			std::cout << "Player Y->" << yPos << std::endl;
+			return false;
+		}
 	
 		return true;
 
@@ -166,16 +180,24 @@ bool Player::moveLeft()
 {
 
 	std::list<Wall>::iterator it;
-
+	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
+			wall_it++;
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
+						if(wall_it > 64)
+							std::cout << wall_it - 64 << "  : Wall number\n";
 						//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 						return false;
 					}
+		}
+		if (xPos - 0.098 < -0.98)
+		{
+			std::cout << "Player X->" << xPos << std::endl;
+			return false;
 		}
 		
 		return true;
@@ -186,13 +208,23 @@ bool Player::moveRight()
 {
 
 	std::list<Wall>::iterator it;
-
+	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
+			wall_it++;
 			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
-				return false;
+				{
+					if(wall_it > 64)
+						std::cout << wall_it - 64 << "  : Wall number\n";
+					return false;
+				}
+		}
+		if (xPos + 0.098 > 0.88)
+		{
+			std::cout << "Player X->" << xPos << std::endl;
+			return false;
 		}
 	
 		return true;

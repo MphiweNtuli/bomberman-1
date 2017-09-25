@@ -172,7 +172,7 @@ int main(void)
 				destructible.draw();
 				destructible01.draw();
                 
-                if (timeout(10) == true)
+                if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
