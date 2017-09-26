@@ -333,8 +333,6 @@ GLfloat Player::get_yPos(void) const
     return this->yPos;
 }
 
-/* emsimang: experimental code*/
-
 GLuint Player::getPVAO() const
 {
     return pVAO;
@@ -355,15 +353,144 @@ GLuint Player::getPTextureId() const
     return pTextureId;
 }
 
-/* emsimang: experimental code*/
+GLuint Player::getPProgramId() const
+{
+	return (programID);
+}
+
+GLuint Player::getPVBO() const{
+	return this->pVBO;
+}
+
+glm::mat4 Player::getView() const{
+	return this->_view;
+}
+
+glm::mat4 Player::getModel() const{
+	return this->_model;
+}
+
+glm::mat4 Player::getProjection() const{
+	return this->_projection;
+}
+
+unsigned int Player::getModelLoc() const{
+	return this->_modelLoc;
+}
+
+unsigned int Player::getVmodelLoc() const{
+	return this->_vmodelLoc;
+}
+
+std::vector<glm::vec3> Player::getVertices() const{
+	return this->_vertices;
+}
+
+std::vector<glm::vec2> Player::getUvbuffer() const{
+	return this->_uvbuffer;
+}
+
+std::vector<glm::vec3> Player::getNormals() const{
+	return this->normals;
+}
+
+int Player::getX() const{
+	return this->x;
+}
+
+int Player::getY() const{
+	return this->y;
+}
+
+std::list<Wall> Player::getWalls() const{
+	return this->walls;
+}
+
+std::vector<float> Player::getModelV() const{
+	return (_modelV);
+}
 
 void Player::operator=(const Player &p)
 {
     this->xPos = p.get_xPos();
-    this->yPos = p.get_yPos();
-    this->pVAO = p.getPVAO();
-    this->pVBO = p.getPUVO();
-    this->pEBO = p.getPEBO();
-    this->programID = p.getProgramId();
-    this->pTextureId = p.getPTextureId();
+	this->yPos = p.get_yPos();
+}
+
+void Player::restorePosition(float x, float y)
+{
+	_model[3][0] = x;
+	_model[3][1] = y;
+	xPos = x;
+	yPos = y;
+}
+void Player::mat4ToVector()
+{
+    int len = 0;
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int  j = 0; j < 4; j++)
+        {
+            len++;
+            _modelV.push_back(_model[i][j]);
+        }
+    }
+    _modelV.push_back(len);
+}
+
+void Player::vectorToMat4()
+{
+    int iv = 0;
+    int len = _modelV.back();
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0 && iv < len; j < 4; j++)
+        {
+            _model[i][j] = _modelV[iv++];
+        }
+    }
+}
+
+void Player::printMatrix(std::string s)
+{
+	std::ofstream ofs("logfile.txt", std::ios::app);
+    for (int i = 0; i < 4; i ++)
+    {
+        if (i == 1)
+            ofs << s.c_str() << "._model = {";
+        if (i != 1)
+            ofs << "         		{";
+        for (int j = 0; j < 4; j++)
+        {
+            ofs << _model[i][j];
+            if (j != 3)
+                ofs << ", ";
+        }
+		ofs << "}" << std::endl;
+    }
+	ofs << "" << std::endl;		
+}
+
+int Player::printVector()
+{
+    int i = 0;
+	int len = _modelV.back();
+	std::ofstream ofs("logfile.txt", std::ios::app);
+    if (!_modelV.size())
+    {
+        ofs << "vector is empty" << std::endl;
+        return (1);
+    }
+    ofs << "_modelV = {";
+    while (i < len)
+    {
+        ofs << _modelV[i];
+        if (i < (len - 1))
+            ofs << ", ";
+        i++;
+    }
+	ofs << "}" << std::endl;
+	ofs << "" << std::endl;
+    return (0);
 }

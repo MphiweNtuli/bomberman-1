@@ -2,6 +2,7 @@
 #define GAMESTATE_HPP
 
 #include "Player.hpp"
+#include "Wall.hpp"
 #include "Bomberman.hpp"
 
 class GameState {
@@ -11,6 +12,8 @@ class GameState {
         void cleanUpSave();
         int loadPlayerState(Player *p);
         int savePlayerState(Player &p);
+        int loadWallState(Wall *w);
+        int saveWallState(Wall &w);
         void operator=(const GameState &rhs);
         bool isEmpty(std::ifstream &ifs);
 
@@ -24,13 +27,26 @@ namespace boost
         template <class archive>
         void serialize(archive &ar, Player &p, const unsigned int version)
         {
-            ar & p.get_xPos();
-            ar & p.get_yPos();
-            ar & p.getPVAO();
-            ar & p.getPUVO();
-            ar & p.getPEBO();
-            ar & p.getProgramId();
-            ar & p.getPTextureId();
+            unsigned int vers;
+
+            ar & p.yPos;
+            ar & p.xPos;
+            vers = version;
+        }
+
+        template <class archive>
+        void serialize(archive &ar, Wall &w, const unsigned int version)
+        {
+            unsigned int vers;
+
+            ar & w.xPos;
+            ar & w.yPos;
+            // ar & w.isDestructable;
+            // ar & w.VertexArrayID;
+            // ar & w.vertexbuffer;
+            // ar & w.wallTexture;
+            // ar & w.elementBuffer;
+            vers = version;
         }
     }
 }

@@ -10,6 +10,7 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
+#include "GameState.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
@@ -62,7 +63,7 @@ int main(void)
 {
 	Sound *sound;
     int soundVal;
-    //GameState gs;
+    GameState gs;
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
@@ -90,15 +91,6 @@ int main(void)
     Timer timer;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
-    
-//====================================
-    //gs.loadPlayerState(player);
-    
-    //zamani please fix this because it causing a seg fault
-    //i think its due to changes of the coordinates system
-    //so it doesn't find the vertices
-//====================================
-
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
     
@@ -119,7 +111,10 @@ int main(void)
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
     
-    //set the initial sound value
+	//======== load game state ========
+	gs.loadPlayerState(player);
+	//=================================
+	//set the initial sound value
     soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
@@ -195,10 +190,10 @@ int main(void)
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
-
-	/* emsimang: save the player's coords*/
-	//gs.savePlayerState(*player);
-
+	
+	//======================= save game state ==================
+	gs.savePlayerState(*player);
+	//==========================================================
 	// Cleanup VBO
 	delete graphics;
 	delete player;

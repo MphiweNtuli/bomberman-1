@@ -2,6 +2,7 @@
 #define _PLAYER_HPP
 
 #include "Bomberman.hpp"
+#include "serialize.hpp"
 #include "camera.hpp"
 #include "loader.hpp"
 #include "Bomb.hpp"
@@ -34,18 +35,34 @@ public:
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
 	void setWalls(std::list<Wall> walls);
-    
-    /* emsimang: experimental code*/
     GLuint getPVAO() const;
     GLuint getPUVO() const;
-    GLuint getPEBO() const;
+    GLuint getPVBO() const;
+	GLuint getPEBO() const;
+    GLuint getPProgramId() const;
     GLuint getPTextureId() const;
-    GLuint getProgramId() const;
+	GLuint getProgramId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
     void remove(std::list<int> removeWalls);
-    /* emsimang: experimental code*/
-    
+	int printVector();
+	void vectorToMat4();
+	void mat4ToVector();
+	void printMatrix(std::string s);
+	std::vector<float> getModelV() const;
+	void restorePosition(float x, float y);
+	glm::mat4 getView() const;
+	glm::mat4 getModel() const;
+	glm::mat4 getProjection() const;
+	unsigned int getModelLoc() const;
+	unsigned int getVmodelLoc() const;
+	std::vector<glm::vec3> getVertices() const;
+	std::vector<glm::vec2> getUvbuffer() const;
+	std::vector<glm::vec3> getNormals() const;
+	int getX() const;
+	int getY() const;
+	std::list<Wall> getWalls() const;
+
 private:
     Bomb *_bomb;
     Destructible _des, _des01;
@@ -63,6 +80,7 @@ private:
 	int y;
     bool load_result;
 	std::list<Wall> walls;
+	std::vector<float> _modelV;
     template <class archive> friend
     void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);
 };

@@ -21,6 +21,8 @@
 #include "controls.hpp"
 #include <list>
 #include "Wall.hpp"
+#include "boost/serialization/list.hpp"
+#include "boost/serialization/vector.hpp"
 #include "boost/archive/text_oarchive.hpp"
 #include "boost/archive/text_iarchive.hpp"
 #include "sys/stat.h"
