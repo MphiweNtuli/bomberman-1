@@ -16,7 +16,7 @@ MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Portal *portal;
-Window *myWindow;
+Window myWindow;
 
 // camera
 glm::vec3 cameraPos = glm::vec3(-1.0f, 2.0f, 3.0f);
@@ -58,9 +58,9 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 
 void initClasses(WindowKeyEvents *keyEvents, Sound *sound)
 {
-	sound = myWindow->getSound();
-	window = myWindow->getWindow();
-	keyEvents = myWindow->getEvents();
+	sound = myWindow.getSound();
+	window = myWindow.getWindow();
+	keyEvents = myWindow.getEvents();
 	glfwSetKeyCallback(window, key_callback);
 }
 
@@ -68,10 +68,8 @@ void initEntities(Camera &cam, Wall &wall, StaticWall &staticWall, Destructible 
 {
 	Camera camera(cameraPos, cameraFront, cameraUp);
 	cam = camera;
-	graphics->initGlArrays();
+	//graphics->initGlArrays();
 	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
-	//mainMenu = new MainMenu(window, myWindow, graphics);
-	//mainMenu->initMenuImage();
 	wall.init();
 	staticWall.init();
 	destructible.init();
@@ -85,11 +83,10 @@ int main(void)
 	Sound *sound;
 	int soundVal;
 	WindowKeyEvents *keyEvents;
-
+	
 	myWindow.runGame();
 	//initialise the required classes
-	initClasses(keyEvents, sound);
-
+	
 	// Initialize GLEW
 	//reuben to revisit to create a function
 	glewExperimental = true; // Needed for core profile
@@ -109,12 +106,25 @@ int main(void)
 	StaticWall staticWall;
 	Destructible destructible;
 	Floor floor;
-	Camera camera;
-	initEntities(camera, wall, staticWall, destructible, floor);
+	Camera camera(cameraPos, cameraFront, cameraUp);
+	initClasses(keyEvents, sound);		
+	std::cout << "vol " << std::endl;	
+	//graphics->initGlArrays();
+	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
+	wall.init();
+	std::cout << "vol " << std::endl;
+	
+	staticWall.init();
+	destructible.init();
+	floor.init();
+	portal->init();
+	player->init();		
+	//nitEntities(camera, wall, staticWall, destructible, floor);
 	graphics->initGlArrays();
 	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
+	std::cout << "vol " << std::endl;	
 
 	//=========================================================================================
 	//build and compile our shader program
@@ -126,7 +136,7 @@ int main(void)
 	//set the initial sound value
 	soundVal = mainMenu->getSoundVal();
 	Mix_VolumeMusic(soundVal);
-
+	
 	do
 	{
 		// Clear the screen
@@ -153,7 +163,7 @@ int main(void)
 				initClasses(keyEvents, sound);
 
 				//reinitialize all the game entities when display mode is switched.
-				initEntities(camera, wall, staticWall, destructible, floor)
+				initEntities(camera, wall, staticWall, destructible, floor);
 				break;
 
 			case GAMEPLAY:

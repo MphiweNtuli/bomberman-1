@@ -21,10 +21,11 @@ class Camera
     float _deltaTime;
     float _lastFrame;
     //=================================================
-		Camera();
+		
 
 	public:
-        Camera(const glm::vec3 &pos, const glm::vec3 &front, const glm::vec3 &up/*, Gluint shadersID*/);
+		Camera();
+		Camera(const glm::vec3 &pos, const glm::vec3 &front, const glm::vec3 &up/*, Gluint shadersID*/);
 		Camera(Camera const & target);
 		Camera &operator =(Camera const & target);
 		~Camera();

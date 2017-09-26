@@ -22,7 +22,9 @@ Camera	&	Camera::operator=(Camera const & target)
 Camera::~Camera()
 {
 }
-
+Camera::Camera()
+{
+}
 const glm::vec3	&	Camera::getPosition(void) const
 {
 	return this->_pos;
