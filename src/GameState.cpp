@@ -10,7 +10,6 @@ void GameState::operator=(const GameState &rhs)
 {
     if (this != &rhs)
         *this = rhs;
-    return;
 }
 
 void GameState::cleanUpSave()
@@ -30,6 +29,7 @@ int GameState::savePlayerState(Player &p)
     std::ofstream ofs("gamestate/player.dat");
     if (ofs.is_open())
     {
+        // p.mat4ToVector();
         {
             boost::archive::text_oarchive oa(ofs);
             oa << p;
@@ -45,22 +45,25 @@ int GameState::loadPlayerState(Player *p)
     std::ifstream ifs("gamestate/player.dat");
     if (!isEmpty(ifs))
     {
+        // p->vectorToMat4();
         if (ifs.is_open())
         {
             {
                 boost::archive::text_iarchive ia(ifs);
                 ia >> p2;
             }
-            (*p) = p2;
+            p->restorePosition(p2.get_xPos(), p2.get_yPos());
         }
-    //     std::cout << "" << std::endl;
-    //     std::cout << "" << std::endl;
-    //     std::cout << "**************************************" << std::endl;
-    //     std::cout << "************* Debugging **************" << std::endl;
-    //     std::cout << "p.xPos: " << p->get_xPos() << " p.yPos: " << p->get_yPos() << std::endl;
-    //     std::cout << "**************************************" << std::endl;
-    //     std::cout << "" << std::endl;
-    //     std::cout << "" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "**************************************" << std::endl;
+        std::cout << "************* Debugging **************" << std::endl;
+        std::cout << "p.xPos: " << p->get_xPos() << " p.yPos: " << p->get_yPos() << std::endl;
+        // p->printVector();
+        // p->printMatrix("gstate");
+        std::cout << "**************************************" << std::endl;
+        std::cout << "" << std::endl;
+        std::cout << "" << std::endl;
     }
     else
         std::cout << "file doe not exit or is empty" << std::endl;

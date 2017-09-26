@@ -364,13 +364,17 @@ std::list<Wall> Player::getWalls() const{
 	return this->walls;
 }
 
+std::vector<float> Player::getModelV() const{
+	return (_modelV);
+}
 
 /* emsimang: experimental code*/
 
 void Player::operator=(const Player &p)
 {
     this->xPos = p.get_xPos();
-    // this->yPos = p.get_yPos();
+	this->yPos = p.get_yPos();
+	// this->_modelV = p.getModelV();
     // this->pVAO = p.getPVAO();
     // this->pVBO = p.getPVBO();
     // this->pEBO = p.getPEBO();
@@ -390,3 +394,80 @@ void Player::operator=(const Player &p)
 	// this->y = p.getY();
 	// this->walls = p.getWalls();
 }
+
+void Player::restorePosition(float x, float y)
+{
+	_model[3][0] = x;
+	_model[3][1] = y;
+}
+// void Player::mat4ToVector()
+// {
+//     int len = 0;
+
+//     for (int i = 0; i < 4; i++)
+//     {
+//         for (int  j = 0; j < 4; j++)
+//         {
+//             len++;
+//             _modelV.push_back(_model[i][j]);
+//         }
+//     }
+//     _modelV.push_back(len);
+// }
+
+// void Player::vectorToMat4()
+// {
+//     int iv = 0;
+//     int len = _modelV.back();
+
+//     for (int i = 0; i < 4; i++)
+//     {
+//         for (int j = 0 && iv < len; j < 4; j++)
+//         {
+//             _model[i][j] = _modelV[iv++];
+//         }
+//     }
+// }
+
+// void Player::printMatrix(std::string s)
+// {
+// 	std::ofstream ofs("logfile.txt", std::ios::app);
+//     for (int i = 0; i < 4; i ++)
+//     {
+//         if (i == 1)
+//             ofs << s.c_str() << "._model = {";
+//         if (i != 1)
+//             ofs << "         		{";
+//         for (int j = 0; j < 4; j++)
+//         {
+//             ofs << _model[i][j];
+//             if (j != 3)
+//                 ofs << ", ";
+//         }
+// 		ofs << "}" << std::endl;
+//     }
+// 	ofs << "" << std::endl;		
+// }
+
+// int Player::printVector()
+// {
+//     int i = 0;
+// 	int len = _modelV.back();
+// 	std::ofstream ofs("logfile.txt", std::ios::app);
+//     if (!_modelV.size())
+//     {
+//         ofs << "vector is empty" << std::endl;
+//         return (1);
+//     }
+//     ofs << "_modelV = {";
+//     while (i < len)
+//     {
+//         ofs << _modelV[i];
+//         if (i < (len - 1))
+//             ofs << ", ";
+//         i++;
+//     }
+// 	ofs << "}" << std::endl;
+// 	ofs << "" << std::endl;
+//     return (0);
+// }

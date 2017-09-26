@@ -38,9 +38,18 @@ public:
 	GLuint getPEBO() const;
     GLuint getPProgramId() const;
     GLuint getPTextureId() const;
-    GLuint getProgramId() const;
+	GLuint getProgramId() const;
     void operator=(const Player &p);
-    void setCoordinates(GLfloat x, GLfloat y);
+	void setCoordinates(GLfloat x, GLfloat y);
+	//============ matrix functions =============
+	int printVector();
+	void vectorToMat4();
+	void mat4ToVector();
+	void printMatrix(std::string s);
+	std::vector<float> getModelV() const;
+	void restorePosition(float x, float y);
+	//============ matrix functions =============
+
     /* emsimang: experimental code*/
 	
 	glm::mat4 getView() const;
@@ -54,8 +63,7 @@ public:
 	int getX() const;
 	int getY() const;
 	std::list<Wall> getWalls() const;
-	
-	
+
 private:
     Bomb *_bomb;
 	GLfloat xPos, yPos;
@@ -72,6 +80,7 @@ private:
 	int y;
     bool load_result;
 	std::list<Wall> walls;
+	std::vector<float> _modelV;
     template <class archive> friend
     void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);
 };
