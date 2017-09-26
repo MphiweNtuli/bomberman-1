@@ -18,8 +18,8 @@ public:
     std::list<Wall> getWalls() const;
     
 private:
-    GLuint VertexArrayID, wallTexture;
-    GLuint programID, VAOs[STATIC_WALLS], VBOs[STATIC_WALLS], EBOs[STATIC_WALLS];
+    GLuint wallTexture;
+    GLuint VAOs[STATIC_WALLS], VBOs[STATIC_WALLS];
     std::list<Wall> walls;
 
 };

@@ -5,24 +5,21 @@ Player::Player()
 {
 }
 
-Player::Player(std::list<Wall> walls)
+Player::Player(std::list<Wall> walls, Bomb *bomb)
 {
+    _bomb = bomb;
 	x = 0;
 	y = 0;
 	texture_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
-	Texture* text = new Texture("BombermanModels/bombermanText.png", &pTextureId);
+	Texture text("BombermanModels/bombermanText.png", &pTextureId);
 	this->xPos = 0.0f;
 	this->yPos = 0.0f;
 	_model = glm::mat4(1.0);
-	//_model = glm::translate(_model, glm::vec3(0.4f,  -0.4f, -0.4f));
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
-	//_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -4.356f));
-	//_model = glm::rotate(_model, glm::radians(50.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	//_model = glm::rotate(_model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	yPos = _model[3][1];
 	xPos = _model[3][0];
 	
@@ -34,7 +31,9 @@ Player::Player(std::list<Wall> walls)
 		glm::vec3(0.0f, 1.0f,  1.0f)  // Head is up (set to 0,-1,0 to look upside-down)
    );
 
-   bool res = loadOBJ("BombermanModels/bomberman.obj", _vertices, _uvbuffer, normals);
+   load_result = loadOBJ("BombermanModels/bomberman.obj", _vertices, _uvbuffer, normals);
+    if (load_result != true)
+        std::cout << "failed to load model" << std::endl;
    this->walls = walls;
 }
 
@@ -127,21 +126,16 @@ bool Player::moveUp()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
-				if(xPos  > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
+				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
 						std::cout << wall_it - 64 << "  : Wall number\n";
-					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
 		}
 		if (yPos + 0.098 > 0.87)
-		{
-			std::cout << "Player Y->" << yPos << std::endl;
 			return false;
-		}
 		
 	
 	
@@ -156,21 +150,16 @@ bool Player::moveDown()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-		//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
 						std::cout << wall_it - 64 << "  : Wall number\n";
-					//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 					return false;
 				}
 		}
 		if (yPos - 0.098 < -0.98)
-		{
-			std::cout << "Player Y->" << yPos << std::endl;
 			return false;
-		}
 	
 		return true;
 
@@ -184,21 +173,16 @@ bool Player::moveLeft()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						if(wall_it > 64)
 							std::cout << wall_it - 64 << "  : Wall number\n";
-						//std::cout << "Player:" << xPos << "," << yPos << " Walls:" << it->getXPos() + OFS_X << "," << it->getYPos() + OFS_Y << "   COLISSION" << std::endl;
 						return false;
 					}
 		}
 		if (xPos - 0.098 < -0.98)
-		{
-			std::cout << "Player X->" << xPos << std::endl;
 			return false;
-		}
 		
 		return true;
 			
@@ -212,7 +196,6 @@ bool Player::moveRight()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			//std::cout << it->getXPos() + OFS_X << "  ,  " << it->getYPos() + OFS_Y << "   Player Player! " << xPos << "   ,  " << yPos << "\n ";
 			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				{
@@ -222,10 +205,7 @@ bool Player::moveRight()
 				}
 		}
 		if (xPos + 0.098 > 0.88)
-		{
-			std::cout << "Player X->" << xPos << std::endl;
 			return false;
-		}
 	
 		return true;
 }
@@ -236,7 +216,6 @@ void Player::player_callback(GLFWwindow* window)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		if(moveLeft()) {
-			//xPos -= 0.03f;
 			_model = glm::translate(_model, bills);
 			xPos = _model[3][0];
 		}
@@ -249,42 +228,43 @@ void Player::player_callback(GLFWwindow* window)
 		glm::vec3 bills(0.0,0.0,0.03);
 		
 		if(moveRight()) {
-			//xPos += 0.03f;
 			_model = glm::translate(_model, bills);
 			xPos = _model[3][0];
 		}
-		// std::cout << _model[0][0] << " : " << _model[0][1] << " : " << _model[0][2] << "  :  " << _model[0][3] << " : \n" ;
-		// std::cout << _model[1][0] << " : " << _model[1][1] << " : " << _model[1][2] << " : \n" ;
-		// std::cout << _model[2][0] << " : " << _model[2][1] << " : " << _model[2][2] << " : \n" ;
-		// std::cout << _model[3][0] << " : " << _model[3][1] << " : " << _model[3][2] << " : \n\n" ;
+
 		if (x != 3)
-		y = 3;
+			y = 3;
     }
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
 		if(moveUp()){
-			//yPos -= 0.03f;
 			_model = glm::translate(_model, bills);
 			yPos = _model[3][1];
 		}
 		if (x != 2)
-		y = 2;
+			y = 2;
     }
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
 		if(moveDown()) {
-			//yPos += 0.03f;
 			_model = glm::translate(_model, bills);
 			yPos = _model[3][1];
 		}
 		if (x != 4)
-		y = 4;
+			y = 4;
     }
- //   switch 
+    else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && _bomb->get_bombStatus() == 0)
+    {
+        _bomb->set_x(get_xPos());
+        _bomb->set_y(get_yPos());
+        _bomb->updateLocation();
+        _bomb->drop();
+        std::cout << "Space pressed\n";
+    }
     
 }
 

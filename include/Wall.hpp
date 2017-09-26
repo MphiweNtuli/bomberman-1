@@ -1,7 +1,6 @@
 #ifndef _WALL_HPP
 #define _WALL_HPP
 
-//#include <GL/glew.h>
 #include "Bomberman.hpp"
 #include "serialize.hpp"
 
@@ -14,9 +13,8 @@ public:
 
 	void init();
 	void draw();
-
-	GLfloat getXPos();
-	GLfloat getYPos();
+    GLfloat getXPos();
+    GLfloat getYPos();
 
 private:
 	GLfloat xPos, yPos;

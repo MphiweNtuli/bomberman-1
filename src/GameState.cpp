@@ -6,7 +6,11 @@ GameState::GameState() {
 GameState::~GameState() {
 }
 
-void GameState::operator=(GameState *rhs){
+void GameState::operator=(const GameState &rhs)
+{
+    if (this != &rhs)
+        *this = rhs;
+    return;
 }
 
 void GameState::cleanUpSave()

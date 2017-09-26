@@ -6,18 +6,10 @@ Health::~Health(){}
 
 void Health::init()
 {
-    Texture texture("BombermanModels/powerUps/health.png", &destructibleTexture);
-    
-    GLfloat vertices[STATIC_WALLS][180];
-    GLfloat xLeft = -0.7f;
-    GLfloat xRight = -0.6f;
-    GLfloat fUnit = 0.2;
+    Texture texture("BombermanModels/powerUps/health.png", &healthTexture);
 
-    GLfloat vertexData[] ={
-
-        //first row
-        //1
-        //bottom
+    GLfloat vertexData[] =
+    {
         -0.9f, -0.6f, -0.05f,      0.0f, 0.0f, //0
         -0.8f, -0.6f, -0.05f,      1.0f, 0.0f, //1
         -0.8f, -0.7f, -0.05f,      1.0f, 1.0f, //2
@@ -44,7 +36,7 @@ void Health::init()
 
 void Health::draw()
 {
-    glBindTexture(GL_TEXTURE_2D, destructibleTexture);
+    glBindTexture(GL_TEXTURE_2D, healthTexture);
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 1944);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }

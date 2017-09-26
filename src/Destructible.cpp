@@ -2249,7 +2249,6 @@ void Destructible::init1()
         0.5f, 0.5f, 0.05f,      0.0f, 1.0f, //4
         0.5f, 0.5f, -0.05f,      0.0f, 0.0f, //0
 
-        
         //46
         //bottom
         0.5f, -0.2f, -0.05f,      0.0f, 0.0f, //0
@@ -2694,6 +2693,8 @@ void Destructible::init1()
         0.7f, -0.8f, -0.05f,      0.0f, 0.0f, //0
         
     };
+    
+    std::cout << "vertex " << vertexData[0] << std::endl;
 
     glGenVertexArrays(1, &vao);
     
@@ -2713,7 +2714,6 @@ void Destructible::init1()
     
     int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
     int i = 20;
-    
      
     while (i < dataSize)
     {
@@ -2735,7 +2735,6 @@ void Destructible::init2()
     Texture texture("crate.png", &destructibleTexture);
     
         GLfloat vertexData[] ={
-    
             //first row
             //1
             //bottom
@@ -5406,7 +5405,7 @@ void Destructible::init2()
         };
     
         glGenVertexArrays(1, &vao);
-        
+    
         glGenBuffers(1, &vbo);
         
         glBindVertexArray(vao);
@@ -5423,8 +5422,7 @@ void Destructible::init2()
         
         int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
         int i = 20;
-        
-         
+    
         while (i < dataSize)
         {
             Wall wall(vertexData[i], vertexData[i + 1], true);

@@ -1,13 +1,7 @@
 #ifndef BOMB_HPP
 #define BOMB_HPP
 
-//#include "Texture.hpp"
-//#include "shader.hpp"
-//#include "glm/glm.hpp"
-//#include "glm/gtc/matrix_transform.hpp"
-//#include "glm/gtc/type_ptr.hpp"
 #include "Bomberman.hpp" 
-//#include "Bomberman.hpp"
 #include "camera.hpp"
 #include "loader.hpp"
 #include <GLUT/glut.h>
@@ -19,6 +13,8 @@ class Bomb
 		int countdown;
 		int radius;
 		int time_dropped;
+        bool load_result;
+
 		GLfloat x;
 		GLfloat y;
 		/////////////////////////////////////////////////////////////////////////////
@@ -28,7 +24,6 @@ class Bomb
 	    glm::mat4 _model;
 	    glm::mat4 _projection;
 		unsigned int _modelLoc;
-		unsigned int _vmodelLoc;
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uvbuffer;
 		std::vector<glm::vec3> normals;
@@ -37,7 +32,7 @@ class Bomb
 		
 	
 	public:
-		Bomb(int radius, GLfloat x, GLfloat y);
+		Bomb(int radius);
 		Bomb(void);
 		~Bomb(void);
 		void display(void);
@@ -48,7 +43,6 @@ class Bomb
 		int get_bombStatus(void);
 		GLfloat get_x(void);
 		GLfloat get_y(void);
-    
 
 		void set_countdown(int countdown);
 		void set_radius(int radius);

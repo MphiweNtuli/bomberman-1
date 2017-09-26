@@ -52,12 +52,6 @@ void    Camera::perspectiveView(GLuint shadersID)
 {
     _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
     _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    //create transformations
-    // _model = glm::translate(_model, glm::vec3(-1.0f,  2.0f, -1.0f));
-    // _model = glm::rotate(_model, glm::radians(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    // _model = glm::rotate(_model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    //_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    //_model = cameraRotate(_model);
     
     _projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
     glUniformMatrix4fv(glGetUniformLocation(shadersID, "projection"), 1, GL_FALSE, &_projection[0][0]);
@@ -77,14 +71,7 @@ void    Camera::cameraFunction(GLuint shadersID)
 
 glm::mat4 Camera::cameraRotate(glm::mat4 model)
 {
-    float inc = 10.0f;
     _model = model;
-    if (glfwGetKey(_window, GLFW_KEY_A) == GLFW_PRESS)
-        _model = glm::rotate(_model, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    if (glfwGetKey(_window, GLFW_KEY_S) == GLFW_PRESS)
-         _model = glm::rotate(_model, glm::radians(-70.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    if (glfwGetKey(_window, GLFW_KEY_W) == GLFW_PRESS)
-        _model = glm::rotate(_model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     return _model;
 }
 
@@ -98,12 +85,6 @@ void Camera::processKeyInput()
         _pos += _cameraSpeed * _front;
     if (glfwGetKey(_window, GLFW_KEY_KP_SUBTRACT ) == GLFW_PRESS)
         _pos -= _cameraSpeed * _front;
-    /*if (glfwGetKey(_window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        _pos -= glm::normalize(glm::cross(_front, _up)) * _cameraSpeed;
-    if (glfwGetKey(_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        _pos += glm::normalize(glm::cross(_front, _up)) * _cameraSpeed;*/
-    //if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-      //  _model = glm::rotate(_model, glm::radians(-135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 void Camera::cameraTimeLogic()

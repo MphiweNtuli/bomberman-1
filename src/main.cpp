@@ -10,7 +10,7 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
-#include "Gamestate.hpp"
+#include "GameState.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
@@ -39,29 +39,17 @@ glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
-//move player callback
-static void player_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_SPACE)
-    {
-        bomb->set_x(player->get_xPos());
-        bomb->set_y(player->get_yPos());
-        bomb->updateLocation();
-        bomb->drop();
-        std::cout << "Space pressed\n";
-    }
-}
-
 //Key Checking input        :Cradebe
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    
+    (void) scancode;
+    (void) mods;
 	if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_ENTER) && action == GLFW_PRESS)
 	{
 		mainMenu->toggleCommands(key);
 		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
         {
-			glfwSetKeyCallback(window, player_callback);
+			//glfwSetKeyCallback(window, player_callback);
             glEnable(GL_DEPTH_TEST);
         }
 	}
@@ -74,6 +62,7 @@ int main(void)
 	Sound *sound;
     int soundVal;
     GameState gs;
+
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
@@ -89,8 +78,7 @@ int main(void)
         return -1;
 
 	graphics = new Graphics();
-	// player = new Player();
-    bomb = new Bomb(3, 0, 0);
+    bomb = new Bomb(3);
     // Health = new Token("Health");
     // Timer = new Token("Timer");
 	Wall wall;
@@ -104,15 +92,11 @@ int main(void)
     Camera camera(cameraPos, cameraFront, cameraUp, window);
     
 //====================================
-    gs.loadPlayerState(player);
-    gs.loadWallState(&wall);
-    
     //zamani please fix this because it causing a seg fault
     //i think its due to changes of the coordinates system
     //so it doesn't find the vertices
 //====================================
 
-	graphics->initGlArrays();
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
     
@@ -120,7 +104,7 @@ int main(void)
     health.init();
     timer.init();
 	staticWall.init();
-	player = new Player(staticWall.getWalls());
+	player = new Player(staticWall.getWalls(), bomb);
 	portal.init();
     health.init();
     timer.init();
@@ -129,10 +113,10 @@ int main(void)
     
 	player->setWalls(destructible.getWalls());
     floor.init();
-	//player->init();
-	//Mix_VolumeMusic(10);
     
-    //set the initial sound value
+	//set the initial sound value
+	gs.loadPlayerState(player);
+    // gs.loadWallState(&wall);
     soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
@@ -165,8 +149,6 @@ int main(void)
 				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
-				// Use our shader
-				//glUseProgram(programID);
                 //------------------------------
                 camera.processKeyInput();
                 glUseProgram(shadersID);
@@ -175,18 +157,19 @@ int main(void)
                 floor.draw();
                 //---------------------------------
 				wall.draw();
+				
 				staticWall.draw();
 				portal.draw();
                 health.draw();
                 timer.draw();
 				destructible.draw();
 				destructible01.draw();
+                
+                if (timeout(100) == true)
+                    graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
                     bomb->display();
                 
-                
-               // glUseProgram(player->getProgramId());
-				//camera.cameraFunction(player->getProgramId());
 				player->init();
 				player->player_callback(window);
 
@@ -206,7 +189,9 @@ int main(void)
 	// the problem was the save function was removed, so the 
 	// load funtion was loading a non-existent file
 	gs.savePlayerState(*player);
-	gs.saveWallState(wall);
+	// player->printVector();
+	// player->printMatrix("player");
+	// gs.saveWallState(wall);
 	//==========================================================
 	// Cleanup VBO
 	delete graphics;

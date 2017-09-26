@@ -12,8 +12,8 @@ class Texture
 {
     private:
         GLuint _mtexture;
-        Texture(const Texture& other) {}
-        void operator=(const Texture& other) {}
+    Texture(const Texture& other);
+    void operator=(const Texture& other);
     public:
         Texture(const std::string& filename, GLuint *texture);
         ~Texture(void);

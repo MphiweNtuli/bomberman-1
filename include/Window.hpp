@@ -1,7 +1,6 @@
 #ifndef WINDOW_HPP
 # define WINDOW_HPP
 
-//# include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -9,6 +8,7 @@
 #include "Sound.hpp"
 #include "Graphics.hpp"
 #include "WindowKeyEvents.hpp"
+
 
 class Window
 {

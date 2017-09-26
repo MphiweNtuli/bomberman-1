@@ -33,28 +33,6 @@ void StaticWall::init()
     GLfloat xRight = -0.7f;
     GLfloat fUnit = 0.2;
     
-    /*unsigned int indices[] = {
-        //bottom
-        0, 1, 3,
-        3, 2, 0,
-        //top
-        4, 5, 7,
-        7, 6, 4,
-        //front
-        0, 1, 5,
-        5, 4, 0,
-        //right side
-        1, 3, 7,
-        7, 5, 1,
-        //left side
-        0, 2, 6,
-        6, 4, 0,
-        
-        //back
-        2, 3, 7,
-        7, 6, 2
-    };*/
-    
     int k = 0;
     for (int j = 0; j < 8; j++)
     {
@@ -336,8 +314,7 @@ void StaticWall::init()
             
             
             glGenVertexArrays(1, &VAOs[k]);
-            
-            //glGenBuffers(1, &EBOs[k]);
+        
             glGenBuffers(1, &VBOs[k]);
             
             glBindVertexArray(VAOs[k]);
@@ -345,15 +322,13 @@ void StaticWall::init()
             glBindBuffer(GL_ARRAY_BUFFER, VBOs[k]);
             glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[k]), vertices[k], GL_STATIC_DRAW);
             
-            //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOs[k]);
-            //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-            
             //position attribute
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
             glEnableVertexAttribArray(0);
             // texture coord attribute
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
+
             Wall wall(xLeft + i * fUnit, 0.7f - j * fUnit, false);
             walls.push_back(wall);
             k++;
@@ -373,7 +348,6 @@ void StaticWall::draw()
     {
         glBindTexture(GL_TEXTURE_2D, wallTexture);
         glBindVertexArray(VAOs[i]);
-        //glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
         glDrawArrays(GL_TRIANGLES, 0, 180);
     }
 }

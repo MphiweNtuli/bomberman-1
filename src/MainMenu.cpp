@@ -24,10 +24,12 @@ void MainMenu::gameStart(){
 void MainMenu::gameContinue(){
 
 }
+
 Window MainMenu::getGameWindow()
 {
     return (_gameWindow);
 }
+
 void MainMenu::gameSettings(int input)
 {
     Input command;

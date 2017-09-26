@@ -78,6 +78,7 @@ void Sound::playMusicForvever(int music)
 
 void Sound::stopMusic(int fade_time)
 {
+    _fade_time = fade_time;
     Mix_FadeOutMusic(500);
     // Mix_HaltMusic();
 }
