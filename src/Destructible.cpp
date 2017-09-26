@@ -35,41 +35,50 @@ std::list<int> Destructible::destroy()
     for (it = walls.begin(); it != walls.end(); ++it)
     {
         wall_it++;
-        // if(y + 0.04 > it->getYPos() + OFS_Y && y + 0.09 < it->getYPos() + OFS_Y + 0.09)
-        //     if(x + 0.03 > it->getXPos() + OFS_X && x < it->getXPos() + OFS_X + 0.09)
-        if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y )) 
+        if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y ))
+        { 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                it = walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
                 removeWalls.push_back(wall_it);
-                // return false;
             }
-        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y - 0.06 )) 
+        }
+        else if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y - 0.06 ))
+        { 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : UP WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                it = walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
                 removeWalls.push_back(wall_it);
-                //return false;
             }
-       if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1))
+        }
+       else if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1))
+       {
             if(y < it->getYPos() + OFS_Y + 0.03  && y > it->getYPos() + OFS_Y  - 0.06)
             {
                 std::cout << wall_it << "  : LEFT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                it = walls.erase(it);
+                std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
                 removeWalls.push_back(wall_it);
-                //return false;
             }
-
-       if(x  < it->getXPos() + OFS_X  && x + 0.1 > it->getXPos() + OFS_X)
+        }
+       else if(x  < it->getXPos() + OFS_X  && x + 0.1 > it->getXPos() + OFS_X)
+       {
             if(y < it->getYPos() + OFS_Y + 0.05  && y > it->getYPos() + OFS_Y  - 0.06)
                 {
                     std::cout << wall_it << "  : RIGHT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                    walls.erase(it);
+                    std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                    it = walls.erase(it);
+                    std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
                     removeWalls.push_back(wall_it);
-                    //return false;
                 }
+        }
     }
     std::list<int>::iterator iter;
     for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)

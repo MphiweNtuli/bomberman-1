@@ -62,7 +62,9 @@ void	Player::remove(std::list<int> removeWalls)
 				if (wall_it - 64 == *iter)
 				{
 					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
-					walls.erase(it);
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+					it = walls.erase(it);
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
 				}
 		}
 	}
