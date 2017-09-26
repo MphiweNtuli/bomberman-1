@@ -4,8 +4,6 @@
 #include "Bomberman.hpp" 
 #include "camera.hpp"
 #include "loader.hpp"
-#include <GLUT/glut.h>
-
 
 class Bomb
 {
@@ -14,6 +12,7 @@ class Bomb
 		int radius;
 		int time_dropped;
         bool load_result;
+    bool _bombPlanted;
 
 		GLfloat x;
 		GLfloat y;
@@ -43,6 +42,8 @@ class Bomb
 		int get_bombStatus(void);
 		GLfloat get_x(void);
 		GLfloat get_y(void);
+    bool getBombPlanted(void);
+    void setBombPlanted(bool bombPlanted);
 
 		void set_countdown(int countdown);
 		void set_radius(int radius);

@@ -263,6 +263,7 @@ void Player::player_callback(GLFWwindow* window)
         _bomb->set_y(get_yPos());
         _bomb->updateLocation();
         _bomb->drop();
+        _bomb->setBombPlanted(true);
         std::cout << "Space pressed\n";
     }
     

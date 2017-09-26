@@ -25,7 +25,6 @@ Destructible destructible;
 Destructible destructible01;
 
 bool clockTimer = false;
-bool setBomb = false;
 
 static bool timeout(int seconds)
 {
@@ -169,11 +168,12 @@ int main(void)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
 					bomb->display();
-				else if (setBomb)
+				else if (bomb->getBombPlanted())
 				{
+                    std::cout << "i am here" << std::endl;
 					destructible.destroy();
 					destructible01.destroy();
-					setBomb = false;
+                    bomb->setBombPlanted(false);
 				}
                 
 				player->init();

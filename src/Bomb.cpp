@@ -5,6 +5,7 @@ Bomb::Bomb(int radius)
 	 std::cout << "top of constructer \n";
 	this->countdown = 1;
 	this->radius = radius;
+    this->_bombPlanted = false;
 
 	this->time_dropped = 0;
 	bomb_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
@@ -97,7 +98,7 @@ void Bomb::explode(void)
 	// print particles and collision here
 	if (this->time_dropped == 0)
 		return;
-	if (glfwGetTime() - this->time_dropped >= (this->countdown * 2.0f))
+	if (glfwGetTime() - this->time_dropped >= (this->countdown * 1.0f))
 	{
 			
 			this->time_dropped = 0;
@@ -112,6 +113,16 @@ void Bomb::drop(void)
 		this->time_dropped = glfwGetTime();
 		std::cout << "Bomb planted" << std::endl;
 	}
+}
+
+bool Bomb::getBombPlanted(void)
+{
+    return _bombPlanted;
+}
+
+void Bomb::setBombPlanted(bool bombPlanted)
+{
+    _bombPlanted = bombPlanted;
 }
 
 
