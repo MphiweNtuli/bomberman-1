@@ -163,7 +163,7 @@ int main(void)
 			wall.draw();
 			staticWall.draw();
 			destructible.draw();
-			//ue the shaders for the game
+			//use the shaders for the game
 			if (!shaderIsSet)
 			{
 				glUseProgram(shadersID);
