@@ -29,7 +29,6 @@ int GameState::savePlayerState(Player &p)
     std::ofstream ofs("gamestate/player.dat");
     if (ofs.is_open())
     {
-        // p.mat4ToVector();
         {
             boost::archive::text_oarchive oa(ofs);
             oa << p;
@@ -45,7 +44,6 @@ int GameState::loadPlayerState(Player *p)
     std::ifstream ifs("gamestate/player.dat");
     if (!isEmpty(ifs))
     {
-        // p->vectorToMat4();
         if (ifs.is_open())
         {
             {
@@ -59,8 +57,6 @@ int GameState::loadPlayerState(Player *p)
         std::cout << "**************************************" << std::endl;
         std::cout << "************* Debugging **************" << std::endl;
         std::cout << "p.xPos: " << p->get_xPos() << " p.yPos: " << p->get_yPos() << std::endl;
-        // p->printVector();
-        // p->printMatrix("gstate");
         std::cout << "**************************************" << std::endl;
         std::cout << "" << std::endl;
         std::cout << "" << std::endl;

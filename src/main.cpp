@@ -90,13 +90,6 @@ int main(void)
 	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
-    
-//====================================
-    //zamani please fix this because it causing a seg fault
-    //i think its due to changes of the coordinates system
-    //so it doesn't find the vertices
-//====================================
-
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
     
@@ -114,9 +107,10 @@ int main(void)
 	player->setWalls(destructible.getWalls());
     floor.init();
     
-	//set the initial sound value
+	//======== load game state ========
 	gs.loadPlayerState(player);
-    // gs.loadWallState(&wall);
+	//=================================
+	//set the initial sound value
     soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
@@ -185,13 +179,8 @@ int main(void)
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
 	
-	//==========================================================
-	// the problem was the save function was removed, so the 
-	// load funtion was loading a non-existent file
+	//======================= save game state ==================
 	gs.savePlayerState(*player);
-	// player->printVector();
-	// player->printMatrix("player");
-	// gs.saveWallState(wall);
 	//==========================================================
 	// Cleanup VBO
 	delete graphics;

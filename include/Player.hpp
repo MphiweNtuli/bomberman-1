@@ -30,8 +30,6 @@ public:
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
 	void setWalls(std::list<Wall> walls);
-    
-    /* emsimang: experimental code*/
     GLuint getPVAO() const;
     GLuint getPUVO() const;
     GLuint getPVBO() const;
@@ -41,17 +39,12 @@ public:
 	GLuint getProgramId() const;
     void operator=(const Player &p);
 	void setCoordinates(GLfloat x, GLfloat y);
-	//============ matrix functions =============
 	int printVector();
 	void vectorToMat4();
 	void mat4ToVector();
 	void printMatrix(std::string s);
 	std::vector<float> getModelV() const;
 	void restorePosition(float x, float y);
-	//============ matrix functions =============
-
-    /* emsimang: experimental code*/
-	
 	glm::mat4 getView() const;
 	glm::mat4 getModel() const;
 	glm::mat4 getProjection() const;
