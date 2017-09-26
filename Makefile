@@ -56,10 +56,14 @@ _GLM_FOLDER = $(BREW)/Cellar/glm
 GLM_FOLDER = $(_GLM_FOLDER)/$(shell ls -r $(_GLM_FOLDER) | head -n 1)
 GLM = -I $(GLM_FOLDER)/include/GLM
 
+_FREETYPE_FOLDER = $(BREW)/Cellar/freetype
+FREETYPE_FOLDER = $(_FREETYPE_FOLDER)/$(shell ls -r $(_FREETYPE_FOLDER) | head -n 1)
+FREETYPE = -I $(FREETYPE_FOLDER)/include/freetype2
+
 all: $(NAME)
 
-$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_BOOST_FOLDER) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER)
-	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(BOOST) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) -framework OpenGL
+$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_BOOST_FOLDER) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER) $(_FREETYPE_FOLDER)
+	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(BOOST) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) $(FREETYPE) -framework OpenGL
 
 $(BREW):
 	git clone $(BREW_REPO) $(BREW_TMP)
@@ -82,6 +86,9 @@ $(_SDL2_FOLDER):
 
 $(_SDL2_MIXER_FOLDER):
 	brew install sdl2_mixer
+
+$(_FREETYPE_FOLDER):
+	brew install freetype
 
 clean:
 	rm -f $(NAME)
