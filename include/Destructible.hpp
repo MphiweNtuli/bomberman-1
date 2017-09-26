@@ -18,7 +18,7 @@ public:
     void init3();
     void test();
     void draw();
-    bool destroy();
+    std::list<int> destroy();
     void set_xy(GLfloat x, GLfloat y);
     std::list<Wall> getWalls() const;
     

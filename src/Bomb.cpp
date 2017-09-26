@@ -3,7 +3,7 @@
 Bomb::Bomb(int radius)
 {
 	 std::cout << "top of constructer \n";
-	this->countdown = 1;
+	this->countdown = 2;
 	this->radius = radius;
     this->_bombPlanted = false;
 

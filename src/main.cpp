@@ -66,6 +66,7 @@ int main(void)
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
+	std::list<int> removeWalls;
 
 	myWindow.runGame();
 	sound = myWindow.getSound();
@@ -115,6 +116,7 @@ int main(void)
     player->setDestructible01(destructible01);
     
 	player->setWalls(destructible.getWalls());
+	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
     
     //set the initial sound value
@@ -173,7 +175,7 @@ int main(void)
 				else if (bomb->getBombPlanted())
 				{
                     std::cout << "i am here" << std::endl;
-					player->getDestructible().destroy();
+					removeWalls = player->getDestructible().destroy();
 					player->getDestructible01().destroy();
                     bomb->setBombPlanted(false);
 				}

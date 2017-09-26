@@ -26,9 +26,10 @@ void Destructible::set_xy(GLfloat x, GLfloat y)
 	this->y = y;
 }
 
-bool Destructible::destroy()
+std::list<int> Destructible::destroy()
 {
     std::cout << "WIthin the Destroyer\n";
+    std::list<int> removeWalls;
     std::list<Wall>::iterator it;
 	int wall_it = 0;
     for (it = walls.begin(); it != walls.end(); ++it)
@@ -40,18 +41,21 @@ bool Destructible::destroy()
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                removeWalls.push_back(wall_it);
                 // return false;
             }
-        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y )) 
+        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y - 0.06 )) 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : UP WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                removeWalls.push_back(wall_it);
                 //return false;
             }
        if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1))
             if(y < it->getYPos() + OFS_Y + 0.03  && y > it->getYPos() + OFS_Y  - 0.06)
             {
                 std::cout << wall_it << "  : LEFT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                removeWalls.push_back(wall_it);
                 //return false;
             }
 
@@ -59,10 +63,15 @@ bool Destructible::destroy()
             if(y < it->getYPos() + OFS_Y + 0.05  && y > it->getYPos() + OFS_Y  - 0.06)
                 {
                     std::cout << wall_it << "  : RIGHT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                    removeWalls.push_back(wall_it);
                     //return false;
                 }
     }
-    return true;
+    std::list<int>::iterator iter;
+    for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
+        std::cout << "Super awesome " << *iter << std::endl;
+
+    return removeWalls;
 }
 
 void Destructible::init1()
