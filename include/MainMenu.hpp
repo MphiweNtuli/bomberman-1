@@ -37,8 +37,10 @@ class MainMenu
     void gameSettings(int input);
     void gameContinue();
     void modSound();
+    void modDisplay();
     int getSoundVal();
     void gameExit();
+    bool getDispChange();
     Window getGameWindow();
     void toggleCommands(int input);
     void executeCommand(int command);
@@ -52,6 +54,7 @@ class MainMenu
 
   private:
     int _input;
+    bool _dispChange;
     GLFWwindow *_window;
     Window _gameWindow;
     Graphics *graphics;

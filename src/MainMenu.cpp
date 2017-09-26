@@ -6,6 +6,7 @@ MainMenu::MainMenu() {}
 MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
 {
     Input command;
+    _dispChange = false;
     this->_input = command.Start;
     this->_window = window;
     this->_gameWindow = gameWindow;
@@ -37,6 +38,9 @@ void MainMenu::gameSettings(int input)
         else
             std::cout << "Sound is OFF" << std::endl;
         break;
+    case command.ToggleScreen:
+        modDisplay();
+    break;
     }
 }
 Window MainMenu::getGameWindow()
@@ -59,7 +63,7 @@ void MainMenu::executeCommand(int input)
     case command.Settings:
         std::cout << "Settings" << std::endl;
         gameSettings(5);
-        _gameWindow.changeWindowSize();
+        gameSettings(6);
         break;
     case command.Exit:
         std::cout << "Exit" << std::endl;
@@ -103,9 +107,17 @@ void MainMenu::modSound()
     else if (_sound_val == 0)
         _sound_val = 100;
 }
+void MainMenu::modDisplay()
+{
+    _gameWindow.changeWindowSize();
+    _dispChange = !(_dispChange);
+}
 int MainMenu::getSoundVal()
 {
     return (_sound_val);
+}
+bool MainMenu::getDispChange(){
+    return (_dispChange);
 }
 void MainMenu::initMenuImage()
 {

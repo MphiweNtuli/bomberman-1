@@ -59,6 +59,7 @@ int main(void)
 {
 	Sound *sound;
 	int soundVal;
+	bool dispVal;
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 
@@ -83,6 +84,7 @@ int main(void)
 
 	graphics = new Graphics();
 	player = new Player();
+	bool shaderIsSet = false;
 	portal = new Portal();
 	Wall wall;
 	StaticWall staticWall;
@@ -94,22 +96,17 @@ int main(void)
 	//graphics->initPlayerVertices(&pVBO, &pVAO, &pEBO);
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
-	wall.init();
-	staticWall.init();
-	destructible.init();
-	floor.init();
-	portal->init();
-	player->init();
 
 	//=========================================================================================
 	//build and compile our shader program
 	GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
-	glUseProgram(shadersID);
-	camera.perspectiveView(shadersID);
+	//glUseProgram(shadersID);
+	//camera.perspectiveView(shadersID);
 	//====================================================================================
 
 	//set the initial sound value
 	soundVal = mainMenu->getSoundVal();
+	dispVal = mainMenu->getDispChange();
 	Mix_VolumeMusic(soundVal);
 
 	do
@@ -117,29 +114,32 @@ int main(void)
 		// Clear the screen
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//only reset the sound setting if the value is different
-		if (soundVal != mainMenu->getSoundVal())
-		{
-			std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
-			soundVal = mainMenu->getSoundVal();
-			Mix_VolumeMusic(soundVal);
-		}
+		
+		
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
 		case MAINMENU:
 			sound->playMusicForvever(MUSIC_MENU1);
 			mainMenu->LoadMainMenuImage();
-			myWindow = mainMenu->getGameWindow();
-			window = myWindow.getWindow();
-			keyEvents->keyEventsWrapper(window, sound, graphics);
-			glfwSetKeyCallback(window, key_callback);
-			wall.init();
-			staticWall.init();
-			destructible.init();
-			floor.init();
-			//portal->init();
-			//player->init();
+			//only reset the sound setting if the value is different
+			if (soundVal != mainMenu->getSoundVal())
+			{
+				std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+				soundVal = mainMenu->getSoundVal();
+				Mix_VolumeMusic(soundVal);
+			}
+			//only reset the display setting if the value is different
+			if (dispVal != mainMenu->getDispChange())
+			{
+				myWindow = mainMenu->getGameWindow();
+				window = myWindow.getWindow();
+				keyEvents->keyEventsWrapper(window, sound, graphics);
+				glfwSetKeyCallback(window, key_callback);
+				//reload the shaders each time the loop itarates in the main menu;
+				shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
+				dispVal = mainMenu->getDispChange();
+			}
 			break;
 
 		case GAMEPLAY:
@@ -153,19 +153,23 @@ int main(void)
 			camera.cameraFunction(shadersID);
 			floor.draw();
 			//---------------------------------
+
+			wall.init();
+			staticWall.init();
+			destructible.init();
+			floor.init();
+			portal->init();
+			player->init();
 			wall.draw();
 			staticWall.draw();
 			destructible.draw();
-		//graphics->drawElements();
-
-		//player transformations
-		//player->transform();
-		//draw player
-		//player->draw();
-
-		//Portal trans and draw
-		//	portal->transform();
-		//	portal->draw();
+			//ue the shaders for the game
+			if (!shaderIsSet)
+			{
+				glUseProgram(shadersID);
+				camera.perspectiveView(shadersID);
+				shaderIsSet = true;
+			}
 		default:
 			break;
 		}
