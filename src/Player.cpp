@@ -114,7 +114,7 @@ void Player::init()
 		glDrawArrays(GL_TRIANGLES, 0, _vertices.size() );
 
 		glDeleteBuffers(1, &pVAO);
-		glDeleteBuffers(1, &pVBO);
+		glDeleteBuffers(1, &pUVO);
 		glDeleteBuffers(1, &pEBO);
 
 }

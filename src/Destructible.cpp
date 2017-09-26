@@ -20,6 +20,51 @@ Destructible::~Destructible()
 {
 }
 
+void Destructible::set_xy(GLfloat x, GLfloat y)
+{
+    this->x = x;
+	this->y = y;
+}
+
+bool Destructible::destroy()
+{
+    std::cout << "WIthin the Destroyer\n";
+    std::list<Wall>::iterator it;
+	int wall_it = 0;
+    for (it = walls.begin(); it != walls.end(); ++it)
+    {
+        wall_it++;
+        // if(y + 0.04 > it->getYPos() + OFS_Y && y + 0.09 < it->getYPos() + OFS_Y + 0.09)
+        //     if(x + 0.03 > it->getXPos() + OFS_X && x < it->getXPos() + OFS_X + 0.09)
+        if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y )) 
+            if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
+            {
+                std::cout << wall_it << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                // return false;
+            }
+        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y )) 
+            if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
+            {
+                std::cout << wall_it << "  : UP WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                //return false;
+            }
+       if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1))
+            if(y < it->getYPos() + OFS_Y + 0.03  && y > it->getYPos() + OFS_Y  - 0.06)
+            {
+                std::cout << wall_it << "  : LEFT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                //return false;
+            }
+
+       if(x  < it->getXPos() + OFS_X  && x + 0.1 > it->getXPos() + OFS_X)
+            if(y < it->getYPos() + OFS_Y + 0.05  && y > it->getYPos() + OFS_Y  - 0.06)
+                {
+                    std::cout << wall_it << "  : RIGHT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                    //return false;
+                }
+    }
+    return true;
+}
+
 void Destructible::init1()
 {
     Texture texture("crate.png", &destructibleTexture);
@@ -2718,7 +2763,6 @@ void Destructible::init1()
     while (i < dataSize)
     {
         Wall wall(vertexData[i], vertexData[i + 1], true);
-        std::cout << "Walls Top Left: X-> " << vertexData[i] << " Y-> " << vertexData[i + 1] << std::endl;
         walls.push_back(wall);
         i += 180 ;
     }
@@ -5426,7 +5470,6 @@ void Destructible::init2()
         while (i < dataSize)
         {
             Wall wall(vertexData[i], vertexData[i + 1], true);
-            std::cout << "Walls Top Left: X-> " << vertexData[i] << " Y-> " << vertexData[i + 1] << std::endl;
             walls.push_back(wall);
             i += 180 ;
         }
@@ -8132,7 +8175,6 @@ void Destructible::init3()
         while (i < dataSize)
         {
             Wall wall(vertexData[i], vertexData[i + 1], true);
-            std::cout << "Walls Top Left: X-> " << vertexData[i] << " Y-> " << vertexData[i + 1] << std::endl;
             walls.push_back(wall);
             i += 180 ;
         }

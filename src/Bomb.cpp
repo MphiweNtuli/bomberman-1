@@ -3,8 +3,9 @@
 Bomb::Bomb(int radius)
 {
 	 std::cout << "top of constructer \n";
-	this->countdown = 3;
+	this->countdown = 1;
 	this->radius = radius;
+
 	this->time_dropped = 0;
 	bomb_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
@@ -13,7 +14,6 @@ Bomb::Bomb(int radius)
    load_result = loadOBJ("BombermanModels/bombs/bomb.obj", _vertices, _uvbuffer, normals);
     if (load_result != true)
         std::cout << "failed to load object model" << std::endl;
-
 
 }
 
@@ -73,10 +73,8 @@ void Bomb::updateLocation(void)
 	std::cout << "update \n";
 	_model = glm::mat4(1.0);
 
-	this ->x = get_x();
-	this ->y = get_y();
-
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
+
 	_model = glm::translate(_model, glm::vec3(this->x, this ->y , -3.82f));
 	
 	_model = glm::scale(_model, glm::vec3(1.0));
@@ -86,13 +84,7 @@ void Bomb::updateLocation(void)
 		glm::vec3(0.0f, 0.0f, -1.0f), // and looks at the origin
 		glm::vec3(0.0f, 1.0f,  1.0f)  // Head is up (set to 0,-1,0 to look upside-down)
    );
-
-	this -> x = 0.0f;
-	this -> y = 0.0f;
-
    display();
-
-
 }
 
 int Bomb::get_bombStatus(void)
@@ -135,7 +127,6 @@ void Bomb::display(void)
 		glm::mat4 ModelMatrix = _model;
 
 		glUniformMatrix4fv(glGetUniformLocation(bomb_programID, "transform"), 1, GL_FALSE, &_projection[0][0]);
-		//std::cout << "bomb draw" << std::endl;
 
 		_modelLoc = glGetUniformLocation(bomb_programID, "model");
 		glUniformMatrix4fv(_modelLoc, 1, GL_FALSE, glm::value_ptr(_model));

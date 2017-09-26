@@ -10,7 +10,6 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
-//#include "Gamestate.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
@@ -22,8 +21,11 @@ Player *player;
 Bomb *bomb;
 Health health;
 Timer timer;
+Destructible destructible;
+Destructible destructible01;
 
 bool clockTimer = false;
+bool setBomb = false;
 
 static bool timeout(int seconds)
 {
@@ -86,8 +88,6 @@ int main(void)
 	Portal portal;
     Health health;
     Timer timer;
-	Destructible destructible;
-	Destructible destructible01;
     Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
     
@@ -168,7 +168,13 @@ int main(void)
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
-                    bomb->display();
+					bomb->display();
+				else if (setBomb)
+				{
+					destructible.destroy();
+					destructible01.destroy();
+					setBomb = false;
+				}
                 
 				player->init();
 				player->player_callback(window);
