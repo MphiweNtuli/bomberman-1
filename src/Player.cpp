@@ -47,6 +47,27 @@ void	Player::setWalls(std::list<Wall> walls)
 	}
 }
 
+void	Player::remove(std::list<int> removeWalls)
+{
+	std::list<Wall>::iterator it;
+	std::list<int>::iterator iter;
+
+	int wall_it = 0;
+	for (it = walls.begin(); it != walls.end(); ++it)
+	{
+		wall_it++;
+		if(wall_it > 64)
+		{
+    		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
+				if (wall_it - 64 == *iter)
+				{
+					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
+					walls.erase(it);
+				}
+		}
+	}
+}
+
 Player::~Player()
 {
 	glDeleteBuffers(1, &pVAO);

@@ -41,6 +41,7 @@ std::list<int> Destructible::destroy()
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                walls.erase(it);
                 removeWalls.push_back(wall_it);
                 // return false;
             }
@@ -48,6 +49,7 @@ std::list<int> Destructible::destroy()
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
                 std::cout << wall_it << "  : UP WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                walls.erase(it);
                 removeWalls.push_back(wall_it);
                 //return false;
             }
@@ -55,6 +57,7 @@ std::list<int> Destructible::destroy()
             if(y < it->getYPos() + OFS_Y + 0.03  && y > it->getYPos() + OFS_Y  - 0.06)
             {
                 std::cout << wall_it << "  : LEFT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                walls.erase(it);
                 removeWalls.push_back(wall_it);
                 //return false;
             }
@@ -63,6 +66,7 @@ std::list<int> Destructible::destroy()
             if(y < it->getYPos() + OFS_Y + 0.05  && y > it->getYPos() + OFS_Y  - 0.06)
                 {
                     std::cout << wall_it << "  : RIGHT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
+                    walls.erase(it);
                     removeWalls.push_back(wall_it);
                     //return false;
                 }

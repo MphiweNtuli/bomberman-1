@@ -43,6 +43,7 @@ public:
     GLuint getProgramId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
+    void remove(std::list<int> removeWalls);
     /* emsimang: experimental code*/
     
 private:

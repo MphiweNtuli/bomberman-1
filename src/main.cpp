@@ -176,8 +176,9 @@ int main(void)
 				{
                     std::cout << "i am here" << std::endl;
 					removeWalls = player->getDestructible().destroy();
-					player->getDestructible01().destroy();
+					removeWalls = player->getDestructible01().destroy();
                     bomb->setBombPlanted(false);
+                    player->remove(removeWalls);
 				}
                 
 				player->init();
