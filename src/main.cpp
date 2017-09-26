@@ -111,6 +111,8 @@ int main(void)
     timer.init();
 	destructible.init1();
 	destructible01.init1();
+    player->setDestructible(destructible);
+    player->setDestructible01(destructible01);
     
 	player->setWalls(destructible.getWalls());
     floor.init();
@@ -161,8 +163,8 @@ int main(void)
 				portal.draw();
                 health.draw();
                 timer.draw();
-				destructible.draw();
-				destructible01.draw();
+				player->getDestructible().draw();
+				player->getDestructible01().draw();
                 
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
@@ -171,8 +173,8 @@ int main(void)
 				else if (bomb->getBombPlanted())
 				{
                     std::cout << "i am here" << std::endl;
-					destructible.destroy();
-					destructible01.destroy();
+					player->getDestructible().destroy();
+					player->getDestructible01().destroy();
                     bomb->setBombPlanted(false);
 				}
                 

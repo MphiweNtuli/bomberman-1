@@ -6,7 +6,6 @@
 #define OFS_Y -0.02f
 
 #include "Bomberman.hpp"
-#include "Player.hpp"
 
 class Destructible
 {

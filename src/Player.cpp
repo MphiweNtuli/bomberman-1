@@ -261,12 +261,34 @@ void Player::player_callback(GLFWwindow* window)
     {
         _bomb->set_x(get_xPos());
         _bomb->set_y(get_yPos());
+        _des.set_xy(get_xPos(), get_yPos());
+        _des01.set_xy(get_xPos(),get_yPos());
         _bomb->updateLocation();
         _bomb->drop();
         _bomb->setBombPlanted(true);
         std::cout << "Space pressed\n";
     }
     
+}
+
+void Player::setDestructible(Destructible destructible)
+{
+    _des = destructible;
+}
+
+Destructible Player::getDestructible(void)
+{
+    return _des;
+}
+
+void Player::setDestructible01(Destructible destructible01)
+{
+    _des01 = destructible01;
+}
+
+Destructible Player::getDestructible01(void)
+{
+    return _des01;
 }
 
 GLuint Player::getProgramId() const

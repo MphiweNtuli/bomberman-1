@@ -5,6 +5,7 @@
 #include "camera.hpp"
 #include "loader.hpp"
 #include "Bomb.hpp"
+#include "Destructible.hpp"
 
 #define WALL 0.08f
 #define PLAYER 0.1f
@@ -25,6 +26,10 @@ public:
 	void transform();
 	void player_callback(GLFWwindow* window);
 	void draw();
+    void setDestructible(Destructible destructible);
+    Destructible getDestructible(void);
+    void setDestructible01(Destructible destructible01);
+    Destructible getDestructible01(void);
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
@@ -42,6 +47,7 @@ public:
     
 private:
     Bomb *_bomb;
+    Destructible _des, _des01;
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
 	glm::mat4 _view;
