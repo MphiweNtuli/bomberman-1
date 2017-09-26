@@ -14,7 +14,7 @@
 NAME = bomberman
 
 CC = clang++
-CCFLAGS = -Wall -Werror -Wextra
+CCFLAGS = #-Wall -Werror -Wextra
 
 SRC_FOLDER = src
 INCLUDE_FOLDER = include
@@ -23,7 +23,7 @@ SRCDIR = src/
 SRCS = main.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp loader.cpp\
 	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp controls.cpp\
 	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp\
-	  camera.cpp health.cpp timer.cpp Bomb.cpp #GameState.cpp
+	  camera.cpp health.cpp timer.cpp Bomb.cpp Text.cpp #GameState.cpp
 
 SRC	= $(addprefix $(SRCDIR), $(SRCS))
 INCLUDE = $(wildcard $(INCLUDE_FOLDER)/*.hpp)
@@ -58,7 +58,7 @@ GLM = -I $(GLM_FOLDER)/include/GLM
 
 _FREETYPE_FOLDER = $(BREW)/Cellar/freetype
 FREETYPE_FOLDER = $(_FREETYPE_FOLDER)/$(shell ls -r $(_FREETYPE_FOLDER) | head -n 1)
-FREETYPE = -I $(FREETYPE_FOLDER)/include/freetype2
+FREETYPE = -I $(FREETYPE_FOLDER)/include/freetype2 -L $(FREETYPE_FOLDER)/lib -lfreetype
 
 all: $(NAME)
 
