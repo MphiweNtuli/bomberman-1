@@ -59,7 +59,7 @@ int Text::Render(const char *text, float x, float y, float sx, float sy)
     while (text[loop] != '\0')
     {
       if(this->LoadChar(text[loop]) == TEXT_ERR)
-          return TEXT_ERR;
+          continue;
       glTexImage2D(
         GL_TEXTURE_2D,
         0,

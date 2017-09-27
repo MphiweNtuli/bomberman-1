@@ -13,6 +13,8 @@
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
+#include "Text.hpp"
+#include "Text_Back.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
@@ -61,7 +63,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
 	Sound *sound;
-    int soundVal;
+	int soundVal;
     //GameState gs;
 
 	Window myWindow;
@@ -87,7 +89,8 @@ int main(void)
 	Portal portal;
     Health health;
     Timer timer;
-    Floor floor;
+	Floor floor;
+	Text_Back t_bck;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
     
 //====================================
@@ -113,7 +116,8 @@ int main(void)
 	destructible01.init1();
     
 	player->setWalls(destructible.getWalls());
-    floor.init();
+	floor.init();
+	t_bck.init();
     
     //set the initial sound value
     soundVal = mainMenu->getSoundVal();
@@ -123,7 +127,10 @@ int main(void)
     glUseProgram(shadersID);
     camera.perspectiveView(shadersID);
     //====================================================================================
-    
+	
+	Text *text = new Text();
+	text->SetFontSize(11);
+
     do {
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -152,11 +159,12 @@ int main(void)
                 camera.processKeyInput();
                 glUseProgram(shadersID);
                 camera.cameraTimeLogic();
-                camera.cameraFunction(shadersID);
+				camera.cameraFunction(shadersID);
+				t_bck.draw();
+				text->Render("High Score", 0, 0, 1, 1);
                 floor.draw();
                 //---------------------------------
 				wall.draw();
-				
 				staticWall.draw();
 				portal.draw();
                 health.draw();
