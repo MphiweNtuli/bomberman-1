@@ -1,6 +1,7 @@
 #include "MainMenu.hpp"
 #include "Texture.hpp"
 
+
 MainMenu::MainMenu() {}
 
 MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
@@ -11,6 +12,8 @@ MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
     this->_gameWindow = gameWindow;
    graphics = g;
     _sound_val = 100;
+    // settings = new Settings(window, gameWindow, g);
+    // settings->initSettingsImage();
 }
 
 MainMenu::~MainMenu(){
@@ -58,8 +61,11 @@ void MainMenu::executeCommand(int input){
         break;
         case command.Settings :
              std::cout << "Settings" << std::endl;
-             gameSettings(5);
-            _gameWindow.changeWindowSize();
+             glClear(GL_COLOR_BUFFER_BIT);
+             graphics->setDrawMode(SETTINGS);
+             //settings->LoadSettingsImage();
+            //  gameSettings(5);
+            // _gameWindow.changeWindowSize();
         break;
         case command.Exit :
             std::cout << "Exit" << std::endl;      
@@ -114,7 +120,7 @@ void MainMenu::initMenuImage()
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("main.png", &menuTexture);
+    Texture texture("BombermanModels/main.png", &menuTexture);
 
     static const GLfloat g_vertex_buffer_start[] = { 
         

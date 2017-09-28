@@ -17,7 +17,7 @@ class Player
 {
 public:
     Player();
-	Player(std::vector<Wall> walls, Bomb *bomb);
+	Player(std::list<Wall> walls, Bomb *bomb);
 	~Player();
 	void init();
 	bool moveUp(); 
@@ -34,7 +34,7 @@ public:
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
-	void setWalls(std::vector<Wall> walls);
+	void setWalls(std::list<Wall> walls);
     GLuint getPVAO() const;
     GLuint getPUVO() const;
     GLuint getPVBO() const;
@@ -44,7 +44,7 @@ public:
 	GLuint getProgramId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
-    void remove(std::vector<int> removeWalls);
+    void remove(std::list<int> removeWalls);
 	int printVector();
 	void vectorToMat4();
 	void mat4ToVector();
@@ -61,7 +61,7 @@ public:
 	std::vector<glm::vec3> getNormals() const;
 	int getX() const;
 	int getY() const;
-	std::vector<Wall> getWalls() const;
+	std::list<Wall> getWalls() const;
 
 private:
     Bomb *_bomb;
@@ -79,7 +79,7 @@ private:
 	int x;
 	int y;
     bool load_result;
-	std::vector<Wall> walls;
+	std::list<Wall> walls;
 	std::vector<float> _modelV;
     template <class archive> friend
     void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);

@@ -5,7 +5,7 @@ Player::Player()
 {
 }
 
-Player::Player(std::vector<Wall> walls, Bomb *bomb)
+Player::Player(std::list<Wall> walls, Bomb *bomb)
 {
     _bomb = bomb;
 	x = 0;
@@ -37,9 +37,9 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
    this->walls = walls;
 }
 
-void	Player::setWalls(std::vector<Wall> walls)
+void	Player::setWalls(std::list<Wall> walls)
 {
-	std::vector<Wall>::iterator it;
+	std::list<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
@@ -47,12 +47,11 @@ void	Player::setWalls(std::vector<Wall> walls)
 	}
 }
 
-void	Player::remove(std::vector<int> removeWalls)
+void	Player::remove(std::list<int> removeWalls)
 {
-	std::vector<Wall>::iterator it;
-	std::vector<int>::iterator iter;
+	std::list<Wall>::iterator it;
+	std::list<int>::iterator iter;
 
-	std::cout <<  "Is inside player function";
 	int wall_it = 0;
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
@@ -63,10 +62,7 @@ void	Player::remove(std::vector<int> removeWalls)
 				if (wall_it - 64 == *iter)
 				{
 					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-					it = walls.erase(it);
-					// it->setIsDestroyed(true);
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+					walls.erase(it);
 				}
 		}
 	}
@@ -146,12 +142,12 @@ void Player::init()
 
 bool Player::moveUp()
 {
-	std::vector<Wall>::iterator it;
+	std::list<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if((yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
+			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -170,12 +166,12 @@ bool Player::moveUp()
 
 bool Player::moveDown()
 {
-	std::vector<Wall>::iterator it;
+	std::list<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if((yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
+			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -193,12 +189,12 @@ bool Player::moveDown()
 bool Player::moveLeft()
 {
 
-	std::vector<Wall>::iterator it;
+	std::list<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-				if((xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15) && !it->isDestroyed())
+				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						if(wall_it > 64)
@@ -216,12 +212,12 @@ bool Player::moveLeft()
 bool Player::moveRight()
 {
 
-	std::vector<Wall>::iterator it;
+	std::list<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
+			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				{
 					if(wall_it > 64)
@@ -406,7 +402,7 @@ int Player::getY() const{
 	return this->y;
 }
 
-std::vector<Wall> Player::getWalls() const{
+std::list<Wall> Player::getWalls() const{
 	return this->walls;
 }
 

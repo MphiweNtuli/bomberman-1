@@ -16,19 +16,18 @@ public:
     void init1();
     void init2();
     void init3();
-    void draw(std::vector<GLfloat> destructibleToDraw);
-    std::vector<int> destroy(std::vector<GLfloat> &dest);
+    void test();
+    void draw();
+    std::list<int> destroy();
     void set_xy(GLfloat x, GLfloat y);
-    std::vector<Wall> getWalls() const;
-    std::vector<GLfloat> getDestructibles(void);
-    void removeDestructible(std::vector<GLfloat> &dest, int destNo);
+    std::list<Wall> getWalls() const;
     
 private:
-    GLuint destructibleTexture, vao, vbo;
+    GLuint VertexArrayID, destructibleTexture;
+    GLuint programID, VAOs[STATIC_WALLS], VBOs[STATIC_WALLS], EBOs[STATIC_WALLS], vao, vbo;
     GLfloat x,y;
-    std::vector<Wall> walls;
-    int _counter, _dataSize;
-    std::vector<GLfloat> _destructiblevector;
+    std::list<Wall> walls;
+
 };
 
 #endif

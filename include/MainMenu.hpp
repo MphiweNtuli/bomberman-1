@@ -8,6 +8,7 @@
 
 #include "Window.hpp"
 #include "shader.hpp"
+#include "settings.hpp"
 
 struct Input
 {
@@ -55,6 +56,7 @@ class MainMenu
         Window _gameWindow;
         Graphics *graphics;
         int _sound_val;
+        Settings *settings;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;
 };
 

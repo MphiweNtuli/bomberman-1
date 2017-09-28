@@ -14,20 +14,23 @@
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
+#include "settings.hpp"
 #include "text.hpp"
 #include "enemy.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
-Graphics *graphics;
+Settings *settings;
+
 Text *text;
-Player *player;
+Enemy *enemy;
+Graphics *graphics;
+Player *player; 
 Bomb *bomb;
-Health health;
+Health health; 
 Timer timer;
 Destructible destructible;
-std::vector <GLfloat> listOfWalls;
-Enemy *enemy;
+Destructible destructible01;
 
 bool clockTimer = false;
 
@@ -39,21 +42,33 @@ static bool timeout(int seconds)
         return (true);
     return (false);
 }
-
+ 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
+//Key Checking input        :Cradebe
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     (void) scancode;
     (void) mods;
 	if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_ENTER) && action == GLFW_PRESS)
-	{
-		mainMenu->toggleCommands(key);
-		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-            glEnable(GL_DEPTH_TEST);
+	{	
+		if (graphics->getDrawMode() == MAINMENU)
+		{
+			mainMenu->toggleCommands(key);
+			if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
+        	{
+				//glfwSetKeyCallback(window, player_callback);
+        	    glEnable(GL_DEPTH_TEST);
+        	}
+        }
+        else if (graphics->getDrawMode() == SETTINGS)
+        {
+        	std::cout << "inside \n";
+        	settings->toggleCommands(/*window,*/ key);
+        }
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -67,7 +82,7 @@ int main(void)
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
-	std::vector<int> removeWalls;
+	std::list<int> removeWalls;
 
 	myWindow.runGame();
 	sound = myWindow.getSound();
@@ -81,9 +96,22 @@ int main(void)
         return -1;
 
 	graphics = new Graphics();
-	enemy = new Enemy();
-
     bomb = new Bomb(3);
+    enemy = new Enemy();
+    text = new Text();
+
+	char bomberman[256];
+	
+
+	char level[256];
+	int level_num = 1;
+	sprintf(level," Level : %d" , level_num);
+
+	char hearts[256];
+	int hearts_num = 3;
+	sprintf(hearts,"Hearts: %d", hearts_num);
+
+
     // Health = new Token("Health");
     // Timer = new Token("Timer");
 	Wall wall;
@@ -92,23 +120,29 @@ int main(void)
     Health health;
     Timer timer;
     Floor floor;
+
+
+
     Camera camera(cameraPos, cameraFront, cameraUp, window);
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
+
+	settings = new Settings(window, myWindow, graphics);
+	settings->initSettingsImage();
     
 	wall.init();
     health.init();
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls(), bomb);
-	text = new Text();
-
 	portal.init();
     health.init();
     timer.init();
 	destructible.init1();
+	destructible01.init1();
     player->setDestructible(destructible);
-    listOfWalls = player->getDestructible().getDestructibles();
+    player->setDestructible01(destructible01);
+    
 	player->setWalls(destructible.getWalls());
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
@@ -123,9 +157,6 @@ int main(void)
     GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
     glUseProgram(shadersID);
     camera.perspectiveView(shadersID);
-    char bomberman[256];
-	sprintf(bomberman,"Your Quest has start");
-	
     //====================================================================================
     
     do {
@@ -135,7 +166,7 @@ int main(void)
         //only reset the sound setting if the value is different
         if (soundVal != mainMenu->getSoundVal())
         {
-            std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+            //std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
             soundVal = mainMenu->getSoundVal();
             Mix_VolumeMusic(soundVal);
         }
@@ -148,7 +179,18 @@ int main(void)
 				mainMenu->LoadMainMenuImage();
                 myWindow = mainMenu->getGameWindow();
                 window = myWindow.getWindow();
-                glfwSetKeyCallback(window, key_callback);
+                // glfwSetKeyCallback(window, key_callback);
+				break;
+			case SETTINGS:
+				sound->playMusicForvever(MUSIC_MENU1);
+				// settings->toggleCommands(window);
+				//settings->initSettingsImage();
+				settings->LoadSettingsImage();
+                myWindow = settings->getGameWindow();
+
+                
+                // window = myWindow.getWindow();
+                // glfwSetKeyCallback(window, key_callback);
 				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
@@ -165,7 +207,8 @@ int main(void)
 				portal.draw();
                 health.draw();
                 timer.draw();
-				player->getDestructible().draw(listOfWalls);
+				player->getDestructible().draw();
+				player->getDestructible01().draw();
                 enemy->display();
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
@@ -173,12 +216,16 @@ int main(void)
 					bomb->display();
 				else if (bomb->getBombPlanted())
 				{
-					removeWalls = player->getDestructible().destroy(listOfWalls);
+                    std::cout << "i am here" << std::endl;
+					removeWalls = player->getDestructible().destroy();
+					removeWalls = player->getDestructible01().destroy();
                     bomb->setBombPlanted(false);
                     player->remove(removeWalls);
 				}
-				text->loadText(bomberman, 50, 100, 20); //(location left /right,location up / down ,size)
-
+				sprintf(bomberman,"Your Quest has started  %.1f ", glfwGetTime());
+				text->loadText(bomberman, 30, 580, 15); //(location left /right,location up / down ,size)
+				text->loadText(level, 450, 580, 15);
+				text->loadText(hearts, 670, 380, 15);
                 
 				player->init();
 				player->player_callback(window);
@@ -201,7 +248,6 @@ int main(void)
 	// Cleanup VBO
 	delete graphics;
 	delete player;
-    delete bomb;
 	
 	mainMenu->menuCleanup();
 	//glDeleteProgram(programID);

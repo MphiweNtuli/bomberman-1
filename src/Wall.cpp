@@ -22,22 +22,11 @@ Wall::Wall(GLfloat x, GLfloat y, bool isDec)
 	xPos = x;
 	yPos = y;
 	isDestructable = isDec;
-    destroyed = false;
 }
 
 Wall::~Wall()
 {
 	glDeleteVertexArrays(1, &VertexArrayID);
-}
-
-bool    Wall::isDestroyed()
-{
-    return destroyed;
-}
-
-void    Wall::setIsDestroyed(bool isDestroyed)
-{
-    this->destroyed = isDestroyed;
 }
 
 void Wall::init()

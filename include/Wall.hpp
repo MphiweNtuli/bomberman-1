@@ -15,12 +15,10 @@ public:
 	void draw();
     GLfloat getXPos();
     GLfloat getYPos();
-    void    setIsDestroyed(bool isDestroyed);
-    bool	isDestroyed();
 
 private:
 	GLfloat xPos, yPos;
-	bool isDestructable, destroyed;
+	bool isDestructable;
 	GLuint VertexArrayID, vertexbuffer, wallTexture;
 	GLuint	elementBuffer;
     template <class archive> friend

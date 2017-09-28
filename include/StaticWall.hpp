@@ -5,7 +5,7 @@
 
 #include "Player.hpp"
 #include "Wall.hpp"
-#include <vector>
+#include <list>
 
 class StaticWall
 {
@@ -15,12 +15,12 @@ public:
     
     void init();
     void draw();
-    std::vector<Wall> getWalls() const;
+    std::list<Wall> getWalls() const;
     
 private:
     GLuint wallTexture;
     GLuint VAOs[STATIC_WALLS], VBOs[STATIC_WALLS];
-    std::vector<Wall> walls;
+    std::list<Wall> walls;
 
 };
 
