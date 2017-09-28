@@ -15,11 +15,15 @@
 #include "health.hpp"
 #include "timer.hpp"
 #include "settings.hpp"
+#include "text.hpp"
+#include "enemy.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Settings *settings;
 
+Text *text;
+Enemy *enemy;
 Graphics *graphics;
 Player *player; 
 Bomb *bomb;
@@ -38,7 +42,7 @@ static bool timeout(int seconds)
         return (true);
     return (false);
 }
-
+ 
 // camera
 glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -93,6 +97,21 @@ int main(void)
 
 	graphics = new Graphics();
     bomb = new Bomb(3);
+    enemy = new Enemy();
+    text = new Text();
+
+	char bomberman[256];
+	
+
+	char level[256];
+	int level_num = 1;
+	sprintf(level," Level : %d" , level_num);
+
+	char hearts[256];
+	int hearts_num = 3;
+	sprintf(hearts,"Hearts: %d", hearts_num);
+
+
     // Health = new Token("Health");
     // Timer = new Token("Timer");
 	Wall wall;
@@ -190,7 +209,7 @@ int main(void)
                 timer.draw();
 				player->getDestructible().draw();
 				player->getDestructible01().draw();
-                
+                enemy->display();
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
@@ -203,6 +222,10 @@ int main(void)
                     bomb->setBombPlanted(false);
                     player->remove(removeWalls);
 				}
+				sprintf(bomberman,"Your Quest has started  %.1f ", glfwGetTime());
+				text->loadText(bomberman, 30, 580, 15); //(location left /right,location up / down ,size)
+				text->loadText(level, 450, 580, 15);
+				text->loadText(hearts, 670, 380, 15);
                 
 				player->init();
 				player->player_callback(window);
