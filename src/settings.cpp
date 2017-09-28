@@ -24,7 +24,7 @@ void Settings::Music(){
 
 void Settings::Screen(){
 
-}
+} 
 
 Window Settings::getGameWindow()
 {
@@ -37,14 +37,15 @@ void Settings::executeCommand(int input){
     settingsInput command;
     switch(input){ 
         case command.Sound :
-            std::cout << "Start:" << std::endl;
+            std::cout << "Sound:" << std::endl;
             glClear(GL_COLOR_BUFFER_BIT);
         break;
         case command.Screen :
-            std::cout << "Continue" << std::endl;
+            std::cout << "Screen" << std::endl;
         break;
         case command.Return :
-             std::cout << "Settings" << std::endl;
+            graphics->setDrawMode(MAINMENU);
+            std::cout << "Settings" << std::endl;
             
         break;
     }
