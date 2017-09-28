@@ -193,22 +193,18 @@ void Settings::initSettingsImage()
     glGenBuffers(1, &menuVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, menuVBO);
-    switch(this->_input)
-    { 
 
-        case 0:
-            //std::cout << "Start" << std::endl;
-            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_sound), g_vertex_buffer_sound, GL_STATIC_DRAW);
-        break;  
-
-        case 1:
-            //std::cout << "continue" << std::endl;
-             glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
-        break;
-       
-        case 2:
-            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_return), g_vertex_buffer_return, GL_STATIC_DRAW);
-        break;          
+    if (this->_input == 0)
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_sound), g_vertex_buffer_sound, GL_STATIC_DRAW);
+    }
+    else if (this->_input == 1)
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
+    }
+    else if (this->_input == 2)
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_return), g_vertex_buffer_return, GL_STATIC_DRAW);   
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, menuEBO);

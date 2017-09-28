@@ -144,7 +144,7 @@ int main(void)
             Mix_VolumeMusic(soundVal);
         }
         bomb->explode();
-		keyEvents->keyEventsWrapper(window, sound, graphics, settings);
+		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())
 		{
 			case MAINMENU:
@@ -156,10 +156,13 @@ int main(void)
 				break;
 			case SETTINGS:
 				sound->playMusicForvever(MUSIC_MENU1);
+				settings->toggleCommands(window);
+				settings->initSettingsImage();
 				settings->LoadSettingsImage();
 
                 myWindow = settings->getGameWindow();
-                settings->toggleCommands(window);
+
+                
                 // window = myWindow.getWindow();
                 // glfwSetKeyCallback(window, key_callback);
 				break;
