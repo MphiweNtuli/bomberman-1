@@ -1,113 +1,111 @@
-#include "Text.hpp"
+#include "text.hpp"
 
-Text::Text(void)
-{
-  programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
-    this->status = TEXT_ERR;
-    if(FT_Init_FreeType(&(this->ft)))
-        return;
-    if(FT_New_Face(this->ft, "text/FreeSans.ttf", 0, &(this->font)))
-        return;
-    this->status = TEXT_OK;
-    this->gs = NULL;
+Text::Text(/*const char * texturePath*/){
+
+	// Initialize texture
+	// Text2DTextureID = loadDDS(texturePath);
+	Texture text("BombermanModels/letters.png", &textId);
+
+	// Initialize VBO
+	glGenBuffers(1, &Text2DVertexBufferID);
+	glGenBuffers(1, &Text2DUVBufferID);
+
+	// Initialize Shader
+	Text2DShaderID = LoadShaders( "Text.vertexshader", "Text.fragmentshader" );
+
+	// Initialize uniforms' IDs
+	Text2DUniformID = glGetUniformLocation( Text2DShaderID, "Text" );
+
 }
 
-Text::~Text(void)
-{
-    return;
+// Text::Text(){
+
+// }
+
+void Text::loadText(const char * text, int x, int y, int size){
+
+	unsigned int length = strlen(text);
+
+	// Fill buffers
+	std::vector<glm::vec2> vertices;
+	std::vector<glm::vec2> UVs;
+	for ( unsigned int i=0 ; i<length ; i++ ){
+		
+		glm::vec2 vertex_up_left    = glm::vec2( x+i*size     , y+size );
+		glm::vec2 vertex_up_right   = glm::vec2( x+i*size+size, y+size );
+		glm::vec2 vertex_down_right = glm::vec2( x+i*size+size, y      );
+		glm::vec2 vertex_down_left  = glm::vec2( x+i*size     , y      );
+
+		vertices.push_back(vertex_up_left   );
+		vertices.push_back(vertex_down_left );
+		vertices.push_back(vertex_up_right  );
+
+		vertices.push_back(vertex_down_right);
+		vertices.push_back(vertex_up_right);
+		vertices.push_back(vertex_down_left);
+
+		char character = text[i];
+		float uv_x = (character%16)/16.0f;
+		float uv_y = (character/16)/16.0f;
+
+		glm::vec2 uv_up_left    = glm::vec2( uv_x           , uv_y );
+		glm::vec2 uv_up_right   = glm::vec2( uv_x+1.0f/16.0f, uv_y );
+		glm::vec2 uv_down_right = glm::vec2( uv_x+1.0f/16.0f, (uv_y + 1.0f/16.0f) );
+		glm::vec2 uv_down_left  = glm::vec2( uv_x           , (uv_y + 1.0f/16.0f) );
+		UVs.push_back(uv_up_left   );
+		UVs.push_back(uv_down_left );
+		UVs.push_back(uv_up_right  );
+
+		UVs.push_back(uv_down_right);
+		UVs.push_back(uv_up_right);
+		UVs.push_back(uv_down_left);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, Text2DVertexBufferID);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec2), &vertices[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, Text2DUVBufferID);
+	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(glm::vec2), &UVs[0], GL_STATIC_DRAW);
+
+	// Bind shader
+	glUseProgram(Text2DShaderID);
+
+	// Bind texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textId);
+	// Set our "myTextureSampler" sampler to use Texture Unit 0
+	glUniform1i(Text2DUniformID, 0);
+
+	// 1rst attribute buffer : vertices
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, Text2DVertexBufferID);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+
+	// 2nd attribute buffer : UVs
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, Text2DUVBufferID);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0 );
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Draw call
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size() );
+
+	glDisable(GL_BLEND);
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+
 }
 
-void Text::Init(void)
-{
-  glUseProgram(programID);
-    if (this->status == TEXT_ERR || this->status == TEXT_READY)
-        return;
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glActiveTexture(GL_TEXTURE0);
-    glGenTextures(1, &(this->tex));
-    glBindTexture(GL_TEXTURE_2D, this->tex);
-    glUniform1i(uniform_tex, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glGenBuffers(1, &(this->vbo));
-    glEnableVertexAttribArray(attribute_coord);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glVertexAttribPointer(attribute_coord, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    this->status = TEXT_READY;
-}
+Text::~Text(){
 
-int Text::LoadChar(char c)
-{
-    if (this->GetStatus() == TEXT_ERR)
-        return TEXT_ERR;
-    if(FT_Load_Char(this->font, c, FT_LOAD_RENDER))
-        return TEXT_ERR;
-    this->gs = this->font->glyph;
-    return TEXT_OK;
-}
+	// Delete buffers
+	glDeleteBuffers(1, &Text2DVertexBufferID);
+	glDeleteBuffers(1, &Text2DUVBufferID);
 
-int Text::Render(const char *text, float x, float y, float sx, float sy)
-{
-  glUseProgram(programID);
-    int loop;
-    
-    loop = 0;
-    if (this->status == TEXT_ERR)
-        return TEXT_ERR;
-    this->Init();
-    while (text[loop] != '\0')
-    {
-      if(this->LoadChar(text[loop]) == TEXT_ERR)
-          continue;
-      glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RED,
-        this->gs->bitmap.width,
-        this->gs->bitmap.rows,
-        0,
-        GL_RED,
-        GL_UNSIGNED_BYTE,
-        this->gs->bitmap.buffer
-      );
-      float x2 = x + this->gs->bitmap_left * sx;
-      float y2 = -y - this->gs->bitmap_top * sy;
-      float w = this->gs->bitmap.width * sx;
-      float h = this->gs->bitmap.rows * sy;
-      GLfloat box[4][4] = {
-          {x2,     -y2    , 0, 0},
-          {x2 + w, -y2    , 1, 0},
-          {x2,     -y2 - h, 0, 1},
-          {x2 + w, -y2 - h, 1, 1},
-      };
-      glBufferData(GL_ARRAY_BUFFER, sizeof box, box, GL_DYNAMIC_DRAW);
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-      x += (this->gs->advance.x/64) * sx;
-      y += (this->gs->advance.y/64) * sy;
-      loop++;
-    }
-    return TEXT_OK;
-}
+	// Delete texture
+	glDeleteTextures(1, &Text2DTextureID);
 
-int Text::GetFontSize(void)
-{
-    return this->font_size;
-}
-
-int Text::GetStatus(void)
-{
-    return this->status;
-}
-
-int Text::SetFontSize(int font_size)
-{
-    if (this->GetStatus() == TEXT_ERR)
-        return TEXT_ERR;
-    this->font_size = font_size;
-    FT_Set_Pixel_Sizes(this->font, 0, font_size);
-    return TEXT_OK;
+	// Delete shader
+	glDeleteProgram(Text2DShaderID);
 }

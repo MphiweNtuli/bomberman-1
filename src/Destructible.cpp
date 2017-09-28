@@ -26,43 +26,69 @@ void Destructible::set_xy(GLfloat x, GLfloat y)
 	this->y = y;
 }
 
-bool Destructible::destroy()
+void Destructible::removeDestructible(std::vector<GLfloat> &dest, int destNo)
 {
-    std::cout << "WIthin the Destroyer\n";
-    std::list<Wall>::iterator it;
-	int wall_it = 0;
+    destNo -= 1;
+    int start = 180 * destNo;
+    int end = start + 180;
+    
+    dest.erase(dest.begin() + start, dest.begin() + end);
+}
+
+std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
+{
+    std::vector<int> removeWalls;
+    std::vector<Wall>::iterator it;
+    int wall_it = 0;
     for (it = walls.begin(); it != walls.end(); ++it)
     {
         wall_it++;
-        // if(y + 0.04 > it->getYPos() + OFS_Y && y + 0.09 < it->getYPos() + OFS_Y + 0.09)
-        //     if(x + 0.03 > it->getXPos() + OFS_X && x < it->getXPos() + OFS_X + 0.09)
-        if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y )) 
+        if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y ) && !it->isDestroyed()) 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
-                std::cout << wall_it << "  : DOWN WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                // return false;
+                removeDestructible(dest, wall_it);
+                it->setIsDestroyed(true);
+                removeWalls.push_back(wall_it);
             }
-        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y )) 
+        if((y < it->getYPos() + OFS_Y && y + 0.1 > it->getYPos() + OFS_Y - 0.06 ) && !it->isDestroyed()) 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
             {
-                std::cout << wall_it << "  : UP WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                //return false;
+                removeDestructible(dest, wall_it);
+                it->setIsDestroyed(true);
+                removeWalls.push_back(wall_it);
             }
-       if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1))
+       if((x  > it->getXPos() + OFS_X  && x - 0.1 < it->getXPos() + OFS_X + 0.1) && !it->isDestroyed())
             if(y < it->getYPos() + OFS_Y + 0.03  && y > it->getYPos() + OFS_Y  - 0.06)
             {
-                std::cout << wall_it << "  : LEFT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                //return false;
+                removeDestructible(dest, wall_it);
+                it->setIsDestroyed(true);
+                removeWalls.push_back(wall_it);
             }
 
-       if(x  < it->getXPos() + OFS_X  && x + 0.1 > it->getXPos() + OFS_X)
+       if((x  < it->getXPos() + OFS_X  && x + 0.1 > it->getXPos() + OFS_X) && !it->isDestroyed())
             if(y < it->getYPos() + OFS_Y + 0.05  && y > it->getYPos() + OFS_Y  - 0.06)
-                {
-                    std::cout << wall_it << "  : RIGHT WALL IS DESTROID!!!!!!!!!!!!!!!!!!!!!!\n";
-                    //return false;
-                }
+            {
+                removeDestructible(dest, wall_it);
+                it->setIsDestroyed(true);
+                removeWalls.push_back(wall_it);
+            }
     }
-    return true;
+    walls.erase(walls.begin(),walls.end());
+    for (it = walls.begin(); it != walls.end(); ++it)
+        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
+    _dataSize = dest.size();
+    _counter = 20;
+    
+    while (_counter < _dataSize)
+    {
+        Wall wall(dest.at(_counter), dest.at(_counter + 1), true);
+        walls.push_back(wall);
+        _counter += 180;
+    }
+    for (it = walls.begin(); it != walls.end(); ++it)
+        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : POST Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
+
+    return removeWalls;
 }
 
 void Destructible::init1()
@@ -2739,37 +2765,26 @@ void Destructible::init1()
         
     };
     
-    std::cout << "vertex " << vertexData[0] << std::endl;
-
-    glGenVertexArrays(1, &vao);
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    glGenBuffers(1, &vbo);
+    _dataSize = _destructiblevector.size();
+    _counter = 20;
     
-    glBindVertexArray(vao);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-    
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    
-    int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
-    int i = 20;
-     
-    while (i < dataSize)
+    while (_counter < _dataSize)
     {
-        Wall wall(vertexData[i], vertexData[i + 1], true);
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
         walls.push_back(wall);
-        i += 180 ;
+        _counter += 180;
     }
-    
 }
 
-std::list<Wall>     Destructible::getWalls() const
+std::vector<GLfloat>     Destructible::getDestructibles(void)
+{
+    return _destructiblevector;
+}
+
+std::vector<Wall>     Destructible::getWalls() const
 {
     return walls;
 }
@@ -5448,31 +5463,18 @@ void Destructible::init2()
             
         };
     
-        glGenVertexArrays(1, &vao);
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-        glGenBuffers(1, &vbo);
-        
-        glBindVertexArray(vao);
-        
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-        
-        // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        // texture coord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        
-        int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
-        int i = 20;
+    _dataSize = _destructiblevector.size();
+    _counter = 20;
     
-        while (i < dataSize)
-        {
-            Wall wall(vertexData[i], vertexData[i + 1], true);
-            walls.push_back(wall);
-            i += 180 ;
-        }
+    while (_counter < _dataSize)
+    {
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
+        walls.push_back(wall);
+        _counter += 180;
+    }
     
 }
 
@@ -8148,48 +8150,56 @@ void Destructible::init3()
                 // 0.7f, -0.7f, 0.05f,      1.0f, 1.0f, //7
                 // 0.7f, -0.7f, 0.05f,      1.0f, 1.0f, //7
                 // 0.7f, -0.8f, 0.05f,      0.0f, 1.0f, //4
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 // 0.7f, -0.8f, -0.05f,      0.0f, 0.0f, //0
                 
             };
     
-        glGenVertexArrays(1, &vao);
-        
-        glGenBuffers(1, &vbo);
-        
-        glBindVertexArray(vao);
-        
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-        
-        // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-        // texture coord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        
-        int dataSize = sizeof(vertexData) / sizeof(vertexData[0]);
-        int i = 20;
-        
-         
-        while (i < dataSize)
-        {
-            Wall wall(vertexData[i], vertexData[i + 1], true);
-            walls.push_back(wall);
-            i += 180 ;
-        }
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    
+    _dataSize = _destructiblevector.size();
+    _counter = 20;
+    
+    while (_counter < _dataSize)
+    {
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
+        walls.push_back(wall);
+        _counter += 180;
+    }
 }
 
 
-void Destructible::draw()
+
+void Destructible::draw(std::vector<GLfloat> destructible)
 {
+    
+    glGenVertexArrays(1, &vao);
+    
+    glGenBuffers(1, &vbo);
+    
+    glBindVertexArray(vao);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, destructible.size() * sizeof(GLfloat), &destructible.front(), GL_STATIC_DRAW);
+    
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // texture coord attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    
     glBindTexture(GL_TEXTURE_2D, destructibleTexture);
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 1944);
-
+    
 }
-
-// Maze Destructible::getMaze()
-// {
-//     return maze;
-// }

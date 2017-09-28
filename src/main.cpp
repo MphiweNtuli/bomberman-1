@@ -10,21 +10,24 @@
 #include "StaticWall.hpp"
 #include "Destructible.hpp"
 #include "camera.hpp"
+#include "GameState.hpp"
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
-#include "Text.hpp"
-#include "Text_Back.hpp"
+#include "text.hpp"
+#include "enemy.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
+Text *text;
 Player *player;
 Bomb *bomb;
 Health health;
 Timer timer;
 Destructible destructible;
-Destructible destructible01;
+std::vector <GLfloat> listOfWalls;
+Enemy *enemy;
 
 bool clockTimer = false;
 
@@ -42,7 +45,6 @@ glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
-//Key Checking input        :Cradebe
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     (void) scancode;
@@ -51,10 +53,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	{
 		mainMenu->toggleCommands(key);
 		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-        {
-			//glfwSetKeyCallback(window, player_callback);
             glEnable(GL_DEPTH_TEST);
-        }
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -63,11 +62,12 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 int main(void)
 {
 	Sound *sound;
-	int soundVal;
-    //GameState gs;
+    int soundVal;
+    GameState gs;
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
+	std::vector<int> removeWalls;
 
 	myWindow.runGame();
 	sound = myWindow.getSound();
@@ -81,6 +81,8 @@ int main(void)
         return -1;
 
 	graphics = new Graphics();
+	enemy = new Enemy();
+
     bomb = new Bomb(3);
     // Health = new Token("Health");
     // Timer = new Token("Timer");
@@ -89,18 +91,8 @@ int main(void)
 	Portal portal;
     Health health;
     Timer timer;
-	Floor floor;
-	Text_Back t_bck;
+    Floor floor;
     Camera camera(cameraPos, cameraFront, cameraUp, window);
-    
-//====================================
-    //gs.loadPlayerState(player);
-    
-    //zamani please fix this because it causing a seg fault
-    //i think its due to changes of the coordinates system
-    //so it doesn't find the vertices
-//====================================
-
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
     
@@ -109,28 +101,33 @@ int main(void)
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls(), bomb);
+	text = new Text();
+
 	portal.init();
     health.init();
     timer.init();
 	destructible.init1();
-	destructible01.init1();
-    
+    player->setDestructible(destructible);
+    listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
-	floor.init();
-	t_bck.init();
+	// glfwSetKeyCallback(window, player->player_callback(window));
+    floor.init();
     
-    //set the initial sound value
+	//======== load game state ========
+	gs.loadPlayerState(player);
+	//=================================
+	//set the initial sound value
     soundVal = mainMenu->getSoundVal();
     //=========================================================================================
     //build and compile our shader program
     GLuint shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
     glUseProgram(shadersID);
     camera.perspectiveView(shadersID);
-    //====================================================================================
+    char bomberman[256];
+	sprintf(bomberman,"Your Quest has start");
 	
-	Text *text = new Text();
-	text->SetFontSize(11);
-
+    //====================================================================================
+    
     do {
 		// Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -159,33 +156,32 @@ int main(void)
                 camera.processKeyInput();
                 glUseProgram(shadersID);
                 camera.cameraTimeLogic();
-				camera.cameraFunction(shadersID);
+                camera.cameraFunction(shadersID);
                 floor.draw();
                 //---------------------------------
 				wall.draw();
+				
 				staticWall.draw();
 				portal.draw();
                 health.draw();
                 timer.draw();
-				destructible.draw();
-				destructible01.draw();
-                
+				player->getDestructible().draw(listOfWalls);
+                enemy->display();
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
 					bomb->display();
 				else if (bomb->getBombPlanted())
 				{
-                    std::cout << "i am here" << std::endl;
-					destructible.destroy();
-					destructible01.destroy();
+					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
+                    player->remove(removeWalls);
 				}
+				text->loadText(bomberman, 50, 100, 20); //(location left /right,location up / down ,size)
+
                 
 				player->init();
 				player->player_callback(window);
-				t_bck.draw();
-				text->Render("High Score", 0, 0, 1, 1);
 
 			default:
 				break;
@@ -198,13 +194,14 @@ int main(void)
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
-
-	/* emsimang: save the player's coords*/
-	//gs.savePlayerState(*player);
-
+	
+	//======================= save game state ==================
+	gs.savePlayerState(*player);
+	//==========================================================
 	// Cleanup VBO
 	delete graphics;
 	delete player;
+    delete bomb;
 	
 	mainMenu->menuCleanup();
 	//glDeleteProgram(programID);

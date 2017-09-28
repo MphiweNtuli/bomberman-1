@@ -5,7 +5,7 @@ Player::Player()
 {
 }
 
-Player::Player(std::list<Wall> walls, Bomb *bomb)
+Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
     _bomb = bomb;
 	x = 0;
@@ -37,13 +37,38 @@ Player::Player(std::list<Wall> walls, Bomb *bomb)
    this->walls = walls;
 }
 
-void	Player::setWalls(std::list<Wall> walls)
+void	Player::setWalls(std::vector<Wall> walls)
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
 		this->walls.push_back(*it);
+	}
+}
+
+void	Player::remove(std::vector<int> removeWalls)
+{
+	std::vector<Wall>::iterator it;
+	std::vector<int>::iterator iter;
+
+	std::cout <<  "Is inside player function";
+	int wall_it = 0;
+	for (it = walls.begin(); it != walls.end(); ++it)
+	{
+		wall_it++;
+		if(wall_it > 64)
+		{
+    		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
+				if (wall_it - 64 == *iter)
+				{
+					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+					it = walls.erase(it);
+					// it->setIsDestroyed(true);
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+				}
+		}
 	}
 }
 
@@ -121,12 +146,12 @@ void Player::init()
 
 bool Player::moveUp()
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
+			if((yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -145,12 +170,12 @@ bool Player::moveUp()
 
 bool Player::moveDown()
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
+			if((yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -168,12 +193,12 @@ bool Player::moveDown()
 bool Player::moveLeft()
 {
 
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
+				if((xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15) && !it->isDestroyed())
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						if(wall_it > 64)
@@ -191,12 +216,12 @@ bool Player::moveLeft()
 bool Player::moveRight()
 {
 
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
+			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				{
 					if(wall_it > 64)
@@ -261,12 +286,34 @@ void Player::player_callback(GLFWwindow* window)
     {
         _bomb->set_x(get_xPos());
         _bomb->set_y(get_yPos());
+        _des.set_xy(get_xPos(), get_yPos());
+        _des01.set_xy(get_xPos(),get_yPos());
         _bomb->updateLocation();
         _bomb->drop();
         _bomb->setBombPlanted(true);
         std::cout << "Space pressed\n";
     }
     
+}
+
+void Player::setDestructible(Destructible destructible)
+{
+    _des = destructible;
+}
+
+Destructible Player::getDestructible(void)
+{
+    return _des;
+}
+
+void Player::setDestructible01(Destructible destructible01)
+{
+    _des01 = destructible01;
+}
+
+Destructible Player::getDestructible01(void)
+{
+    return _des01;
 }
 
 GLuint Player::getProgramId() const
@@ -290,8 +337,6 @@ GLfloat Player::get_yPos(void) const
     return this->yPos;
 }
 
-/* emsimang: experimental code*/
-
 GLuint Player::getPVAO() const
 {
     return pVAO;
@@ -312,15 +357,144 @@ GLuint Player::getPTextureId() const
     return pTextureId;
 }
 
-/* emsimang: experimental code*/
+GLuint Player::getPProgramId() const
+{
+	return (programID);
+}
+
+GLuint Player::getPVBO() const{
+	return this->pVBO;
+}
+
+glm::mat4 Player::getView() const{
+	return this->_view;
+}
+
+glm::mat4 Player::getModel() const{
+	return this->_model;
+}
+
+glm::mat4 Player::getProjection() const{
+	return this->_projection;
+}
+
+unsigned int Player::getModelLoc() const{
+	return this->_modelLoc;
+}
+
+unsigned int Player::getVmodelLoc() const{
+	return this->_vmodelLoc;
+}
+
+std::vector<glm::vec3> Player::getVertices() const{
+	return this->_vertices;
+}
+
+std::vector<glm::vec2> Player::getUvbuffer() const{
+	return this->_uvbuffer;
+}
+
+std::vector<glm::vec3> Player::getNormals() const{
+	return this->normals;
+}
+
+int Player::getX() const{
+	return this->x;
+}
+
+int Player::getY() const{
+	return this->y;
+}
+
+std::vector<Wall> Player::getWalls() const{
+	return this->walls;
+}
+
+std::vector<float> Player::getModelV() const{
+	return (_modelV);
+}
 
 void Player::operator=(const Player &p)
 {
     this->xPos = p.get_xPos();
-    this->yPos = p.get_yPos();
-    this->pVAO = p.getPVAO();
-    this->pVBO = p.getPUVO();
-    this->pEBO = p.getPEBO();
-    this->programID = p.getProgramId();
-    this->pTextureId = p.getPTextureId();
+	this->yPos = p.get_yPos();
+}
+
+void Player::restorePosition(float x, float y)
+{
+	_model[3][0] = x;
+	_model[3][1] = y;
+	xPos = x;
+	yPos = y;
+}
+void Player::mat4ToVector()
+{
+    int len = 0;
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int  j = 0; j < 4; j++)
+        {
+            len++;
+            _modelV.push_back(_model[i][j]);
+        }
+    }
+    _modelV.push_back(len);
+}
+
+void Player::vectorToMat4()
+{
+    int iv = 0;
+    int len = _modelV.back();
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0 && iv < len; j < 4; j++)
+        {
+            _model[i][j] = _modelV[iv++];
+        }
+    }
+}
+
+void Player::printMatrix(std::string s)
+{
+	std::ofstream ofs("logfile.txt", std::ios::app);
+    for (int i = 0; i < 4; i ++)
+    {
+        if (i == 1)
+            ofs << s.c_str() << "._model = {";
+        if (i != 1)
+            ofs << "         		{";
+        for (int j = 0; j < 4; j++)
+        {
+            ofs << _model[i][j];
+            if (j != 3)
+                ofs << ", ";
+        }
+		ofs << "}" << std::endl;
+    }
+	ofs << "" << std::endl;		
+}
+
+int Player::printVector()
+{
+    int i = 0;
+	int len = _modelV.back();
+	std::ofstream ofs("logfile.txt", std::ios::app);
+    if (!_modelV.size())
+    {
+        ofs << "vector is empty" << std::endl;
+        return (1);
+    }
+    ofs << "_modelV = {";
+    while (i < len)
+    {
+        ofs << _modelV[i];
+        if (i < (len - 1))
+            ofs << ", ";
+        i++;
+    }
+	ofs << "}" << std::endl;
+	ofs << "" << std::endl;
+    return (0);
 }

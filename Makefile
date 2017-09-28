@@ -14,16 +14,16 @@
 NAME = bomberman
 
 CC = clang++
-CCFLAGS = #-Wall -Werror -Wextra
+CCFLAGS = -Wall -Werror -Wextra
 
 SRC_FOLDER = src
 INCLUDE_FOLDER = include
 
 SRCDIR = src/
 SRCS = main.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp loader.cpp\
-	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp controls.cpp Text_Back.cpp\
+	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp controls.cpp\
 	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp\
-	  camera.cpp health.cpp timer.cpp Bomb.cpp Text.cpp #GameState.cpp
+	  camera.cpp health.cpp timer.cpp Bomb.cpp GameState.cpp text.cpp enemy.cpp
 
 SRC	= $(addprefix $(SRCDIR), $(SRCS))
 INCLUDE = $(wildcard $(INCLUDE_FOLDER)/*.hpp)
@@ -56,14 +56,10 @@ _GLM_FOLDER = $(BREW)/Cellar/glm
 GLM_FOLDER = $(_GLM_FOLDER)/$(shell ls -r $(_GLM_FOLDER) | head -n 1)
 GLM = -I $(GLM_FOLDER)/include/GLM
 
-_FREETYPE_FOLDER = $(BREW)/Cellar/freetype
-FREETYPE_FOLDER = $(_FREETYPE_FOLDER)/$(shell ls -r $(_FREETYPE_FOLDER) | head -n 1)
-FREETYPE = -I $(FREETYPE_FOLDER)/include/freetype2 -L $(FREETYPE_FOLDER)/lib -lfreetype
-
 all: $(NAME)
 
-$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_BOOST_FOLDER) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER) $(_FREETYPE_FOLDER)
-	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(BOOST) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) $(FREETYPE) -framework OpenGL
+$(NAME): $(SRC) $(INCLUDE) $(BREW) $(_BOOST_FOLDER) $(_GLM_FOLDER) $(_GLEW_FOLDER) $(_GLFW_FOLDER) $(_SDL2_FOLDER) $(_SDL2_MIXER_FOLDER)
+	$(CC) $(CCFLAGS) -o $(NAME) $(SRC) -I $(INCLUDE_FOLDER) $(BOOST) $(GLM) $(GLEW) $(GLFW) $(SDL2) $(SDL2_MIXER) -framework OpenGL
 
 $(BREW):
 	git clone $(BREW_REPO) $(BREW_TMP)
@@ -86,9 +82,6 @@ $(_SDL2_FOLDER):
 
 $(_SDL2_MIXER_FOLDER):
 	brew install sdl2_mixer
-
-$(_FREETYPE_FOLDER):
-	brew install freetype
 
 clean:
 	rm -f $(NAME)

@@ -1,41 +1,39 @@
-#ifndef _TEXT_HPP_
-#define _TEXT_HPP_
+#ifndef TEXT2D_HPP
+#define TEXT2D_HPP
 
-#define TEXT_OK 1
-#define TEXT_ERR 2
-#define TEXT_READY 3
-#define TEXT_NOT_READY 4
+#include <vector>
+#include <cstring>
 
-#include "Bomberman.hpp" 
-#include "ft2build.h"
-#include FT_FREETYPE_H
+// #include <GL/glew.h>
+
+// #include <glm/glm.hpp>
+// #include <glm/gtc/matrix_transform.hpp>
+// // using namespace glm;
+
+// #include "shader.hpp"
+// #include "texture.hpp"
+#include "Bomberman.hpp"
 
 class Text
 {
-    private:
-        FT_Library ft;
-        FT_Face font;
-        FT_GlyphSlot gs;
-        GLuint tex;
-        GLuint vbo;
-        GLuint programID;
-        GLint attribute_coord;
-        GLint uniform_tex;
-        int font_size;
-        int status;
+	public:
+		// Text(const char * texturePath);
+		Text();
+		~Text();
 
-        void Init(void);
-        int LoadChar(char c);
-    public:
-        Text(void);
-        ~Text(void);
-        
-        int Render(const char *text, float x, float y, float sx, float sy);
+		void loadText(const char * text, int x, int y, int size);
 
-        int GetFontSize(void);
-        int GetStatus(void);
-        
-        int SetFontSize(int font_size);
+	private:
+		unsigned int Text2DTextureID;
+		unsigned int Text2DVertexBufferID;
+		unsigned int Text2DUVBufferID;
+		unsigned int Text2DShaderID;
+		unsigned int Text2DUniformID;
+		GLuint	textId;
 };
 
-#endif
+
+
+
+
+#endif 

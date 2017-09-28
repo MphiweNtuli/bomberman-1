@@ -6,7 +6,6 @@
 #define OFS_Y -0.02f
 
 #include "Bomberman.hpp"
-#include "Player.hpp"
 
 class Destructible
 {
@@ -17,18 +16,19 @@ public:
     void init1();
     void init2();
     void init3();
-    void test();
-    void draw();
-    bool destroy();
+    void draw(std::vector<GLfloat> destructibleToDraw);
+    std::vector<int> destroy(std::vector<GLfloat> &dest);
     void set_xy(GLfloat x, GLfloat y);
-    std::list<Wall> getWalls() const;
+    std::vector<Wall> getWalls() const;
+    std::vector<GLfloat> getDestructibles(void);
+    void removeDestructible(std::vector<GLfloat> &dest, int destNo);
     
 private:
-    GLuint VertexArrayID, destructibleTexture;
-    GLuint programID, VAOs[STATIC_WALLS], VBOs[STATIC_WALLS], EBOs[STATIC_WALLS], vao, vbo;
+    GLuint destructibleTexture, vao, vbo;
     GLfloat x,y;
-    std::list<Wall> walls;
-
+    std::vector<Wall> walls;
+    int _counter, _dataSize;
+    std::vector<GLfloat> _destructiblevector;
 };
 
 #endif
