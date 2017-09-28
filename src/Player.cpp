@@ -52,6 +52,7 @@ void	Player::remove(std::list<int> removeWalls)
 	std::list<Wall>::iterator it;
 	std::list<int>::iterator iter;
 
+	std::cout <<  "Is inside player function";
 	int wall_it = 0;
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
@@ -62,9 +63,10 @@ void	Player::remove(std::list<int> removeWalls)
 				if (wall_it - 64 == *iter)
 				{
 					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-					it = walls.erase(it);
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getXPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
+					// it = walls.erase(it);
+					it->setIsDestroyed(true);
+					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
 				}
 		}
 	}
@@ -149,7 +151,7 @@ bool Player::moveUp()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09)
+			if((yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -173,7 +175,7 @@ bool Player::moveDown()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09)
+			if((yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
 				{
 					if(wall_it > 64)
@@ -196,7 +198,7 @@ bool Player::moveLeft()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-				if(xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15)
+				if((xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15) && !it->isDestroyed())
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					{
 						if(wall_it > 64)
@@ -219,7 +221,7 @@ bool Player::moveRight()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if(xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07)
+			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 				{
 					if(wall_it > 64)
