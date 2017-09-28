@@ -2,6 +2,7 @@
 
 Text::Text(void)
 {
+  programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
     this->status = TEXT_ERR;
     if(FT_Init_FreeType(&(this->ft)))
         return;
@@ -18,6 +19,7 @@ Text::~Text(void)
 
 void Text::Init(void)
 {
+  glUseProgram(programID);
     if (this->status == TEXT_ERR || this->status == TEXT_READY)
         return;
     glEnable(GL_BLEND);
@@ -50,8 +52,9 @@ int Text::LoadChar(char c)
 
 int Text::Render(const char *text, float x, float y, float sx, float sy)
 {
+  glUseProgram(programID);
     int loop;
-  
+    
     loop = 0;
     if (this->status == TEXT_ERR)
         return TEXT_ERR;

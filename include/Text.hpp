@@ -18,6 +18,7 @@ class Text
         FT_GlyphSlot gs;
         GLuint tex;
         GLuint vbo;
+        GLuint programID;
         GLint attribute_coord;
         GLint uniform_tex;
         int font_size;

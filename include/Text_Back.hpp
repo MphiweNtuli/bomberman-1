@@ -15,6 +15,7 @@ public:
     
 private:
     GLuint VAO, VBO, EBO, Text_BackTexture;
+    GLuint programID;
 };
 
 #endif

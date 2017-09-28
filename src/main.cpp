@@ -160,8 +160,6 @@ int main(void)
                 glUseProgram(shadersID);
                 camera.cameraTimeLogic();
 				camera.cameraFunction(shadersID);
-				t_bck.draw();
-				text->Render("High Score", 0, 0, 1, 1);
                 floor.draw();
                 //---------------------------------
 				wall.draw();
@@ -186,6 +184,8 @@ int main(void)
                 
 				player->init();
 				player->player_callback(window);
+				t_bck.draw();
+				text->Render("High Score", 0, 0, 1, 1);
 
 			default:
 				break;

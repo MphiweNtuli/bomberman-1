@@ -2,7 +2,8 @@
 
 Text_Back::Text_Back()
 {
-    glDeleteBuffers(1, &VBO);
+    programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
+    // glDeleteBuffers(1, &VBO);
 }
 
 Text_Back::~Text_Back()
@@ -14,6 +15,7 @@ Text_Back::~Text_Back()
 
 void Text_Back::init()
 {
+    glUseProgram(programID);
     Texture texture("mud.jpg", &Text_BackTexture);
     
     
@@ -59,6 +61,7 @@ void Text_Back::init()
 
 void Text_Back::draw()
 {
+    // glUseProgram(programID);
     //render Text_Back
     glBindVertexArray(VAO);
     //bind textures on corresponding texture units
