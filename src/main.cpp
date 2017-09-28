@@ -23,7 +23,7 @@ Bomb *bomb;
 Health health;
 Timer timer;
 Destructible destructible;
-Destructible destructible01;
+std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
 
@@ -41,7 +41,6 @@ glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
-//Key Checking input        :Cradebe
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     (void) scancode;
@@ -50,10 +49,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	{
 		mainMenu->toggleCommands(key);
 		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-        {
-			//glfwSetKeyCallback(window, player_callback);
             glEnable(GL_DEPTH_TEST);
-        }
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -103,10 +99,8 @@ int main(void)
     health.init();
     timer.init();
 	destructible.init1();
-	destructible01.init1();
     player->setDestructible(destructible);
-    player->setDestructible01(destructible01);
-    
+    listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
@@ -160,8 +154,7 @@ int main(void)
 				portal.draw();
                 health.draw();
                 timer.draw();
-				player->getDestructible().draw();
-				player->getDestructible01().draw();
+				player->getDestructible().draw(listOfWalls);
                 
                 if (timeout(100) == true)
                     graphics->setDrawMode(MAINMENU);
@@ -169,9 +162,7 @@ int main(void)
 					bomb->display();
 				else if (bomb->getBombPlanted())
 				{
-                    std::cout << "i am here" << std::endl;
-					removeWalls = player->getDestructible().destroy();
-					removeWalls = player->getDestructible01().destroy();
+					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
                     player->remove(removeWalls);
 				}
@@ -197,6 +188,7 @@ int main(void)
 	// Cleanup VBO
 	delete graphics;
 	delete player;
+    delete bomb;
 	
 	mainMenu->menuCleanup();
 	//glDeleteProgram(programID);
