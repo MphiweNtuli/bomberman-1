@@ -337,7 +337,7 @@ void StaticWall::init()
     
 }
 
-std::list<Wall>     StaticWall::getWalls() const
+std::vector<Wall>     StaticWall::getWalls() const
 {
     return walls;
 }

@@ -35,10 +35,10 @@ void Destructible::removeDestructible(std::vector<GLfloat> &dest, int destNo)
     dest.erase(dest.begin() + start, dest.begin() + end);
 }
 
-std::list<int> Destructible::destroy(std::vector<GLfloat> &dest)
+std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
 {
-    std::list<int> removeWalls;
-    std::list<Wall>::iterator it;
+    std::vector<int> removeWalls;
+    std::vector<Wall>::iterator it;
     int wall_it = 0;
     for (it = walls.begin(); it != walls.end(); ++it)
     {
@@ -73,6 +73,20 @@ std::list<int> Destructible::destroy(std::vector<GLfloat> &dest)
                 removeWalls.push_back(wall_it);
             }
     }
+    walls.erase(walls.begin(),walls.end());
+    for (it = walls.begin(); it != walls.end(); ++it)
+        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
+    _dataSize = dest.size();
+    _counter = 20;
+    
+    while (_counter < _dataSize)
+    {
+        Wall wall(dest.at(_counter), dest.at(_counter + 1), true);
+        walls.push_back(wall);
+        _counter += 180;
+    }
+    for (it = walls.begin(); it != walls.end(); ++it)
+        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : POST Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
 
     return removeWalls;
 }
@@ -2751,15 +2765,15 @@ void Destructible::init1()
         
     };
     
-    //construct a list from an array
-    _destructibleList.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructibleList.size();
+    _dataSize = _destructiblevector.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructibleList.at(_counter), _destructibleList.at(_counter + 1), true);
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
         walls.push_back(wall);
         _counter += 180;
     }
@@ -2767,10 +2781,10 @@ void Destructible::init1()
 
 std::vector<GLfloat>     Destructible::getDestructibles(void)
 {
-    return _destructibleList;
+    return _destructiblevector;
 }
 
-std::list<Wall>     Destructible::getWalls() const
+std::vector<Wall>     Destructible::getWalls() const
 {
     return walls;
 }
@@ -5449,15 +5463,15 @@ void Destructible::init2()
             
         };
     
-    //construct a list from an array
-    _destructibleList.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructibleList.size();
+    _dataSize = _destructiblevector.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructibleList.at(_counter), _destructibleList.at(_counter + 1), true);
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
         walls.push_back(wall);
         _counter += 180;
     }
@@ -8136,19 +8150,28 @@ void Destructible::init3()
                 // 0.7f, -0.7f, 0.05f,      1.0f, 1.0f, //7
                 // 0.7f, -0.7f, 0.05f,      1.0f, 1.0f, //7
                 // 0.7f, -0.8f, 0.05f,      0.0f, 1.0f, //4
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 // 0.7f, -0.8f, -0.05f,      0.0f, 0.0f, //0
                 
             };
     
-    //construct a list from an array
-    _destructibleList.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    //construct a vector from an array
+    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructibleList.size();
+    _dataSize = _destructiblevector.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructibleList.at(_counter), _destructibleList.at(_counter + 1), true);
+        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
         walls.push_back(wall);
         _counter += 180;
     }

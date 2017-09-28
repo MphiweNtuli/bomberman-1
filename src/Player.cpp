@@ -5,7 +5,7 @@ Player::Player()
 {
 }
 
-Player::Player(std::list<Wall> walls, Bomb *bomb)
+Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
     _bomb = bomb;
 	x = 0;
@@ -37,9 +37,9 @@ Player::Player(std::list<Wall> walls, Bomb *bomb)
    this->walls = walls;
 }
 
-void	Player::setWalls(std::list<Wall> walls)
+void	Player::setWalls(std::vector<Wall> walls)
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
@@ -47,10 +47,10 @@ void	Player::setWalls(std::list<Wall> walls)
 	}
 }
 
-void	Player::remove(std::list<int> removeWalls)
+void	Player::remove(std::vector<int> removeWalls)
 {
-	std::list<Wall>::iterator it;
-	std::list<int>::iterator iter;
+	std::vector<Wall>::iterator it;
+	std::vector<int>::iterator iter;
 
 	std::cout <<  "Is inside player function";
 	int wall_it = 0;
@@ -64,8 +64,8 @@ void	Player::remove(std::list<int> removeWalls)
 				{
 					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
 					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-					// it = walls.erase(it);
-					it->setIsDestroyed(true);
+					it = walls.erase(it);
+					// it->setIsDestroyed(true);
 					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
 				}
 		}
@@ -146,7 +146,7 @@ void Player::init()
 
 bool Player::moveUp()
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
@@ -170,7 +170,7 @@ bool Player::moveUp()
 
 bool Player::moveDown()
 {
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
@@ -193,7 +193,7 @@ bool Player::moveDown()
 bool Player::moveLeft()
 {
 
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
@@ -216,7 +216,7 @@ bool Player::moveLeft()
 bool Player::moveRight()
 {
 
-	std::list<Wall>::iterator it;
+	std::vector<Wall>::iterator it;
 	int wall_it = 0;
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
@@ -406,7 +406,7 @@ int Player::getY() const{
 	return this->y;
 }
 
-std::list<Wall> Player::getWalls() const{
+std::vector<Wall> Player::getWalls() const{
 	return this->walls;
 }
 

@@ -63,7 +63,7 @@ int main(void)
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
-	std::list<int> removeWalls;
+	std::vector<int> removeWalls;
 
 	myWindow.runGame();
 	sound = myWindow.getSound();
