@@ -21,7 +21,7 @@ MainMenu *mainMenu;
 Settings *settings;
 
 Graphics *graphics;
-Player *player;
+Player *player; 
 Bomb *bomb;
 Health health; 
 Timer timer;
@@ -50,12 +50,20 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     (void) scancode;
     (void) mods;
 	if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_ENTER) && action == GLFW_PRESS)
-	{
-		mainMenu->toggleCommands(key);
-		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
+	{	
+		if (graphics->getDrawMode() == MAINMENU)
+		{
+			mainMenu->toggleCommands(key);
+			if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
+        	{
+				//glfwSetKeyCallback(window, player_callback);
+        	    glEnable(GL_DEPTH_TEST);
+        	}
+        }
+        else if (graphics->getDrawMode() == SETTINGS)
         {
-			//glfwSetKeyCallback(window, player_callback);
-            glEnable(GL_DEPTH_TEST);
+        	std::cout << "inside \n";
+        	settings->toggleCommands(/*window,*/ key);
         }
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -139,7 +147,7 @@ int main(void)
         //only reset the sound setting if the value is different
         if (soundVal != mainMenu->getSoundVal())
         {
-            std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+            //std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
             soundVal = mainMenu->getSoundVal();
             Mix_VolumeMusic(soundVal);
         }
@@ -152,14 +160,13 @@ int main(void)
 				mainMenu->LoadMainMenuImage();
                 myWindow = mainMenu->getGameWindow();
                 window = myWindow.getWindow();
-                glfwSetKeyCallback(window, key_callback);
+                // glfwSetKeyCallback(window, key_callback);
 				break;
 			case SETTINGS:
 				sound->playMusicForvever(MUSIC_MENU1);
-				settings->toggleCommands(window);
-				settings->initSettingsImage();
+				// settings->toggleCommands(window);
+				//settings->initSettingsImage();
 				settings->LoadSettingsImage();
-
                 myWindow = settings->getGameWindow();
 
                 

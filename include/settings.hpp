@@ -24,7 +24,7 @@ class Settings
 		Settings();
         Settings(GLFWwindow *window, Window &, Graphics *g);
         ~Settings();
-
+ 
         Settings(Settings& obj);
         Settings& operator=(Settings& obj);
 
@@ -35,7 +35,7 @@ class Settings
         // int getSoundVal();
         void Return();
         Window getGameWindow();
-        void toggleCommands(GLFWwindow* window);
+        void toggleCommands(/*GLFWwindow* window, */int key);
         void executeCommand(int command);
         void setGraphics(Graphics *g);
         // void gameHighScore();

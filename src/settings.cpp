@@ -31,20 +31,7 @@ Window Settings::getGameWindow()
     return (_gameWindow);
 }
 
-// void Settings::gameSettings(int input)
-// {
-//     Input command;
-//     switch (input)
-//     {
-//         case command.ToggleSound:
-//             modSound();
-//             if (getSoundVal() > 0)
-//                 std::cout << "Sound is ON" << std::endl;
-//             else
-//                 std::cout << "Sound is OFF" << std::endl;
-//             break;
-//     }
-// }
+
 
 void Settings::executeCommand(int input){
     settingsInput command;
@@ -52,65 +39,40 @@ void Settings::executeCommand(int input){
         case command.Sound :
             std::cout << "Start:" << std::endl;
             glClear(GL_COLOR_BUFFER_BIT);
-			graphics->setDrawMode(GAMEPLAY);
         break;
         case command.Screen :
             std::cout << "Continue" << std::endl;
         break;
         case command.Return :
              std::cout << "Settings" << std::endl;
-            // gameSettings(5);
-            _gameWindow.changeWindowSize();
-        // break;
-        // case command.Exit :
-        //     std::cout << "Exit" << std::endl;      
-        //     glfwSetWindowShouldClose(_window, GL_TRUE);
+            
         break;
     }
 }
 
-// void Settings::toggleCommands(int key){
-//     settingsInput command;
-//     switch(key){
-//         case GLFW_KEY_DOWN :
-//             this->_input++;
-//             if(_input > command.Return)
-//                 this->_input = command.Sound;
-//             std::cout << _input << std::endl;
-//             break;
-        
-//         case GLFW_KEY_UP :
-//             this->_input--;
-//             if(_input < command.Sound)
-//                 this->_input = command.Return;
-//             std::cout << _input << std::endl;
-//             break;
-//         case GLFW_KEY_ENTER :
-//                executeCommand(_input);
-//     }
-//     initSettingsImage();
-// }
 
-void Settings::toggleCommands(GLFWwindow* window)
+void Settings::toggleCommands(/*GLFWwindow* window,*/ int key)
 {
     std::cout  << this->_input << " input : \n";
      settingsInput command;
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-    {
-        this->_input--;
-        if(_input < command.Sound)
-            this->_input = command.Return;
-        std::cout << _input << std::endl;  //break;
-
+      switch(key){
+        case GLFW_KEY_DOWN :
+            this->_input++;
+            if(_input > command.Return)
+                this->_input = command.Sound;
+            std::cout << _input << std::endl;
+            break;
+        
+        case GLFW_KEY_UP :
+            this->_input--;
+            if(_input < command.Sound)
+                this->_input = command.Return;
+            std::cout << _input << std::endl;
+            break;
+        case GLFW_KEY_ENTER :
+               executeCommand(_input);
     }
-    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        this->_input++;
-        if(_input > command.Return)
-            this->_input = command.Sound;
-        std::cout << _input << std::endl;
-       
-    }
+    initSettingsImage();
     
 }
 
