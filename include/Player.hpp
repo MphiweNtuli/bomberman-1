@@ -20,12 +20,12 @@ public:
 	Player(std::vector<Wall> walls, Bomb *bomb);
 	~Player();
 	void init();
-	bool moveUp(); 
-	bool moveDown();
-	bool moveLeft();
-	bool moveRight();
+	bool moveUp(std::vector<Wall> walls); 
+	bool moveDown(std::vector<Wall> walls);
+	bool moveLeft(std::vector<Wall> walls);
+	bool moveRight(std::vector<Wall> walls);
 	void transform();
-	void player_callback(GLFWwindow* window);
+	void player_callback(GLFWwindow* window, std::vector<Wall> walls);
 	void draw();
     void setDestructible(Destructible destructible);
     Destructible getDestructible(void);
@@ -34,7 +34,7 @@ public:
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
-	void setWalls(std::vector<Wall> walls);
+	void setWalls(std::vector<Wall> walls, std::vector<Wall> &walls2);
     GLuint getPVAO() const;
     GLuint getPUVO() const;
     GLuint getPVBO() const;
@@ -44,7 +44,7 @@ public:
 	GLuint getProgramId() const;
     void operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
-    void remove(std::vector<int> removeWalls);
+    void remove(std::vector<int> removeWalls, std::vector<Wall> &walls);
 	int printVector();
 	void vectorToMat4();
 	void mat4ToVector();
@@ -79,7 +79,7 @@ private:
 	int x;
 	int y;
     bool load_result;
-	std::vector<Wall> walls;
+	std::vector<Wall> walls1;
 	std::vector<float> _modelV;
     template <class archive> friend
     void boost::serialization::serialize(archive &ar, Player &p, const unsigned int version);

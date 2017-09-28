@@ -34,20 +34,20 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
    load_result = loadOBJ("BombermanModels/bomberman.obj", _vertices, _uvbuffer, normals);
     if (load_result != true)
         std::cout << "failed to load model" << std::endl;
-   this->walls = walls;
+   this->walls1 = walls;
 }
 
-void	Player::setWalls(std::vector<Wall> walls)
+void	Player::setWalls(std::vector<Wall> walls, std::vector<Wall> &walls2)
 {
 	std::vector<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
-		this->walls.push_back(*it);
+		walls2.push_back(*it);
 	}
 }
 
-void	Player::remove(std::vector<int> removeWalls)
+void	Player::remove(std::vector<int> removeWalls, std::vector<Wall> &walls)
 {
 	std::vector<Wall>::iterator it;
 	std::vector<int>::iterator iter;
@@ -144,7 +144,7 @@ void Player::init()
 
 }
 
-bool Player::moveUp()
+bool Player::moveUp(std::vector<Wall> walls)
 {
 	std::vector<Wall>::iterator it;
 	int wall_it = 0;
@@ -168,7 +168,7 @@ bool Player::moveUp()
 	
 }
 
-bool Player::moveDown()
+bool Player::moveDown(std::vector<Wall> walls)
 {
 	std::vector<Wall>::iterator it;
 	int wall_it = 0;
@@ -190,7 +190,7 @@ bool Player::moveDown()
 
 }
 
-bool Player::moveLeft()
+bool Player::moveLeft(std::vector<Wall> walls)
 {
 
 	std::vector<Wall>::iterator it;
@@ -213,7 +213,7 @@ bool Player::moveLeft()
 			
 }
 
-bool Player::moveRight()
+bool Player::moveRight(std::vector<Wall> walls)
 {
 
 	std::vector<Wall>::iterator it;
@@ -235,12 +235,12 @@ bool Player::moveRight()
 		return true;
 }
 
-void Player::player_callback(GLFWwindow* window)
+void Player::player_callback(GLFWwindow* window, std::vector<Wall> walls)
 {
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
-		if(moveLeft()) {
+		if(moveLeft(walls)) {
 			_model = glm::translate(_model, bills);
 			xPos = _model[3][0];
 		}
@@ -252,7 +252,7 @@ void Player::player_callback(GLFWwindow* window)
 
 		glm::vec3 bills(0.0,0.0,0.03);
 		
-		if(moveRight()) {
+		if(moveRight(walls)) {
 			_model = glm::translate(_model, bills);
 			xPos = _model[3][0];
 		}
@@ -264,7 +264,7 @@ void Player::player_callback(GLFWwindow* window)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
-		if(moveUp()){
+		if(moveUp(walls)){
 			_model = glm::translate(_model, bills);
 			yPos = _model[3][1];
 		}
@@ -275,7 +275,7 @@ void Player::player_callback(GLFWwindow* window)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
-		if(moveDown()) {
+		if(moveDown(walls)) {
 			_model = glm::translate(_model, bills);
 			yPos = _model[3][1];
 		}
@@ -407,7 +407,7 @@ int Player::getY() const{
 }
 
 std::vector<Wall> Player::getWalls() const{
-	return this->walls;
+	return this->walls1;
 }
 
 std::vector<float> Player::getModelV() const{

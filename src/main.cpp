@@ -64,6 +64,7 @@ int main(void)
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 	std::vector<int> removeWalls;
+	std::vector<Wall> walls;
 
 	myWindow.runGame();
 	sound = myWindow.getSound();
@@ -94,14 +95,15 @@ int main(void)
     health.init();
     timer.init();
 	staticWall.init();
-	player = new Player(staticWall.getWalls(), bomb);
+	walls = staticWall.getWalls();
+	player = new Player(walls, bomb);
 	portal.init();
     health.init();
     timer.init();
 	destructible.init1();
     player->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
-	player->setWalls(destructible.getWalls());
+	player->setWalls(destructible.getWalls(),walls);
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
     
@@ -164,11 +166,11 @@ int main(void)
 				{
 					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
-                    player->remove(removeWalls);
+                    player->remove(removeWalls,walls);
 				}
                 
 				player->init();
-				player->player_callback(window);
+				player->player_callback(window, walls);
 
 			default:
 				break;
