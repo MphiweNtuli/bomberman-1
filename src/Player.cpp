@@ -52,23 +52,14 @@ void	Player::remove(std::vector<int> removeWalls)
 	std::vector<Wall>::iterator it;
 	std::vector<int>::iterator iter;
 
-	std::cout <<  "Is inside player function";
 	int wall_it = 0;
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
 		wall_it++;
 		if(wall_it > 64)
-		{
     		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
 				if (wall_it - 64 == *iter)
-				{
-					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-					it = walls.erase(it);
-					// it->setIsDestroyed(true);
-					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-				}
-		}
+					it->setIsDestroyed(true);
 	}
 }
 
@@ -153,11 +144,7 @@ bool Player::moveUp()
 			wall_it++;
 			if((yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Wall number\n";
 					return false;
-				}
 		}
 		if (yPos + 0.098 > 0.87)
 			return false;
@@ -177,11 +164,7 @@ bool Player::moveDown()
 			wall_it++;
 			if((yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 				if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Wall number\n";
 					return false;
-				}
 		}
 		if (yPos - 0.098 < -0.98)
 			return false;
@@ -200,11 +183,7 @@ bool Player::moveLeft()
 			wall_it++;
 				if((xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15) && !it->isDestroyed())
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
-					{
-						if(wall_it > 64)
-							std::cout << wall_it - 64 << "  : Wall number\n";
 						return false;
-					}
 		}
 		if (xPos - 0.098 < -0.98)
 			return false;
@@ -223,11 +202,7 @@ bool Player::moveRight()
 			wall_it++;
 			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Wall number\n";
 					return false;
-				}
 		}
 		if (xPos + 0.098 > 0.88)
 			return false;

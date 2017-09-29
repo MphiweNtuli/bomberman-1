@@ -71,7 +71,6 @@ void Bomb::set_y(GLfloat y)
 
 void Bomb::updateLocation(void)
 {
-	std::cout << "update \n";
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
@@ -99,10 +98,7 @@ void Bomb::explode(void)
 	if (this->time_dropped == 0)
 		return;
 	if (glfwGetTime() - this->time_dropped >= (this->countdown * 1.0f))
-	{
-			
 			this->time_dropped = 0;
-	}
 }
 
 void Bomb::drop(void)
@@ -111,7 +107,6 @@ void Bomb::drop(void)
 	{
 		this->display();
 		this->time_dropped = glfwGetTime();
-		std::cout << "Bomb planted" << std::endl;
 	}
 }
 

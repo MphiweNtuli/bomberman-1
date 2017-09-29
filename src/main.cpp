@@ -98,7 +98,7 @@ int main(void)
 	portal.init();
     health.init();
     timer.init();
-	destructible.init1();
+	destructible.init3();
     player->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
@@ -156,7 +156,7 @@ int main(void)
                 timer.draw();
 				player->getDestructible().draw(listOfWalls);
                 
-                if (timeout(100) == true)
+                if (timeout(1000) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
 					bomb->display();
