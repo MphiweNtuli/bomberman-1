@@ -30,86 +30,19 @@ void Destructible::set_xy(GLfloat x, GLfloat y)
 
 void Destructible::removeDestructible(std::vector<GLfloat> &dest, int destNo)
 {
-    /*std::multimap<int,float> aMap;
-    int label = 1;
-    int cube = 1;
-    for (std::vector<GLfloat>::iterator it = dest.begin(); it != dest.end(); it++) 
-    {
-        if (label == 180)
-        {
-            cube++;
-            label = 1;
-        }
-        //std::cout << "adding to map " << *it;
-        aMap.insert (std::pair<int, float>(cube,*it));
-        //aMap[cube] = *it;
-        label++;
-    }
-    std::cout << "\n";
 
-    destNo -= 1;
-    std::cout << "destno = " << destNo << "\n";
-
-    label = 1;
-      // show content:
- for (std::multimap<int, float>::iterator it = aMap.begin(); it!= aMap.end(); ++it)
- {
-    std::cout << (*it).first << " => " << (*it).second << " ";
-    if (label == 180)
-    {
-        std::cout << "\n";
-        label = 1;
-    }
-    label++;
-}
-std::cout << "\n";*/
-
-    int start = 180 * destNo;
+    int start = 180 * (destNo - 1);
     int end = start + 180;
-    int count = 0;
-
-    std::cout << "start = " << start << "\n";
-    std::cout << "end = " << end << "\n";
-
-    std::cout << "What to delete ";
 
     std::vector<GLfloat>::iterator it = dest.begin() + start;
     std::vector<GLfloat>::iterator itEnd = dest.begin() + end;
-
-    std::cout << "it = " << *it << "\n";
-    std::cout << "itEnd = " << *itEnd << "\n";
 
     while (it != itEnd)
     {
         dest.erase(it);
         dest.insert(it,10);
-        std::cout << ' ' << *it;
         ++it;
     }
-    //std::replace (it, itEnd, *it, 10);
-
-    /*for (std::vector<GLfloat>::iterator it = dest.begin() + start; it != dest.end() + end; ++it)
-    {
-        count++;
-        std::cout << ' ' << *it;
-    }
-    std::cout << "count = " << count << "\n";
-    
-    //dest.erase(dest.begin() + start, dest.begin() + end);*/
-
-    count =0;
-    std::cout << "What is left ";
-    for (std::vector<GLfloat>::iterator it = dest.begin(); it != dest.end(); ++it)
-    {
-        count++;
-        std::cout << ' ' << *it;
-        if (count == 180)
-        {
-            std::cout << "\n new \n";
-            count = 0;
-        }
-    }
-    std::cout << "\n";
 }
 
 std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
@@ -150,20 +83,6 @@ std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
                 removeWalls.push_back(wall_it);
             }
     }
-    walls.erase(walls.begin(),walls.end());
-    for (it = walls.begin(); it != walls.end(); ++it)
-        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
-    _dataSize = dest.size();
-    _counter = 20;
-    
-    while (_counter < _dataSize)
-    {
-        Wall wall(dest.at(_counter), dest.at(_counter + 1), true);
-        walls.push_back(wall);
-        _counter += 180;
-    }
-    for (it = walls.begin(); it != walls.end(); ++it)
-        std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : POST Walls Printing!!!!!!!!!!!!!!!!!!!!!!\n";
 
     return removeWalls;
 }

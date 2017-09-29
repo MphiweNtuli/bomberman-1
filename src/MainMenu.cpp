@@ -49,7 +49,6 @@ void MainMenu::executeCommand(int input){
     Input command;
     switch(input){
         case command.Start :
-            std::cout << "Start:" << std::endl;
             glClear(GL_COLOR_BUFFER_BIT);
 			graphics->setDrawMode(GAMEPLAY);
         break;
@@ -57,12 +56,10 @@ void MainMenu::executeCommand(int input){
             std::cout << "Continue" << std::endl;
         break;
         case command.Settings :
-             std::cout << "Settings" << std::endl;
              gameSettings(5);
             _gameWindow.changeWindowSize();
         break;
         case command.Exit :
-            std::cout << "Exit" << std::endl;      
             glfwSetWindowShouldClose(_window, GL_TRUE);
         break;
     }
@@ -75,14 +72,12 @@ void MainMenu::toggleCommands(int key){
             this->_input++;
             if(_input > command.Exit)
                 this->_input = command.Start;
-            std::cout << _input << std::endl;
             break;
         
         case GLFW_KEY_UP :
             this->_input--;
             if(_input < command.Start)
                 this->_input = command.Exit;
-            std::cout << _input << std::endl;
             break;
         case GLFW_KEY_ENTER :
                executeCommand(_input);

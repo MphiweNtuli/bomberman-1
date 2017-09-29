@@ -156,7 +156,7 @@ int main(void)
                 timer.draw();
 				player->getDestructible().draw(listOfWalls);
                 
-                if (timeout(100) == true)
+                if (timeout(1000) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
 					bomb->display();
