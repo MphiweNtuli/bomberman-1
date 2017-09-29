@@ -64,8 +64,8 @@ void	Player::remove(std::vector<int> removeWalls)
 				{
 					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
 					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
-					it = walls.erase(it);
-					// it->setIsDestroyed(true);
+					// it = walls.erase(it);
+					it->setIsDestroyed(true);
 					std::cout <<"X->"<< it->getXPos() <<", Y->" << it->getYPos() << "  : DOWN WALL IS Player!!!!!!!!!!!!!!!!!!!!!!\n";
 				}
 		}
