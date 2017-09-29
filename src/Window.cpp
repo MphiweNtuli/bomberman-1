@@ -25,7 +25,7 @@ Window::~Window(){
 
 void Window::runGame()
 {
-    int     win;
+    /*int     win;
     // _sound->playMusicForvever(MUSIC_BEAR);
     std::cout << "PLEASE SELECT WINDOW MODE: [1] Windowed OR [0] FullScreen" << std::endl;
     std::cin >> win;
@@ -44,12 +44,12 @@ void Window::runGame()
     
     if (win == 1)
         initiateSystems2();
-    else
-        initiateSystems();
+    else */
+        initiateSystemsFullscreen();
 }
 
 //Initiates Screen  :Cradebe
-void Window::initiateSystems(){
+void Window::initiateSystemsFullscreen(){
     
     glfwSetErrorCallback(error_callback);
     
@@ -82,7 +82,7 @@ void Window::initiateSystems(){
     glClearColor(0.0f, 0.3f, 0.0f, 0.0f);
 }
 
-void Window::initiateSystems2()
+void Window::initiateSystemsWindowed()
 {
     
     glfwSetErrorCallback(error_callback);
@@ -150,13 +150,13 @@ void Window::changeWindowSize()
     //glfwGetWindowSize(_window, &width, &height);
     if (_fullWindow)
     {
-        initiateSystems2();
+        initiateSystemsWindowed();
         glfwDestroyWindow(_fullWindow);
         _fullWindow = nullptr;
     }
     else if (_window)
     {
-        initiateSystems();
+        initiateSystemsFullscreen();
         glfwDestroyWindow(_window);
         _window = nullptr;
     }

@@ -35,6 +35,7 @@ class PauseMenu
         // int getSoundVal();
         void Return();
         Window getGameWindow();
+        void setWindow(GLFWwindow *, Window &, Graphics *);
         void toggleCommands(/*GLFWwindow* window, */int key);
         void executeCommand(int command);
         void setGraphics(Graphics *g);

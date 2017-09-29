@@ -10,6 +10,7 @@ Settings::Settings(GLFWwindow *window, Window &gameWindow, Graphics *g)
    this->_input = command.Sound;
    this->_window = window;
     this->_gameWindow = gameWindow;
+    this->_dispChange = false;    
    graphics = g;
     // _sound_val = 100;
 }
@@ -30,18 +31,36 @@ Window Settings::getGameWindow()
 {
     return (_gameWindow);
 }
-
-
-
+void Settings::modSound()
+{
+    if (_sound_val == 100)
+        _sound_val = 0;
+    else if (_sound_val == 0)
+        _sound_val = 100;
+}
+void Settings::modDisplay()
+{
+    _gameWindow.changeWindowSize();
+    _dispChange = !(_dispChange);
+}
+int Settings::getSoundVal()
+{
+    return (_sound_val);
+}
+bool Settings::getDispChange(){
+    return (_dispChange);
+}
 void Settings::executeCommand(int input){
     settingsInput command;
     switch(input){ 
         case command.Sound :
             std::cout << "Sound:" << std::endl;
+            modSound();
             glClear(GL_COLOR_BUFFER_BIT);
         break;
         case command.Screen :
             std::cout << "Screen" << std::endl;
+            modDisplay();
         break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);
@@ -50,7 +69,11 @@ void Settings::executeCommand(int input){
         break;
     }
 }
-
+void Settings::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
+    this->_window = nWindow;
+    this->_gameWindow = nGameWindow;
+    graphics = g;
+}
 
 void Settings::toggleCommands(/*GLFWwindow* window,*/ int key)
 {

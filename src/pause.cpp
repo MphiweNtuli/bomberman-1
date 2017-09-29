@@ -33,7 +33,11 @@ Window PauseMenu::getGameWindow()
     return (_gameWindow);
 } 
 
-
+void PauseMenu::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
+    this->_window = nWindow;
+    this->_gameWindow = nGameWindow;
+    graphics = g;
+}
 
 void PauseMenu::executeCommand(int input){
     pauseInput command;

@@ -8,7 +8,6 @@
 
 #include "Window.hpp"
 #include "shader.hpp"
-#include "settings.hpp"
 
 struct Input
 {
@@ -39,6 +38,7 @@ class MainMenu
         void modSound();
         int getSoundVal();
         void gameExit();
+        void setWindow(GLFWwindow *, Window &, Graphics *);
         Window getGameWindow();
         void toggleCommands(int input);
         void executeCommand(int command);
@@ -56,7 +56,6 @@ class MainMenu
         Window _gameWindow;
         Graphics *graphics;
         int _sound_val;
-        Settings *settings;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;
 };
 

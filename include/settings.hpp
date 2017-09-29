@@ -27,13 +27,17 @@ class Settings
  
         Settings(Settings& obj);
         Settings& operator=(Settings& obj);
-
         void Music();
         void Screen(/*int input*/);
         // void gameContinue();
         // void modSound();
         // int getSoundVal();
         void Return();
+        void modSound();
+        void modDisplay();
+        int getSoundVal();
+        bool getDispChange();
+        void setWindow(GLFWwindow *, Window &, Graphics *);
         Window getGameWindow();
         void toggleCommands(/*GLFWwindow* window, */int key);
         void executeCommand(int command);
@@ -42,15 +46,15 @@ class Settings
         void initSettingsImage();
         void LoadSettingsImage();
         void SettingsCleanup();
-
         int getInput();
     
     private:
         int _input;
+        bool _dispChange;
+        int _sound_val;      
         GLFWwindow* _window;
         Window _gameWindow;
         Graphics *graphics;
-        int _sound_val;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;
 };
 
