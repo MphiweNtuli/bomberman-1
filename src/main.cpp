@@ -56,24 +56,32 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 	(void)scancode;
 	(void)mods;
 	if ((key == GLFW_KEY_DOWN || key == GLFW_KEY_UP || key == GLFW_KEY_ENTER) && action == GLFW_PRESS)
-	{
+	{	
 		if (graphics->getDrawMode() == MAINMENU)
 		{
 			mainMenu->toggleCommands(key);
 			if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-			{
+        	{
 				//glfwSetKeyCallback(window, player_callback);
-				glEnable(GL_DEPTH_TEST);
-			}
-		}
-		else if (graphics->getDrawMode() == SETTINGS)
-		{
-			std::cout << "inside \n";
-			settings->toggleCommands(/*window,*/ key);
-		}
+        	    glEnable(GL_DEPTH_TEST);
+        	}
+        }
+        else if (graphics->getDrawMode() == SETTINGS)
+        {
+        	std::cout << "inside \n";
+        	settings->toggleCommands(/*window,*/ key);
+        }
+        else if (graphics->getDrawMode() == PAUSE)
+        {
+        	std::cout << "inside \n";
+        	pauseMenu->toggleCommands(/*window,*/ key);
+        }
 	}
 	else if (key == GLFW_KEY_P)
+	{
 		graphics->setDrawMode(PAUSE);
+		glEnable(GL_DEPTH_TEST);
+	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
@@ -179,12 +187,12 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//only reset the sound setting if the value is different
-		if (soundVal != mainMenu->getSoundVal())
-		{
-			//std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
-			soundVal = mainMenu->getSoundVal();
-			Mix_VolumeMusic(soundVal);
-		}
+		// if (soundVal != mainMenu->getSoundVal())
+		// {
+		// 	//std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
+		// 	soundVal = mainMenu->getSoundVal();
+		// 	Mix_VolumeMusic(soundVal);
+		// }
 		bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
 		switch (graphics->getDrawMode())

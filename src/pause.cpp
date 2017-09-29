@@ -42,8 +42,8 @@ void PauseMenu::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g)
 void PauseMenu::executeCommand(int input){
     pauseInput command;
     switch(input){ 
-        case command.Resume :
-            std::cout << "Resume:" << std::endl;
+       case command.Resume :
+            graphics->setDrawMode(GAMEPLAY);
             glClear(GL_COLOR_BUFFER_BIT);
         break;
         case command.SaveGame :
@@ -51,7 +51,6 @@ void PauseMenu::executeCommand(int input){
         break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);
-            std::cout << "Return" << std::endl;
             
         break;
     }
@@ -106,9 +105,9 @@ void PauseMenu::initPauseImage()
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,//sound
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
-        -0.65f, 0.0f, 0.25f,    0.0f, 0.90f,
-        -0.55f, 0.05f, 0.25f,   0.0f, 0.10f,
-        -0.65f, 0.10f, 0.25f,   1.0f, 0.10f,
+        -0.65f, 0.0f, -0.25f,    0.0f, 0.0f,
+        -0.55f, 0.05f, -0.25f,   0.0f, 0.0f,
+        -0.65f, 0.10f, -0.25f,   0.0f, 0.0f,
         
     };
 
@@ -120,9 +119,9 @@ void PauseMenu::initPauseImage()
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
 
-        -0.65f, -0.11f, 0.25f,        0.0f, 0.90f,
-        -0.55f, -0.07f, 0.25f,       0.0f, 0.10f, //screen
-        -0.65f, -0.04f, 0.25f,      1.0f, 0.10f,
+        -0.65f, -0.11f, -0.25f,       0.0f, 0.0f,
+        -0.55f, -0.07f, -0.25f,       0.0f, 0.0f, //screen
+        -0.65f, -0.04f, -0.25f,       0.0f, 0.0f,
     };
 
     static const GLfloat g_vertex_buffer_return[] = { 
@@ -132,9 +131,9 @@ void PauseMenu::initPauseImage()
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
 
-        -0.65f, -0.25f, 0.35f,   0.90f, 0.0f,
-        -0.55f, -0.30f, 0.35f,  0.10f, 0.0f, //return
-        -0.65f, -0.35f, 0.35f,  0.10f, 1.0f
+        -0.65f, -0.25f, -0.35f,   0.0f, 0.0f,
+        -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //return
+        -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
     };
         
     // };
