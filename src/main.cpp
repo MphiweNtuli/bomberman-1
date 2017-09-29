@@ -98,7 +98,7 @@ int main(void)
 	portal.init();
     health.init();
     timer.init();
-	destructible.init1();
+	destructible.init3();
     player->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
