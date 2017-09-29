@@ -17,10 +17,12 @@
 #include "settings.hpp"
 #include "text.hpp"
 #include "enemy.hpp"
+#include "pause.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Settings *settings;
+PauseMenu *pauseMenu;
 
 Text *text;
 Enemy *enemy;
@@ -70,6 +72,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         	settings->toggleCommands(/*window,*/ key);
         }
 	}
+	else if (key == GLFW_KEY_P)
+		graphics->setDrawMode(PAUSE);
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
@@ -112,6 +116,13 @@ int main(void)
 	sprintf(hearts,"Hearts: %d", hearts_num);
 
 
+	char pauseText[256];
+	// int hearts_num = 3;
+	sprintf(pauseText,"Prss P");
+
+	char pausePress[256];
+	// int hearts_num = 3;
+	sprintf(pausePress,"Pause");
     // Health = new Token("Health");
     // Timer = new Token("Timer");
 	Wall wall;
@@ -129,6 +140,9 @@ int main(void)
 
 	settings = new Settings(window, myWindow, graphics);
 	settings->initSettingsImage();
+
+	pauseMenu = new PauseMenu(window, myWindow, graphics);
+	pauseMenu->initPauseImage();
     
 	wall.init();
     health.init();
@@ -192,6 +206,17 @@ int main(void)
                 // window = myWindow.getWindow();
                 // glfwSetKeyCallback(window, key_callback);
 				break;
+			case PAUSE:
+				sound->playMusicForvever(MUSIC_MENU1);
+				// settings->toggleCommands(window);
+				//settings->initSettingsImage();
+				pauseMenu->LoadPauseImage();
+                myWindow = pauseMenu->getGameWindow();
+
+                
+                // window = myWindow.getWindow();
+                // glfwSetKeyCallback(window, key_callback);
+				break;
 			case GAMEPLAY:
 				sound->playMusicForvever(MUSIC_BACK);
                 //------------------------------
@@ -223,6 +248,8 @@ int main(void)
                     player->remove(removeWalls);
 				}
 				sprintf(bomberman,"Your Quest has started  %.1f ", glfwGetTime());
+				text->loadText(pauseText, 0,450, 12);
+				text->loadText(pausePress, 0,460, 16);
 				text->loadText(bomberman, 30, 580, 15); //(location left /right,location up / down ,size)
 				text->loadText(level, 450, 580, 15);
 				text->loadText(hearts, 670, 380, 15);

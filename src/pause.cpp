@@ -1,109 +1,101 @@
-#include "settings.hpp"
+#include "Pause.hpp"
 #include "Texture.hpp"
 
-Settings::Settings() {}
+PauseMenu::PauseMenu() {}
 
-Settings::Settings(GLFWwindow *window, Window &gameWindow, Graphics *g)
+PauseMenu::PauseMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
 {
-   settingsInput command;
+   pauseInput command;
 
-   this->_input = command.Sound;
-   this->_window = window;
+    
+    this->_input = command.Resume;
+    this->_window = window;
     this->_gameWindow = gameWindow;
    graphics = g;
     // _sound_val = 100;
 }
 
-Settings::~Settings(){
+PauseMenu::~PauseMenu(){
 	delete graphics;
 }
 
-void Settings::Music(){
+void PauseMenu::Resume(){
     
 }
 
-void Settings::Screen(){
+void PauseMenu::SaveGame(){
 
 } 
 
-Window Settings::getGameWindow()
+
+Window PauseMenu::getGameWindow()
 {
     return (_gameWindow);
-}
+} 
 
 
 
-void Settings::executeCommand(int input){
-    settingsInput command;
+void PauseMenu::executeCommand(int input){
+    pauseInput command;
     switch(input){ 
-        case command.Sound :
-            std::cout << "Sound:" << std::endl;
+        case command.Resume :
+            std::cout << "Resume:" << std::endl;
             glClear(GL_COLOR_BUFFER_BIT);
         break;
-        case command.Screen :
-            std::cout << "Screen" << std::endl;
+        case command.SaveGame :
+            std::cout << "Save" << std::endl;
         break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);
-            std::cout << "Settings" << std::endl;
+            std::cout << "Return" << std::endl;
             
         break;
     }
 }
 
 
-void Settings::toggleCommands(/*GLFWwindow* window,*/ int key)
+void PauseMenu::toggleCommands( int key)
 {
-     settingsInput command;
+    // std::cout  << this->_input << " input : \n";
+     pauseInput command;
       switch(key){
         case GLFW_KEY_DOWN :
             this->_input++;
             if(_input > command.Return)
-                this->_input = command.Sound;
+                this->_input = command.Resume;
             std::cout << _input << std::endl;
             break;
         
         case GLFW_KEY_UP :
             this->_input--;
-            if(_input < command.Sound)
+            if(_input < command.Resume)
                 this->_input = command.Return;
             std::cout << _input << std::endl;
             break;
         case GLFW_KEY_ENTER :
                executeCommand(_input);
     }
-    initSettingsImage();
+    initPauseImage();
     
 }
 
 
-void Settings::setGraphics(Graphics *g)
+void PauseMenu::setGraphics(Graphics *g)
 {
     graphics = g;
 }
 
-// void Settings::modSound()
-// {
-//     if (_sound_val == 100)
-//         _sound_val = 0;
-//     else if (_sound_val == 0)
-//         _sound_val = 100;
-// }
-// int Settings::getSoundVal()
-// {
-//     return (_sound_val);
-// }
 
-void Settings::initSettingsImage()
+void PauseMenu::initPauseImage()
 {
     glGenVertexArrays(1, &menuVAO);
     glBindVertexArray(menuVAO);
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("BombermanModels/settings.png", &menuTexture);
+    Texture texture("BombermanModels/pause.png", &menuTexture);
 
-    static const GLfloat g_vertex_buffer_sound[] = { 
+    static const GLfloat g_vertex_buffer_resume[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -116,7 +108,7 @@ void Settings::initSettingsImage()
         
     };
 
-    static const GLfloat g_vertex_buffer_screen[] = { 
+    static const GLfloat g_vertex_buffer_save[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f 
@@ -150,6 +142,9 @@ void Settings::initSettingsImage()
         4,5,6,
         //7,8,9
     };
+    
+    glEnable(GL_BLEND); //Enable blending.
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
 
     glGenBuffers(1, &menuEBO);
     glGenBuffers(1, &menuVBO);
@@ -158,11 +153,11 @@ void Settings::initSettingsImage()
 
     if (this->_input == 0)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_sound), g_vertex_buffer_sound, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_resume), g_vertex_buffer_resume, GL_STATIC_DRAW);
     }
     else if (this->_input == 1)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_save), g_vertex_buffer_save, GL_STATIC_DRAW);
     }
     else if (this->_input == 2)
     {
@@ -187,7 +182,7 @@ void Settings::initSettingsImage()
     glEnableVertexAttribArray(1);
 }
 
-void Settings::LoadSettingsImage()
+void PauseMenu::LoadPauseImage()
 {       
    // glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	glBindTexture(GL_TEXTURE_2D, menuTexture);
@@ -199,12 +194,12 @@ void Settings::LoadSettingsImage()
     glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 }
 
-int Settings::getInput()
+int PauseMenu::getInput()
 {
 	return _input;
 }
 
-void Settings::SettingsCleanup()
+void PauseMenu::PauseCleanup()
 {
     // Cleanup VBO
     glDeleteBuffers(1, &menuVBO);
