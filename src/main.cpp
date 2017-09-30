@@ -33,18 +33,16 @@ Graphics *graphics;
 Player *player;
 Bomb *bomb;
 Health health;
-Timer timer;
 PowerUp power;
 Destructible destructible;
 std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
+static int prev_time = glfwGetTime();
 
-static bool timeout(int seconds)
+static bool timeout(int seconds, int prev_time)
 {
-	static int time = glfwGetTime();
-
-	if (glfwGetTime() - time >= seconds)
+	if (glfwGetTime() - prev_time >= seconds)
 		return (true);
 	return (false);
 }
@@ -164,7 +162,6 @@ int main(void)
 	player = new Player(staticWall.getWalls(), bomb);
 	portal.init();
     health.init();
-    timer.init();
 	destructible.init3();
     player->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
@@ -301,8 +298,13 @@ int main(void)
                 
 			player->getDestructible().draw(listOfWalls);
 			enemy->display();
-			if (timeout(100) == true)
+			if (timeout(100, prev_time) == true)
+			{
+				sound->stopMusic(MUSIC_BACK);
+				sound->playMusicForvever(MUSIC_MENU1);
 				graphics->setDrawMode(MAINMENU);
+				prev_time = glfwGetTime();
+			}
 			if (bomb->get_bombStatus() != 0)
 				bomb->display();
 			else if (bomb->getBombPlanted())

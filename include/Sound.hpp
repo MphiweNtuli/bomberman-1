@@ -29,9 +29,10 @@
 class Sound
 {
     private:
-        Mix_Chunk **effects;
+        int _fade_time;
         Mix_Music **music;
-    int _fade_time;
+        Mix_Chunk **effects;
+        int _currently_playing;
     
         void loadEffects(void);
         void loadMusic(void);
@@ -52,6 +53,7 @@ class Sound
         void stopMusic(int fade_time);
         void stopEffect(int channel);
 
+        int getCurrentlyPlaying();
         Mix_Chunk **getEffects(void);
         Mix_Music **getMusic(void);
 

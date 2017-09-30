@@ -13,7 +13,6 @@ void Sound::loadMusic(void)
     this->music = new Mix_Music*[NUM_MUSIC];
     (this->music)[MUSIC_BACK] = Mix_LoadMUS("sounds/background.wav");
     (this->music)[MUSIC_MENU1] = Mix_LoadMUS("sounds/menu.ogg");
-    // (this->music)[MUSIC_MENU2] = Mix_LoadMUS("sounds/menu2.ogg");
 }
 
 Sound::Sound(void)
@@ -72,20 +71,34 @@ void Sound::playMusicLoop(int music, int loop)
 void Sound::playMusicForvever(int music)
 {
     if (!musicIsPlaying())
+    {
         Mix_FadeInMusic((this->music)[music], -1, 4000);
-        // Mix_PlayMusic((this->music)[music], -1);
+        _currently_playing = music;
+    }
+    else
+    {
+        if (_currently_playing != music)
+        {
+            Mix_FadeInMusic((this->music)[music], -1, 4000);
+            _currently_playing = music;
+        }
+    }
 }
 
 void Sound::stopMusic(int fade_time)
 {
     _fade_time = fade_time;
     Mix_FadeOutMusic(500);
-    // Mix_HaltMusic();
 }
 
 void Sound::stopEffect(int channel)
 {
     Mix_HaltChannel(channel);
+}
+
+int Sound::getCurrentlyPlaying()
+{
+    return (_currently_playing);
 }
 
 Mix_Chunk **Sound::getEffects(void)
@@ -102,4 +115,5 @@ void Sound::operator=(Sound *rhs)
 {
     this->effects = rhs->getEffects();
     this->music = rhs->getMusic();
+    this->_currently_playing = rhs->getCurrentlyPlaying();
 }
