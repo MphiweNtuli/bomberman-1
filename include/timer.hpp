@@ -12,6 +12,7 @@ public:
     void init();
     void draw();
     void    displayTime();
+    float returnTime();
     void    increaseTime();
     int     time;
 

@@ -43,9 +43,6 @@ bool clockTimer = false;
 static bool timeout(int seconds)
 {
 	static int time = glfwGetTime();
-	
-	std::cout << "TIME: ";
-	std::cout << glfwGetTime() << std::endl;
 
 	if (glfwGetTime() - time >= seconds)
 		return (true);
@@ -100,6 +97,7 @@ int main(void)
 	int soundVal;
 	bool dispVal;
 	GameState gs;
+	float time;
 
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
@@ -168,7 +166,7 @@ int main(void)
 	portal.init();
 	health.init();
 	timer.init();
-	destructible.init1();
+	//destructible.init1();
 	destructible01.init1();
 	player->setDestructible(destructible);
 	player->setDestructible01(destructible01);
@@ -281,33 +279,32 @@ int main(void)
 			staticWall.draw();
 			portal.draw();
                 
-                // IMPORTANT
-                if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
-                    && (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
-                {
-                    (power.timeUsed == false) ? timer.increaseTime() : timer.displayTime();
-                    power.TimerDisplay(0);
-                }
-                else
-                {
-                    if (power.TimerDisplay(1) == 1)
-                        timer.draw();
-                }
+			// IMPORTANT
+			if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
+				&& (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
+			{
+				(power.timeUsed == false) ? timer.increaseTime() : timer.displayTime();
+				power.TimerDisplay(0);
+			}
+			else
+			{
+				if (power.TimerDisplay(1) == 1)
+					timer.draw();
+			}
+			
+			if ((player->get_yPos() < -0.5592 && player->get_yPos() > -0.7212)
+				&& (player->get_xPos() > -0.9312 && player->get_xPos() < -0.7728))
+				power.HealthDisplay(0);	
+			else
+			{
+				if (power.HealthDisplay(1) == 1)
+					health.draw();
+			}
+			// IMPORTANT
+			
+			// Time displayed
+			time = timer.returnTime();
                 
-                if ((player->get_yPos() < -0.5592 && player->get_yPos() > -0.7212)
-                    && (player->get_xPos() > -0.9312 && player->get_xPos() < -0.7728))
-                    power.HealthDisplay(0);	
-                else
-                {
-                    if (power.HealthDisplay(1) == 1)
-                        health.draw();
-                }
-                // IMPORTANT
-                
-                timer.displayTime();
-                
-                health.draw();
-			timer.draw();
 			player->getDestructible().draw();
 			player->getDestructible01().draw();
 			enemy->display();
@@ -323,7 +320,7 @@ int main(void)
 				bomb->setBombPlanted(false);
 				player->remove(removeWalls);
 			}
-			sprintf(bomberman, "Your Quest has started  %.1f ", glfwGetTime());
+			sprintf(bomberman, "Your Quest has started  %.1f ", time); //Replaced glfwGetTime() with time variable
 			text->loadText(pauseText, 0, 450, 12);
 			text->loadText(pausePress, 0, 460, 16);
 			text->loadText(bomberman, 30, 580, 15); //(location left /right,location up / down ,size)

@@ -25,6 +25,10 @@
         "streambuf": "cpp",
         "cstdint": "cpp",
         "type_traits": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "ios": "cpp",
+        "__config": "cpp",
+        "initializer_list": "cpp",
+        "stdexcept": "cpp"
     }
 }

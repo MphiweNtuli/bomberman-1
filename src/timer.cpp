@@ -2,17 +2,23 @@
 
 Timer::Timer()
 {
-    time = 180;
+    time = 90;
 }
 
 Timer::~Timer(){}
 
 void Timer::displayTime(){
-    std::cout << time - glfwGetTime() << std::endl;
+    //std::cout << time - glfwGetTime() << std::endl;
 }
 
 void Timer::increaseTime(){
     time += 30;
+}
+
+float Timer::returnTime(){
+    if ((time - glfwGetTime()) < 0)
+        return (0);
+    return (time - glfwGetTime());
 }
 
 void Timer::init()
