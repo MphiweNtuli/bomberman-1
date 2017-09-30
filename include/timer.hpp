@@ -15,7 +15,7 @@ public:
     //void test();
     void draw();
     void    displayTime();
-    void    icreaseTime();
+    void    increaseTime();
     int     time;
 
 private:

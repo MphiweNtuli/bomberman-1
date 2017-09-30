@@ -10,7 +10,7 @@ void Timer::displayTime(){
     std::cout << time - glfwGetTime() << std::endl;
 }
 
-void Timer::increseTime(){
+void Timer::increaseTime(){
     time += 30;
 }
 

@@ -25,6 +25,7 @@ class PowerUp : public Bomb
         int     type;
         int     timer;
         int     health;
+        bool    timeUsed;
 
     private:
 };

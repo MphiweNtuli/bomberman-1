@@ -164,9 +164,11 @@ int main(void)
 				staticWall.draw();
 				portal.draw();
 				
+				// IMPORTANT
 				if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
 							 && (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
 				{ 
+					(power.timeUsed == false) ? timer.increaseTime() : timer.displayTime();
 					power.TimerDisplay(0);
 				}	
 				else
@@ -183,7 +185,8 @@ int main(void)
 					if (power.HealthDisplay(1) == 1)
 						health.draw();
 				}
-
+				// IMPORTANT
+				
 				timer.displayTime();
 
 				destructible.draw();
