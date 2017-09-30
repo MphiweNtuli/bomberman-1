@@ -10,8 +10,8 @@ class GameState {
         GameState();
         ~GameState();
         void cleanUpSave();
-        int loadPlayerState(Player *p);
-        int savePlayerState(Player &p);
+        int loadGameState(Player *p);
+        int saveGameState(Player &p);
         int loadWallState(Wall *w);
         int saveWallState(Wall &w);
         void operator=(const GameState &rhs);

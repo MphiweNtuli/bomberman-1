@@ -50,7 +50,7 @@ public:
 	void mat4ToVector();
 	void printMatrix(std::string s);
 	std::vector<float> getModelV() const;
-	void restorePosition(float x, float y);
+	void restoreState(Player &p);
 	glm::mat4 getView() const;
 	glm::mat4 getModel() const;
 	glm::mat4 getProjection() const;

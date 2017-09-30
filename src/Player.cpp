@@ -395,12 +395,13 @@ void Player::operator=(const Player &p)
 	this->yPos = p.get_yPos();
 }
 
-void Player::restorePosition(float x, float y)
+void Player::restoreState(Player &p)
 {
-	_model[3][0] = x;
-	_model[3][1] = y;
-	xPos = x;
-	yPos = y;
+	_model[3][0] = p.get_xPos();
+	_model[3][1] = p.get_yPos();
+	xPos = _model[3][0];
+	yPos = _model[3][1];
+	walls = p.getWalls();
 }
 void Player::mat4ToVector()
 {

@@ -23,7 +23,7 @@ bool GameState::isEmpty(std::ifstream &ifs)
     return (ifs.peek() == std::ifstream::traits_type::eof());
 }
 
-int GameState::savePlayerState(Player &p)
+int GameState::saveGameState(Player &p)
 {
     mkdir("gamestate", 0777);
     std::ofstream ofs("gamestate/player.dat");
@@ -37,7 +37,7 @@ int GameState::savePlayerState(Player &p)
     return (0);
 }
 
-int GameState::loadPlayerState(Player *p)
+int GameState::loadGameState(Player *p)
 {
     Player p2;
 
@@ -50,7 +50,7 @@ int GameState::loadPlayerState(Player *p)
                 boost::archive::text_iarchive ia(ifs);
                 ia >> p2;
             }
-            p->restorePosition(p2.get_xPos(), p2.get_yPos());
+            p->restoreState(p2);
         }
         std::cout << "" << std::endl;
         std::cout << "" << std::endl;
@@ -118,6 +118,7 @@ namespace boost
 
             ar & p.yPos;
             ar & p.xPos;
+            ar & p.walls;
             vers = version;
         }
 
@@ -128,11 +129,12 @@ namespace boost
 
             ar & w.xPos;
             ar & w.yPos;
-            // ar & w.isDestructable;
-            // ar & w.VertexArrayID;
-            // ar & w.vertexbuffer;
-            // ar & w.wallTexture;
-            // ar & w.elementBuffer;
+            ar & w.isDestructable;
+            ar & w.destroyed;
+            ar & w.VertexArrayID;
+            ar & w.vertexbuffer;
+            ar & w.wallTexture;
+            ar & w.elementBuffer;
             vers = version;
         }
     }
