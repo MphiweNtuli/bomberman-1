@@ -11,6 +11,9 @@ public:
      
     void init();
     void draw();
+    void    displayTime();
+    void    increaseTime();
+    int     time;
 
 private:
     GLuint timerTexture, vao, vbo;

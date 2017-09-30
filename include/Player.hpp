@@ -14,10 +14,11 @@
 #define OFS_Y -0.02f
 
 class Player
-{
+{ 
 public:
     Player();
 	Player(std::list<Wall> walls, Bomb *bomb);
+
 	~Player();
 	void init();
 	bool moveUp(); 
@@ -27,6 +28,7 @@ public:
 	void transform();
 	void player_callback(GLFWwindow* window);
 	void draw();
+
     void setDestructible(Destructible destructible);
     Destructible getDestructible(void);
     void setDestructible01(Destructible destructible01);
@@ -68,6 +70,7 @@ private:
     Destructible _des, _des01;
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
+
 	glm::mat4 _view;
     glm::mat4 _model;
     glm::mat4 _projection;

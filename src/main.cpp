@@ -19,6 +19,7 @@
 #include "enemy.hpp"
 #include "pause.hpp"
 #include "screen.hpp"
+#include "PowerUp.hpp"
 
 GLFWwindow *window;
 MainMenu *mainMenu;
@@ -33,6 +34,7 @@ Player *player;
 Bomb *bomb;
 Health health;
 Timer timer;
+PowerUp power;
 Destructible destructible;
 Destructible destructible01;
 
@@ -41,21 +43,20 @@ bool clockTimer = false;
 static bool timeout(int seconds)
 {
 	static int time = glfwGetTime();
+	
+	std::cout << "TIME: ";
+	std::cout << glfwGetTime() << std::endl;
 
 	if (glfwGetTime() - time >= seconds)
-	{
-		time = glfwGetTime();
 		return (true);
-	}
 	return (false);
 }
 
 // camera
-glm::vec3 cameraPos = glm::vec3(-1.0f, 2.0f, 2.76f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 1.0f);
+glm::vec3 cameraPos   = glm::vec3(-1.0f, 2.0f,  2.76f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); 
+glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  1.0f);
 
-//Key Checking input        :Cradebe
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	(void)scancode;
@@ -66,10 +67,7 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 		{
 			mainMenu->toggleCommands(key);
 			if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-        	{
-				//glfwSetKeyCallback(window, player_callback);
         	    glEnable(GL_DEPTH_TEST);
-        	}
         }
         else if (graphics->getDrawMode() == SETTINGS)
         {
@@ -199,15 +197,9 @@ int main(void)
 		// Clear the screen
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//only reset the sound setting if the value is different
-		// if (soundVal != mainMenu->getSoundVal())
-		// {
-		// 	//std::cout << "vol " << mainMenu->getSoundVal() << std::endl;
-		// 	soundVal = mainMenu->getSoundVal();
-		// 	Mix_VolumeMusic(soundVal);
-		// }
 		bomb->explode();
 		keyEvents->keyEventsWrapper(window, sound, graphics);
+
 		switch (graphics->getDrawMode())
 		{
 		case MAINMENU:
@@ -288,7 +280,33 @@ int main(void)
 
 			staticWall.draw();
 			portal.draw();
-			health.draw();
+                
+                // IMPORTANT
+                if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
+                    && (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
+                {
+                    (power.timeUsed == false) ? timer.increaseTime() : timer.displayTime();
+                    power.TimerDisplay(0);
+                }
+                else
+                {
+                    if (power.TimerDisplay(1) == 1)
+                        timer.draw();
+                }
+                
+                if ((player->get_yPos() < -0.5592 && player->get_yPos() > -0.7212)
+                    && (player->get_xPos() > -0.9312 && player->get_xPos() < -0.7728))
+                    power.HealthDisplay(0);	
+                else
+                {
+                    if (power.HealthDisplay(1) == 1)
+                        health.draw();
+                }
+                // IMPORTANT
+                
+                timer.displayTime();
+                
+                health.draw();
 			timer.draw();
 			player->getDestructible().draw();
 			player->getDestructible01().draw();

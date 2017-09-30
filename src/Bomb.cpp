@@ -15,7 +15,6 @@ Bomb::Bomb(int radius)
    load_result = loadOBJ("BombermanModels/bombs/bomb.obj", _vertices, _uvbuffer, normals);
     if (load_result != true)
         std::cout << "failed to load object model" << std::endl;
-
 }
 
 Bomb::Bomb(void)
@@ -124,7 +123,6 @@ void Bomb::setBombPlanted(bool bombPlanted)
 {
     _bombPlanted = bombPlanted;
 }
-
 
 void Bomb::display(void)
 {

@@ -1,12 +1,24 @@
 #include "timer.hpp"
 
-Timer::Timer(){}
+Timer::Timer()
+{
+    time = 180;
+}
 
 Timer::~Timer(){}
+
+void Timer::displayTime(){
+    std::cout << time - glfwGetTime() << std::endl;
+}
+
+void Timer::increaseTime(){
+    time += 30;
+}
 
 void Timer::init()
 {
 	Texture texture("BombermanModels/powerUps/cl.jpg", &timerTexture);
+
     GLfloat vertexData[] =
     {
         0.6f, 0.7f, -0.05f,      0.0f, 0.0f, //0

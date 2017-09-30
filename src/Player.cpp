@@ -8,6 +8,7 @@ Player::Player()
 Player::Player(std::list<Wall> walls, Bomb *bomb)
 {
     _bomb = bomb;
+
 	x = 0;
 	y = 0;
 	texture_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
@@ -20,6 +21,7 @@ Player::Player(std::list<Wall> walls, Bomb *bomb)
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
 	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
 	yPos = _model[3][1];
 	xPos = _model[3][0];
 	
@@ -157,11 +159,8 @@ bool Player::moveUp()
 		}
 		if (yPos + 0.098 > 0.87)
 			return false;
-		
-	
-	
+    
 		return true;
-	
 }
 
 bool Player::moveDown()
@@ -183,7 +182,6 @@ bool Player::moveDown()
 			return false;
 	
 		return true;
-
 }
 
 bool Player::moveLeft()
