@@ -108,7 +108,7 @@ int main(void)
     floor.init();
     
 	//======== load game state ========
-	gs.loadGameState(player);
+	gs.loadGameState(player, listOfWalls);
 	//=================================
 	//set the initial sound value
     soundVal = mainMenu->getSoundVal();
@@ -185,7 +185,7 @@ int main(void)
 		glfwWindowShouldClose(window) == 0);
 	
 	//======================= save game state ==================
-	gs.saveGameState(*player);
+	gs.saveGameState(*player, listOfWalls);
 	//==========================================================
 	// Cleanup VBO
 	delete graphics;

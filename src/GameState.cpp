@@ -23,7 +23,7 @@ bool GameState::isEmpty(std::ifstream &ifs)
     return (ifs.peek() == std::ifstream::traits_type::eof());
 }
 
-int GameState::saveGameState(Player &p)
+int GameState::saveGameState(Player &p, std::vector<GLfloat> &low)
 {
     mkdir("gamestate", 0777);
     std::ofstream ofs("gamestate/player.dat");
@@ -32,12 +32,13 @@ int GameState::saveGameState(Player &p)
         {
             boost::archive::text_oarchive oa(ofs);
             oa << p;
+            oa << low;
         }
     }
     return (0);
 }
 
-int GameState::loadGameState(Player *p)
+int GameState::loadGameState(Player *p, std::vector<GLfloat> &low)
 {
     Player p2;
 
@@ -49,6 +50,7 @@ int GameState::loadGameState(Player *p)
             {
                 boost::archive::text_iarchive ia(ifs);
                 ia >> p2;
+                ia >> low;
             }
             p->restoreState(p2);
         }

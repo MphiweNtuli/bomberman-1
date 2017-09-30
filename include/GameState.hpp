@@ -10,8 +10,8 @@ class GameState {
         GameState();
         ~GameState();
         void cleanUpSave();
-        int loadGameState(Player *p);
-        int saveGameState(Player &p);
+        int loadGameState(Player *p, std::vector<GLfloat> &low);
+        int saveGameState(Player &p, std::vector<GLfloat> &low);
         int loadWallState(Wall *w);
         int saveWallState(Wall &w);
         void operator=(const GameState &rhs);
