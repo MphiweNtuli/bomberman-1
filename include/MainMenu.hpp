@@ -15,7 +15,7 @@ struct Input
         Start,
         Continue,
         Settings,
-        HighScore,
+        // HighScore,
         Exit,
         ToggleSound,
         ToggleScreen,

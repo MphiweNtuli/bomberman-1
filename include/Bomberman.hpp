@@ -1,8 +1,11 @@
 #ifndef BOMBERMAN_HPP
 #define BOMBERMAN_HPP
 
-# define HEIGHT 768
+# define HEIGHT 868
 # define WIDTH 1024
+
+# define FULLHEIGHT 1080
+#define  FULLWIDTH 1920
 
 #define GLEW_STATIC
 

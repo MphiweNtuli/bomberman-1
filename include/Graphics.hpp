@@ -21,7 +21,8 @@ enum GameMode
 	GAMEPLAY,
 	GAMEPAUSE,
 	SETTINGS, 
-	PAUSE
+	PAUSE,
+	SCREEN,
 };
 
 class Graphics

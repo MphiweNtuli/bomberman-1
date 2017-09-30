@@ -10,6 +10,8 @@ static void error_callback(int error, const char* description)
 }
 
 Window::Window(){
+    latestHeight = HEIGHT;
+    latestWidth = WIDTH;
     _width  = WIDTH;
     _window = nullptr;
     _fullWindow = nullptr;
@@ -45,7 +47,8 @@ void Window::runGame()
     if (win == 1)
         initiateSystems2();
     else */
-        initiateSystemsFullscreen();
+        // initiateSystemsFullscreen();
+    initiateSystemsWindowed();
 }
 
 //Initiates Screen  :Cradebe
@@ -82,6 +85,49 @@ void Window::initiateSystemsFullscreen(){
     glClearColor(0.0f, 0.3f, 0.0f, 0.0f);
 }
 
+void Window::switchToLarge(GLFWwindow* win , int wantedWidth, int wantedHeight)
+{
+    if (wantedHeight != latestHeight && wantedWidth !=  latestWidth)
+    {
+        glfwSetWindowSize(win, wantedWidth, wantedHeight);
+        latestHeight = wantedHeight;
+        latestWidth = wantedWidth;
+    }
+    
+}
+
+void Window::switchToMedium(GLFWwindow* win , int wantedWidth, int wantedHeight)
+{
+    if (wantedHeight != latestHeight && wantedWidth !=  latestWidth)
+    {
+        glfwSetWindowSize(win, wantedWidth, wantedHeight);
+        latestHeight = wantedHeight;
+        latestWidth = wantedWidth;
+    }
+}
+
+void Window::switchToWindowed(GLFWwindow* win)
+{
+    if (HEIGHT != latestHeight && WIDTH !=  latestWidth)
+    {
+        glfwSetWindowSize(win, WIDTH, HEIGHT);
+        latestHeight = HEIGHT;
+        latestWidth = WIDTH;
+    }
+    
+}
+
+void Window::switchToFull(GLFWwindow* win)
+{
+    (void)win;
+    // if (FULLHEIGHT != latestHeight && FULLWIDTH !=  latestWidth)
+    // {
+    //     glfwSetWindowSize(win, FULLWIDTH, FULLHEIGHT);
+    //     latestHeight = FULLHEIGHT;
+    //     latestWidth = FULLWIDTH;
+    // }
+}
+
 void Window::initiateSystemsWindowed()
 {
     
@@ -101,7 +147,7 @@ void Window::initiateSystemsWindowed()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    _window = glfwCreateWindow(800, 600, "Bomberman", NULL, NULL);
+    _window = glfwCreateWindow(900, 750, "Bomberman", NULL, NULL);
     
     if (!_window)
     {

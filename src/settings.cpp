@@ -60,7 +60,8 @@ void Settings::executeCommand(int input){
         break;
         case command.Screen :
             std::cout << "Screen" << std::endl;
-            modDisplay();
+            // modDisplay(); 
+            graphics->setDrawMode(SCREEN);
         break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);

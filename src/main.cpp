@@ -18,11 +18,13 @@
 #include "text.hpp"
 #include "enemy.hpp"
 #include "pause.hpp"
+#include "screen.hpp"
 
 GLFWwindow *window;
 MainMenu *mainMenu;
 Settings *settings;
 PauseMenu *pauseMenu;
+Screen *screen;
 
 Text *text;
 Enemy *enemy;
@@ -41,7 +43,10 @@ static bool timeout(int seconds)
 	static int time = glfwGetTime();
 
 	if (glfwGetTime() - time >= seconds)
+	{
+		time = glfwGetTime();
 		return (true);
+	}
 	return (false);
 }
 
@@ -75,6 +80,11 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
         {
         	std::cout << "inside \n";
         	pauseMenu->toggleCommands(/*window,*/ key);
+        }
+        else if (graphics->getDrawMode() == SCREEN)
+        {
+        	std::cout << "inside \n";
+        	screen->toggleCommands(/*window,*/ key);
         }
 	}
 	else if (key == GLFW_KEY_P)
@@ -125,7 +135,7 @@ int main(void)
 
 	char pauseText[256];
 	// int hearts_num = 3;
-	sprintf(pauseText, "Prss P");
+	sprintf(pauseText, "Press P");
 
 	char pausePress[256];
 	// int hearts_num = 3;
@@ -148,6 +158,9 @@ int main(void)
 
 	pauseMenu = new PauseMenu(window, myWindow, graphics);
 	pauseMenu->initPauseImage();
+
+	screen = new Screen(window, myWindow, graphics);
+	screen->initScreenImage();
 
 	wall.init();
 	health.init();
@@ -248,6 +261,16 @@ int main(void)
 			//settings->initSettingsImage();
 			pauseMenu->LoadPauseImage();
 			myWindow = pauseMenu->getGameWindow();
+
+			// window = myWindow.getWindow();
+			// glfwSetKeyCallback(window, key_callback);
+			break;
+		case SCREEN:
+			sound->playMusicForvever(MUSIC_MENU1);
+			// settings->toggleCommands(window);
+			//settings->initSettingsImage();
+			screen->LoadScreenImage();
+			myWindow = screen->getGameWindow();
 
 			// window = myWindow.getWindow();
 			// glfwSetKeyCallback(window, key_callback);
