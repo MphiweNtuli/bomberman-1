@@ -98,7 +98,6 @@ void Bomb::explode(Sound *snd)
 		return;
 	if (glfwGetTime() - this->time_dropped >= (this->countdown * 1.0f))
 	{
-		// Sound *snd = new Sound();
 		GLuint tmp = pBombId;
 		Texture text("BombermanModels/exp/flames.jpeg", &pBombId);
 		std::vector<glm::vec3> _vert;

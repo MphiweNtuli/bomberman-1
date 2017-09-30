@@ -6,7 +6,7 @@ void Sound::loadEffects(void)
     (this->effects)[EFFECT_WALK] = Mix_LoadWAV("sounds/walk.ogg");
     (this->effects)[EFFECT_SCROLL] = Mix_LoadWAV("sounds/scroll.ogg");
     (this->effects)[EFFECT_ENTER] = Mix_LoadWAV("sounds/enter.ogg");
-    (this->effects)[EFFECT_EXPLOSION] = Mix_LoadWAV("sounds/explosion.wav");
+    (this->effects)[EFFECT_EXPLOSION] = Mix_LoadWAV("sounds/explosion.ogg");
 }
 
 void Sound::loadMusic(void)
@@ -40,7 +40,6 @@ Sound::~Sound(void)
 
 void Sound::playEffectOnce(int effect, int channel)
 {
-    
     Mix_PlayChannel(channel, (this->effects)[effect], 0);
 }
 
