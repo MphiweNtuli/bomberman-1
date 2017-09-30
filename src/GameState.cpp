@@ -14,7 +14,7 @@ void GameState::operator=(const GameState &rhs)
 
 void GameState::cleanUpSave()
 {
-    std::ofstream ofs("gamestate/player.dat", std::ofstream::trunc);
+    std::ofstream ofs("gamestate/gamedata.dat", std::ofstream::trunc);
     ofs.close();
 }
 
@@ -26,7 +26,7 @@ bool GameState::isEmpty(std::ifstream &ifs)
 int GameState::saveGameState(Player &p, std::vector<GLfloat> &low)
 {
     mkdir("gamestate", 0777);
-    std::ofstream ofs("gamestate/player.dat");
+    std::ofstream ofs("gamestate/gamedata.dat");
     if (ofs.is_open())
     {
         {
@@ -42,7 +42,7 @@ int GameState::loadGameState(Player *p, std::vector<GLfloat> &low)
 {
     Player p2;
 
-    std::ifstream ifs("gamestate/player.dat");
+    std::ifstream ifs("gamestate/gamedata.dat");
     if (!isEmpty(ifs))
     {
         if (ifs.is_open())
