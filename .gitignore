@@ -1,6 +1,8 @@
 *.txt
 *.dat
-*.vscode
+.vscode*
+*.json
+
 # Prerequisites
 *.d
 *.dat
