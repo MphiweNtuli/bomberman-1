@@ -15,7 +15,7 @@ struct Input
         Start,
         Continue,
         Settings,
-        HighScore,
+        // HighScore,
         Exit,
         ToggleSound,
         ToggleScreen,
@@ -38,6 +38,7 @@ class MainMenu
         void modSound();
         int getSoundVal();
         void gameExit();
+        void setWindow(GLFWwindow *, Window &, Graphics *);
         Window getGameWindow();
         void toggleCommands(int input);
         void executeCommand(int command);

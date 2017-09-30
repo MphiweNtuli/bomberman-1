@@ -23,7 +23,8 @@ SRCDIR = src/
 SRCS = main.cpp Graphics.cpp Window.cpp MainMenu.cpp stb_image.cpp loader.cpp\
 	  Texture.cpp shader.cpp WindowKeyEvents.cpp Player.cpp controls.cpp\
 	  Sound.cpp Wall.cpp Floor.cpp Portal.cpp StaticWall.cpp Destructible.cpp\
-	  camera.cpp health.cpp timer.cpp Bomb.cpp GameState.cpp
+	  camera.cpp health.cpp timer.cpp Bomb.cpp GameState.cpp settings.cpp text.cpp\
+	  enemy.cpp pause.cpp screen.cpp PowerUp.cpp
 
 SRC	= $(addprefix $(SRCDIR), $(SRCS))
 INCLUDE = $(wildcard $(INCLUDE_FOLDER)/*.hpp)

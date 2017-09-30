@@ -18,7 +18,7 @@ Graphics::Graphics()
 }
 
 Graphics::~Graphics() { }
-
+ 
 void Graphics::setDrawMode(GameMode mode)
 {
 	drawMode = mode;

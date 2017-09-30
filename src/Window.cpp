@@ -10,6 +10,8 @@ static void error_callback(int error, const char* description)
 }
 
 Window::Window(){
+    latestHeight = HEIGHT;
+    latestWidth = WIDTH;
     _width  = WIDTH;
     _window = nullptr;
     _fullWindow = nullptr;
@@ -25,7 +27,7 @@ Window::~Window(){
 
 void Window::runGame()
 {
-    int     win;
+    /*int     win;
     // _sound->playMusicForvever(MUSIC_BEAR);
     std::cout << "PLEASE SELECT WINDOW MODE: [1] Windowed OR [0] FullScreen" << std::endl;
     std::cin >> win;
@@ -44,12 +46,13 @@ void Window::runGame()
     
     if (win == 1)
         initiateSystems2();
-    else
-        initiateSystems();
+    else */
+        // initiateSystemsFullscreen();
+    initiateSystemsWindowed();
 }
 
 //Initiates Screen  :Cradebe
-void Window::initiateSystems(){
+void Window::initiateSystemsFullscreen(){
     
     glfwSetErrorCallback(error_callback);
     
@@ -82,7 +85,50 @@ void Window::initiateSystems(){
     glClearColor(0.0f, 0.3f, 0.0f, 0.0f);
 }
 
-void Window::initiateSystems2()
+void Window::switchToLarge(GLFWwindow* win , int wantedWidth, int wantedHeight)
+{
+    if (wantedHeight != latestHeight && wantedWidth !=  latestWidth)
+    {
+        glfwSetWindowSize(win, wantedWidth, wantedHeight);
+        latestHeight = wantedHeight;
+        latestWidth = wantedWidth;
+    }
+    
+}
+
+void Window::switchToMedium(GLFWwindow* win , int wantedWidth, int wantedHeight)
+{
+    if (wantedHeight != latestHeight && wantedWidth !=  latestWidth)
+    {
+        glfwSetWindowSize(win, wantedWidth, wantedHeight);
+        latestHeight = wantedHeight;
+        latestWidth = wantedWidth;
+    }
+}
+
+void Window::switchToWindowed(GLFWwindow* win)
+{
+    if (HEIGHT != latestHeight && WIDTH !=  latestWidth)
+    {
+        glfwSetWindowSize(win, WIDTH, HEIGHT);
+        latestHeight = HEIGHT;
+        latestWidth = WIDTH;
+    }
+    
+}
+
+void Window::switchToFull(GLFWwindow* win)
+{
+    (void)win;
+    // if (FULLHEIGHT != latestHeight && FULLWIDTH !=  latestWidth)
+    // {
+    //     glfwSetWindowSize(win, FULLWIDTH, FULLHEIGHT);
+    //     latestHeight = FULLHEIGHT;
+    //     latestWidth = FULLWIDTH;
+    // }
+}
+
+void Window::initiateSystemsWindowed()
 {
     
     glfwSetErrorCallback(error_callback);
@@ -101,7 +147,7 @@ void Window::initiateSystems2()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
-    _window = glfwCreateWindow(800, 600, "Bomberman", NULL, NULL);
+    _window = glfwCreateWindow(900, 750, "Bomberman", NULL, NULL);
     
     if (!_window)
     {
@@ -150,13 +196,13 @@ void Window::changeWindowSize()
     //glfwGetWindowSize(_window, &width, &height);
     if (_fullWindow)
     {
-        initiateSystems2();
+        initiateSystemsWindowed();
         glfwDestroyWindow(_fullWindow);
         _fullWindow = nullptr;
     }
     else if (_window)
     {
-        initiateSystems();
+        initiateSystemsFullscreen();
         glfwDestroyWindow(_window);
         _window = nullptr;
     }

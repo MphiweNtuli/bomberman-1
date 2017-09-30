@@ -19,7 +19,10 @@ enum GameMode
 {
 	MAINMENU,
 	GAMEPLAY,
-	GAMEPAUSE
+	GAMEPAUSE,
+	SETTINGS, 
+	PAUSE,
+	SCREEN,
 };
 
 class Graphics

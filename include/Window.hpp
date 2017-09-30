@@ -17,12 +17,16 @@ public:
     ~Window();
 
     void runGame();
-    void initiateSystems();
-    void initiateSystems2();
+    void initiateSystemsFullscreen();
+    void initiateSystemsWindowed();
     void terminateSystems();
     void setGraphics(Graphics g);
     bool initializeGlew();
     void changeWindowSize();
+    void switchToLarge(GLFWwindow* win ,int wantedHeight, int wantedWidth);
+    void switchToMedium(GLFWwindow* win ,int wantedHeight, int wantedWidth);
+    void switchToWindowed(GLFWwindow* win);
+    void switchToFull(GLFWwindow* win);
 
     Sound* getSound();
     GLFWwindow* getWindow();
@@ -31,6 +35,8 @@ public:
 private:
     int _width;
     int _height;
+    int latestHeight;
+    int latestWidth;
     Sound *_sound;
     Graphics *graphics;
     GLFWwindow* _window;

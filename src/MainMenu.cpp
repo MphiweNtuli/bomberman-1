@@ -1,6 +1,7 @@
 #include "MainMenu.hpp"
 #include "Texture.hpp"
 
+
 MainMenu::MainMenu() {}
 
 MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
@@ -11,6 +12,8 @@ MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
     this->_gameWindow = gameWindow;
    graphics = g;
     _sound_val = 100;
+    // settings = new Settings(window, gameWindow, g);
+    // settings->initSettingsImage();
 }
 
 MainMenu::~MainMenu(){
@@ -56,15 +59,19 @@ void MainMenu::executeCommand(int input){
             std::cout << "Continue" << std::endl;
         break;
         case command.Settings :
-             gameSettings(5);
-            _gameWindow.changeWindowSize();
+             glClear(GL_COLOR_BUFFER_BIT);
+             graphics->setDrawMode(SETTINGS);
         break;
-        case command.Exit :
+        case command.Exit : 
             glfwSetWindowShouldClose(_window, GL_TRUE);
         break;
     }
 }
-
+void MainMenu::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
+    this->_window = nWindow;
+    this->_gameWindow = nGameWindow;
+    graphics = g;
+}
 void MainMenu::toggleCommands(int key){
     Input command;
     switch(key){
@@ -109,7 +116,7 @@ void MainMenu::initMenuImage()
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("main.png", &menuTexture);
+    Texture texture("BombermanModels/main.png", &menuTexture);
 
     static const GLfloat g_vertex_buffer_start[] = { 
         
@@ -118,9 +125,9 @@ void MainMenu::initMenuImage()
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
-        -0.65f, 0.0f, 0.25f,    0.0f, 0.90f,
-        -0.55f, 0.05f, 0.25f,   0.0f, 0.10f,
-        -0.65f, 0.10f, 0.25f,   1.0f, 0.10f,
+        -0.65f, 0.0f, -0.25f,    0.0f, 0.0f,
+        -0.55f, 0.05f, -0.25f,   0.0f, 0.0f,
+        -0.65f, 0.10f, -0.25f,   0.0f, 0.0f,
         
     };
 
@@ -132,9 +139,9 @@ void MainMenu::initMenuImage()
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
 
-        -0.65f, -0.11f, 0.25f,        0.0f, 0.90f,
-        -0.55f, -0.07f, 0.25f,       0.0f, 0.10f, //continue
-        -0.65f, -0.04f, 0.25f,      1.0f, 0.10f,
+        -0.65f, -0.11f, -0.25f,      0.0f, 0.0f,
+        -0.55f, -0.07f, -0.25f,      0.0f, 0.0f, //continue
+        -0.65f, -0.04f, -0.25f,      0.0f, 0.0f,
     };
 
     static const GLfloat g_vertex_buffer_settings[] = { 
@@ -144,21 +151,9 @@ void MainMenu::initMenuImage()
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
 
-        -0.65f, -0.12f, 0.35f,   0.90f, 0.0f,
-        -0.55f, -0.16f, 0.35f,  0.10f, 0.0f, //settings
-        -0.65f, -0.19f, 0.35f,  0.10f, 1.0f
-    };
-
-    static const GLfloat g_vertex_buffer_score[] = { 
-        
-        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-
-        -0.65f, -0.25f, 0.35f,   0.90f, 0.0f,
-        -0.55f, -0.30f, 0.35f,  0.10f, 0.0f, //Settings
-        -0.65f, -0.35f, 0.35f,  0.10f, 1.0f
+        -0.65f, -0.12f, -0.35f,   0.0f, 0.0f,
+        -0.55f, -0.16f, -0.35f,  0.0f, 0.0f, //settings
+        -0.65f, -0.19f, -0.35f,  0.0f, 0.0f
     };
 
     static const GLfloat g_vertex_buffer_exit[] = { 
@@ -167,12 +162,24 @@ void MainMenu::initMenuImage()
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-        
-        -0.65f, -0.37f, 0.35f,   0.90f, 0.0f,
-        -0.55f, -0.43f, 0.35f,  0.10f, 0.0f, //Exit
-        -0.65f, -0.47f, 0.35f,  0.10f, 1.0f,
-        
+
+        -0.65f, -0.25f, -0.35f,   0.0f, 0.0f,
+        -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //Settings
+        -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
     };
+
+    // static const GLfloat g_vertex_buffer_exit[] = { 
+        
+    //     -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
+    //     -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
+    //     1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
+    //     1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
+        
+    //     -0.65f, -0.37f, -0.35f,   0.0f, 0.0f,
+    //     -0.55f, -0.43f, -0.35f,  0.0f, 0.0f, //Exit
+    //     -0.65f, -0.47f, -0.35f,  0.0f, 0.0f,
+        
+    // };
 
     GLuint indeces[] =
     {
@@ -203,12 +210,12 @@ void MainMenu::initMenuImage()
         break;
     
         case 3:
-            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_score), g_vertex_buffer_score, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_exit), g_vertex_buffer_exit, GL_STATIC_DRAW);
         break;
     
-        case 4:
-            glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_exit), g_vertex_buffer_exit, GL_STATIC_DRAW);
-        break;          
+        // case 4:
+        //     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_exit), g_vertex_buffer_exit, GL_STATIC_DRAW);
+        // break;          
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, menuEBO);
