@@ -106,7 +106,7 @@ void Bomb::explode(void)
 		std::vector<glm::vec2> _uv;
 		_uv.swap(_uvbuffer);	
 
-		load_result = loadOBJ("BombermanModels/exp/explo.obj", _vertices, _uvbuffer, normals);
+		load_result = loadOBJ("BombermanModels/exp/explosion.obj", _vertices, _uvbuffer, normals);
 		_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		_model = glm::scale(_model, glm::vec3(0.12));
 
