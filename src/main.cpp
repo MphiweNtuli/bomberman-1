@@ -14,11 +14,13 @@
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
+#include "enemy.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
+Enemy *enemy;
 Bomb *bomb;
 Health health;
 Timer timer;
@@ -97,13 +99,16 @@ int main(void)
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls(), bomb);
+	enemy = new Enemy(staticWall.getWalls());
 	portal.init();
     health.init();
     timer.init();
 	destructible.init3();
-    player->setDestructible(destructible);
+	player->setDestructible(destructible);
+	enemy->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
+	enemy->setWalls(destructible.getWalls());
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
     
@@ -166,11 +171,14 @@ int main(void)
 				{
 					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
-                    player->remove(removeWalls);
+					player->remove(removeWalls);
+					enemy->remove(removeWalls);
 				}
                 
 				player->init();
+				enemy->init();
 				player->player_callback(window);
+				enemy->enemy_callback();
 
 			default:
 				break;
