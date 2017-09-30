@@ -14,7 +14,7 @@ Bomb::Bomb(int radius)
 
    load_result = loadOBJ("BombermanModels/bombs/bomb.obj", _vertices, _uvbuffer, normals);
     if (load_result != true)
-        std::cout << "failed to load object model" << std::endl;
+		std::cout << "failed to load object model" << std::endl;
 
 }
 
@@ -98,7 +98,27 @@ void Bomb::explode(void)
 	if (this->time_dropped == 0)
 		return;
 	if (glfwGetTime() - this->time_dropped >= (this->countdown * 1.0f))
-			this->time_dropped = 0;
+	{
+		GLuint tmp = pBombId;
+		Texture text("BombermanModels/exp/flames.jpeg", &pBombId);
+		std::vector<glm::vec3> _vert;
+		_vert.swap(_vertices);
+		std::vector<glm::vec2> _uv;
+		_uv.swap(_uvbuffer);	
+
+		load_result = loadOBJ("BombermanModels/exp/explo.obj", _vertices, _uvbuffer, normals);
+		_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		_model = glm::scale(_model, glm::vec3(0.12));
+
+		display();
+
+		_vertices.swap(_vert);
+		_uvbuffer.swap(_uv);
+		pBombId = tmp;
+		
+		this->time_dropped = 0;
+	}
+	
 }
 
 void Bomb::drop(void)
@@ -125,7 +145,6 @@ void Bomb::display(void)
 {
 	// display bomb
 		glUseProgram(bomb_programID);
-	
 		_view = getViewMatrix();
 
 		glm::mat4 ProjectionMatrix = _projection;

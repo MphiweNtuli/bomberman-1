@@ -49,7 +49,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	{
 		mainMenu->toggleCommands(key);
 		if (mainMenu->getInput() == 0 && key == GLFW_KEY_ENTER)
-            glEnable(GL_DEPTH_TEST);
+		{
+			glEnable(GL_DEPTH_TEST);
+		}	
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
