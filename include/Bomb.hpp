@@ -50,7 +50,7 @@ class Bomb
 		void set_x(GLfloat x);
 		void set_y(GLfloat y);
 
-		void explode(void);
+		void explode(Sound *snd);
 		void drop(void);
 };
 

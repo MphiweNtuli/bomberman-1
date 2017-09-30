@@ -33,7 +33,9 @@ void WindowKeyEvents::soundKeyEvents(GLFWwindow *win, Sound *s, Graphics *g)
                 glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_RELEASE && glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_RELEASE )
                 s->stopEffect(WALK_CHANNEL);
             break;
+        case SCREEN:
         case MAINMENU:
+        case SETTINGS:
             if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS   || glfwGetKey(win, GLFW_KEY_DOWN) == GLFW_PRESS)
             {
                 if (!Mix_Playing(SCROLL_CHANNEL))

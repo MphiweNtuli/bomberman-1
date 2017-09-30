@@ -10,14 +10,16 @@
 #define WALK_CHANNEL 1
 #define SCROLL_CHANNEL 2
 #define ENTER_CHANNEL 3
+#define EXPLOSION_CHANNEL 4
 #define DEFAULT_CHANNEL -1
 
 /* Effects */
-#define NUM_EFFECTS 3
+#define NUM_EFFECTS 4
 
 #define EFFECT_WALK 0
 #define EFFECT_SCROLL 1
 #define EFFECT_ENTER 2
+#define EFFECT_EXPLOSION 3
 
 /* Music */
 #define NUM_MUSIC 3

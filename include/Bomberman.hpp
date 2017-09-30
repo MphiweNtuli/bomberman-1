@@ -23,6 +23,7 @@
 #include "shader.hpp"
 #include "controls.hpp"
 #include <list>
+#include "Sound.hpp"
 #include "Wall.hpp"
 #include "boost/serialization/list.hpp"
 #include "boost/serialization/vector.hpp"

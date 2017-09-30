@@ -6,6 +6,7 @@ void Sound::loadEffects(void)
     (this->effects)[EFFECT_WALK] = Mix_LoadWAV("sounds/walk.ogg");
     (this->effects)[EFFECT_SCROLL] = Mix_LoadWAV("sounds/scroll.ogg");
     (this->effects)[EFFECT_ENTER] = Mix_LoadWAV("sounds/enter.ogg");
+    (this->effects)[EFFECT_EXPLOSION] = Mix_LoadWAV("sounds/explosion.wav");
 }
 
 void Sound::loadMusic(void)
