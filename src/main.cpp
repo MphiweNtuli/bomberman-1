@@ -32,6 +32,9 @@ static bool timeout(int seconds)
 {
 	static int time = glfwGetTime();
 	
+	std::cout << "TIME: ";
+	std::cout << glfwGetTime() << std::endl;
+
 	if (glfwGetTime() - time >= seconds)
 		return (true);
 	return (false);
@@ -120,7 +123,7 @@ int main(void)
 	staticWall.init();
 	player = new Player(staticWall.getWalls());
 	portal.init();
-	destructible.init1();
+	//destructible.init1();
 	destructible01.init1();
     floor.init();
 	//player->init();
@@ -162,8 +165,10 @@ int main(void)
 				portal.draw();
 				
 				if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
-				 			&& (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284)) 
-					power.TimerDisplay(0);	
+							 && (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
+				{ 
+					power.TimerDisplay(0);
+				}	
 				else
 				{
 					if (power.TimerDisplay(1) == 1)
@@ -178,6 +183,8 @@ int main(void)
 					if (power.HealthDisplay(1) == 1)
 						health.draw();
 				}
+
+				timer.displayTime();
 
 				destructible.draw();
 				destructible01.draw();

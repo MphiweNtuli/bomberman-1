@@ -14,6 +14,9 @@ public:
     void init();
     //void test();
     void draw();
+    void    displayTime();
+    void    icreaseTime();
+    int     time;
 
 private:
     GLuint VertexArrayID, destructibleTexture;

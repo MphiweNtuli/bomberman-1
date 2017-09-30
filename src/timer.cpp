@@ -1,8 +1,18 @@
 #include "timer.hpp"
 
-Timer::Timer(){}
+Timer::Timer(){
+    time = 180;
+}
 
 Timer::~Timer(){}
+
+void Timer::displayTime(){
+    std::cout << time - glfwGetTime() << std::endl;
+}
+
+void Timer::increseTime(){
+    time += 30;
+}
 
 void Timer::init()
 {
@@ -11,7 +21,7 @@ void Timer::init()
     GLfloat vertices[STATIC_WALLS][180];
     GLfloat xLeft = -0.7f;
     GLfloat xRight = -0.6f;
-    GLfloat fUnit = 0.2;
+    GLfloat fUnit = 0.2; 
 
     GLfloat vertexData[] ={
 
