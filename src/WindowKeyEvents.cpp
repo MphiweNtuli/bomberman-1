@@ -33,6 +33,7 @@ void WindowKeyEvents::soundKeyEvents(GLFWwindow *win, Sound *s, Graphics *g)
                 glfwGetKey(win, GLFW_KEY_LEFT) == GLFW_RELEASE && glfwGetKey(win, GLFW_KEY_RIGHT) == GLFW_RELEASE )
                 s->stopEffect(WALK_CHANNEL);
             break;
+        case PAUSE:
         case SCREEN:
         case MAINMENU:
         case SETTINGS:
