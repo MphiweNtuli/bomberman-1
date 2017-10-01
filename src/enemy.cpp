@@ -257,17 +257,18 @@ void Enemy::init(void)
 
 void	Enemy::setWalls(std::vector<Wall> walls)
 {
+	std::cout << "set Walls" << std::endl;
 	std::vector<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
 	{
-		std::cout << it->getXPos() << it->getYPos() <<std::endl;
 		this->walls.push_back(*it);
 	}
 }
 
 void Enemy::enemy_callback()
-{	
+{
+	std::cout << "Enemy enemy_callback" << std::endl;
 	glm::vec3 bills(0.0,0.0,0.006);
 	if(moveRight() && direction == "right") {
 		_model = glm::translate(_model, bills);
@@ -314,6 +315,7 @@ void Enemy::enemy_callback()
 
 void Enemy::setDestructible(Destructible destructible)
 {
+	std::cout << "set destructible" << std::endl;
     _des = destructible;
 }
 

@@ -20,6 +20,8 @@ GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
+std::vector<Enemy> enemies;
+std::vector<Enemy>::iterator it;
 Enemy *enemy;
 Enemy *enemy01;
 Enemy *enemy02;
@@ -65,16 +67,21 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 void Player_colision()
 {
-	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy->get_xPos(), enemy->get_yPos())) <= 0.065f)
-		player->set_isdead(true);
-	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy01->get_xPos(), enemy01->get_yPos())) <= 0.065f)
-		player->set_isdead(true);
-	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy02->get_xPos(), enemy02->get_yPos())) <= 0.065f)
-		player->set_isdead(true);
-	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy03->get_xPos(), enemy03->get_yPos())) <= 0.065f)
-		player->set_isdead(true);
-	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy04->get_xPos(), enemy04->get_yPos())) <= 0.065f)
-		player->set_isdead(true);
+	// if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy->get_xPos(), enemy->get_yPos())) <= 0.065f)
+	// 	player->set_isdead(true);
+	// if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy01->get_xPos(), enemy01->get_yPos())) <= 0.065f)
+	// 	player->set_isdead(true);
+	// if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy02->get_xPos(), enemy02->get_yPos())) <= 0.065f)
+	// 	player->set_isdead(true);
+	// if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy03->get_xPos(), enemy03->get_yPos())) <= 0.065f)
+	// 	player->set_isdead(true);
+	// if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy04->get_xPos(), enemy04->get_yPos())) <= 0.065f)
+	// 	player->set_isdead(true);
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(it->get_xPos(), it->get_yPos())) <= 0.065f)
+			player->set_isdead(true);
+
 
 }
 
@@ -118,30 +125,47 @@ int main(void)
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls(), bomb);
-	enemy = new Enemy(staticWall.getWalls(), -0.75f,  0.16f);
-	enemy01 = new Enemy(staticWall.getWalls(), 0.6f,  0.56f);
-	enemy02 = new Enemy(staticWall.getWalls(), -0.75f,  0.30f);	
-	enemy03 = new Enemy(staticWall.getWalls(), -0.75f,  -0.60f);	
-	enemy04 = new Enemy(staticWall.getWalls(), -0.05f,  0.0f);	
+	// enemy = new Enemy(staticWall.getWalls(), -0.75f,  0.16f);
+	// enemy01 = new Enemy(staticWall.getWalls(), 0.6f,  0.56f);
+	// enemy02 = new Enemy(staticWall.getWalls(), -0.75f,  0.30f);	
+	// enemy03 = new Enemy(staticWall.getWalls(), -0.75f,  -0.60f);	
+	// enemy04 = new Enemy(staticWall.getWalls(), -0.05f,  0.0f);
+
+	enemies.push_back(Enemy(staticWall.getWalls(), -0.75f,  0.16f));
+	enemies.push_back(Enemy(staticWall.getWalls(), 0.6f,  0.56f));
+	enemies.push_back(Enemy(staticWall.getWalls(), -0.75f,  0.30f));
+	enemies.push_back(Enemy(staticWall.getWalls(), -0.75f,  -0.60f));
+	enemies.push_back(Enemy(staticWall.getWalls(), -0.05f,  0.0f));
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		std::cout << "I am an enemy" << std::endl;
 	
 	portal.init();
     health.init();
     timer.init();
 	destructible.init3();
 	player->setDestructible(destructible);
-	enemy->setDestructible(destructible);
-	enemy01->setDestructible(destructible);
-	enemy02->setDestructible(destructible);
-	enemy03->setDestructible(destructible);
-	enemy04->setDestructible(destructible);
+	// enemy->setDestructible(destructible);
+	// enemy01->setDestructible(destructible);
+	// enemy02->setDestructible(destructible);
+	// enemy03->setDestructible(destructible);
+	// enemy04->setDestructible(destructible);
 	
     listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
-	enemy->setWalls(destructible.getWalls());
-	enemy01->setWalls(destructible.getWalls());
-	enemy02->setWalls(destructible.getWalls());	
-	enemy03->setWalls(destructible.getWalls());	
-	enemy04->setWalls(destructible.getWalls());	
+	// enemy->setWalls(destructible.getWalls());
+	// enemy01->setWalls(destructible.getWalls());
+	// enemy02->setWalls(destructible.getWalls());	
+	// enemy03->setWalls(destructible.getWalls());	
+	// enemy04->setWalls(destructible.getWalls());
+
+	// std::vector<Enemy>::iterator it;
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setDestructible(destructible);
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setWalls(destructible.getWalls());
 	
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
@@ -206,39 +230,51 @@ int main(void)
 					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
 					player->remove(removeWalls);
-					enemy->remove(removeWalls);
-					enemy01->remove(removeWalls);
-					enemy02->remove(removeWalls);
-					enemy03->remove(removeWalls);
-					enemy04->remove(removeWalls);
+					// enemy->remove(removeWalls);
+					// enemy01->remove(removeWalls);
+					// enemy02->remove(removeWalls);
+					// enemy03->remove(removeWalls);
+					// enemy04->remove(removeWalls);
+					for (it = enemies.begin(); it != enemies.end(); ++it)
+						it->remove(removeWalls);
+
 					player->bomb_colision(bomb->get_x(), bomb->get_y());
-					enemy->bomb_colision(bomb->get_x(), bomb->get_y());
-					enemy01->bomb_colision(bomb->get_x(), bomb->get_y());
-					enemy02->bomb_colision(bomb->get_x(), bomb->get_y());
-					enemy03->bomb_colision(bomb->get_x(), bomb->get_y());
-					enemy04->bomb_colision(bomb->get_x(), bomb->get_y());
+					// enemy->bomb_colision(bomb->get_x(), bomb->get_y());
+					// enemy01->bomb_colision(bomb->get_x(), bomb->get_y());
+					// enemy02->bomb_colision(bomb->get_x(), bomb->get_y());
+					// enemy03->bomb_colision(bomb->get_x(), bomb->get_y());
+					// enemy04->bomb_colision(bomb->get_x(), bomb->get_y());
+					for (it = enemies.begin(); it != enemies.end(); ++it)
+						it->bomb_colision(bomb->get_x(), bomb->get_y());
 
 				}
                 
 				player->init();
-				if(!enemy->get_isdead())
-					enemy->init();
-				if(!enemy01->get_isdead())
-					enemy01->init();
-				if(!enemy02->get_isdead())
-					enemy02->init();
-				if(!enemy03->get_isdead())
-					enemy03->init();
-				if(!enemy04->get_isdead())
-					enemy04->init();
+				// if(!enemy->get_isdead())
+				// 	enemy->init();
+				// if(!enemy01->get_isdead())
+				// 	enemy01->init();
+				// if(!enemy02->get_isdead())
+				// 	enemy02->init();
+				// if(!enemy03->get_isdead())
+				// 	enemy03->init();
+				// if(!enemy04->get_isdead())
+				// 	enemy04->init();
+				for (it = enemies.begin(); it != enemies.end(); ++it)
+					if(!it->get_isdead())
+						it->init();
 				
 				
 				player->player_callback(window);
-				enemy->enemy_callback();
-				enemy01->enemy_callback();	
-				enemy02->enemy_callback();
-				enemy03->enemy_callback();
-				enemy04->enemy_callback();
+				// enemy->enemy_callback();
+				// enemy01->enemy_callback();	
+				// enemy02->enemy_callback();
+				// enemy03->enemy_callback();
+				// enemy04->enemy_callback();
+
+				for (it = enemies.begin(); it != enemies.end(); ++it)
+					it->enemy_callback();
+
 				Player_colision();
 				if(player->get_isdead())
 					graphics->setDrawMode(MAINMENU);
