@@ -5,6 +5,7 @@
 #include "camera.hpp"
 #include "loader.hpp"
 #include "Destructible.hpp"
+#include <stdlib.h> 
 
 
 #define WALL 0.08f
@@ -16,7 +17,7 @@ class Enemy
 {
 	public:
 		
-		Enemy(std::vector<Wall> walls);
+		Enemy(std::vector<Wall> walls, GLfloat x_in, GLfloat y_in);
 		~Enemy(void);
 		void init(void);
 		void updateLocation(void);
@@ -24,6 +25,9 @@ class Enemy
 		void set_x(GLfloat x);
 		void set_y(GLfloat y);
 		void setWalls(std::vector<Wall> walls);
+		void set_isdead(bool death);
+		void bomb_colision(GLfloat bx, GLfloat by);
+
 
 		void checkCollision();
 		bool moveUp(); 
@@ -41,11 +45,12 @@ class Enemy
 
 		GLfloat get_xPos(void) const;
 		GLfloat get_yPos(void) const;
+		bool get_isdead(void) const;
 		int getX() const;
 		int getY() const;
 
 	private:
-        bool load_result;
+        bool load_result, isdead;
 
 		/////////////////////////////////////////////////////////////////////////////
 		Destructible _des, _des01;		
@@ -59,6 +64,8 @@ class Enemy
 		std::vector<glm::vec3> _vertices;
 		std::vector<glm::vec2> _uvbuffer;
 		std::vector<glm::vec3> normals;
+		std::string direction;
+		std::string direction1;
 
 		int x;
 		int y;

@@ -10,6 +10,7 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
     _bomb = bomb;
 	x = 0;
 	y = 0;
+	isdead = false;
 	texture_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
 	Texture text("BombermanModels/bombermanText.png", &pTextureId);
@@ -61,6 +62,25 @@ void	Player::remove(std::vector<int> removeWalls)
 				if (wall_it - 64 == *iter)
 					it->setIsDestroyed(true);
 	}
+}
+
+void Player::bomb_colision(GLfloat bx, GLfloat by)
+{
+	std::cout << "BOMBING ENEMIES$%%$$%%$$$$$$%%$$$$\n";
+
+	if(glm::distance(glm::vec2(bx,  by) , glm::vec2(xPos, yPos)) <= 0.12f)
+		set_isdead(true);
+
+}
+
+bool	Player::get_isdead(void)const
+{
+	return this->isdead;
+}
+
+void	Player::set_isdead(bool death)
+{
+	this->isdead = death;
 }
 
 Player::~Player()

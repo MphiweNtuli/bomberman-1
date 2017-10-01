@@ -3,10 +3,13 @@
 //#include "Player.hpp"
 #include "Bomberman.hpp"
 
-Enemy::Enemy(std::vector<Wall> walls)
+Enemy::Enemy(std::vector<Wall> walls, GLfloat x_in, GLfloat y_in)
 {	
 	x = 0;
 	y = 0;
+	direction = "left";
+	direction1 = "up";
+	isdead = false;
 	
 	enemy_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
 
@@ -16,7 +19,8 @@ Enemy::Enemy(std::vector<Wall> walls)
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
-	_model = glm::translate(_model, glm::vec3(-0.75f,  0.16f, -3.82f));
+	//_model = glm::translate(_model, glm::vec3(-0.75f,  0.16f, -3.82f));
+	_model = glm::translate(_model, glm::vec3(x_in,  y_in, -3.82f));
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	yPos = _model[3][1];
 	xPos = _model[3][0];
@@ -37,6 +41,25 @@ Enemy::Enemy(std::vector<Wall> walls)
    this->walls = walls;
 }
 
+void Enemy::bomb_colision(GLfloat bx, GLfloat by)
+{
+	std::cout << "BOMBING ENEMIES$%%$$%%$$$$$$%%$$$$\n";
+
+	if(glm::distance(glm::vec2(bx,  by) , glm::vec2(xPos, yPos)) <= 0.12f)
+		set_isdead(true);
+
+}
+
+bool	Enemy::get_isdead(void)const
+{
+	return this->isdead;
+}
+
+void	Enemy::set_isdead(bool death)
+{
+	this->isdead = death;
+}
+
 void	Enemy::remove(std::vector<int> removeWalls)
 {
 	std::vector<Wall>::iterator it;
@@ -47,16 +70,12 @@ void	Enemy::remove(std::vector<int> removeWalls)
 	{
 		wall_it++;
 		if(wall_it > 64)
-		{
     		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
 				if (wall_it - 64 == *iter)
-				{
-					std::cout << wall_it - 64 << "  : Destroy Wall number\n";
-					walls.erase(it);
-				}
-		}
+					it->setIsDestroyed(true);
 	}
 }
+
 
 Enemy::~Enemy(void)
 {
@@ -83,7 +102,6 @@ GLfloat Enemy::get_yPos(void) const
 
 void Enemy::updateLocation(void)
 {
-	std::cout << "update \n";
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
@@ -108,16 +126,7 @@ bool Enemy::moveUp()
 			wall_it++;
 			if((yPos + 0.098 > it->getYPos() + OFS_Y && yPos + 0.098 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 			if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Enemy Wall number\n";
 					return false;
-				}
-				if(wall_it > 64)
-				{
-				 std::cout << it->getXPos()  << "  :   " << it->getYPos() << "  : Enemy Wall Position	\n\n\n";
-				 std::cout << xPos  << "  :   " << yPos << "  : Player Wall Position	\n\n\n";
-				}
 		}
 		if (yPos + 0.098 > 0.87)
 			return false;
@@ -137,12 +146,7 @@ bool Enemy::moveDown()
 			wall_it++;
 			if((yPos + 0.04 > it->getYPos() + OFS_Y && yPos + 0.03 < it->getYPos() + OFS_Y + 0.09) && !it->isDestroyed())
 			if(xPos + 0.03 > it->getXPos() + OFS_X && xPos < it->getXPos() + OFS_X + 0.09)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Enemy  Wall number\n";
-					return false;
-				}
-				std::cout << "Move Down count: " << wall_it << std::endl;
+				return false;
 		}
 		if (yPos - 0.098 < -0.98)
 			return false;
@@ -159,13 +163,9 @@ bool Enemy::moveLeft()
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
-			if((xPos - 0.08 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.15) && !it->isDestroyed())
+			if((xPos - 0.03 > it->getXPos() + OFS_X && xPos + 0.05 < it->getXPos() + OFS_X + 0.2) && !it->isDestroyed())
 			if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
-					{
-						if(wall_it > 64)
-							std::cout << wall_it - 64 << "  : Enemy  Wall number\n";
 						return false;
-					}
 		}
 		if (xPos - 0.1 < -0.1)
 			return false;
@@ -184,11 +184,7 @@ bool Enemy::moveRight()
 			wall_it++;
 			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 			if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
-				{
-					if(wall_it > 64)
-						std::cout << wall_it - 64 << "  : Enemy Wall number\n";
-					return false;
-				}
+				return false;
 		}
 		if (xPos + 0.098 > 0.88)
 			return false;
@@ -251,7 +247,7 @@ void Enemy::init(void)
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, pVAO);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0 * sizeof(float), (void*)0 );
-
+		
 		glDrawArrays(GL_TRIANGLES, 0, _vertices.size() );
 
 		glDeleteBuffers(1, &pVAO);
@@ -271,72 +267,49 @@ void	Enemy::setWalls(std::vector<Wall> walls)
 }
 
 void Enemy::enemy_callback()
-{
-	static int count = 0;
-	static std::string direction = "left";
-	static std::string direction1 = "down";
-	if (count == 120000)
-		count = 0;
-	
-	glm::vec3 bills(0.0,0.0,0.01);
+{	
+	glm::vec3 bills(0.0,0.0,0.006);
+	if(moveRight() && direction == "right") {
+		_model = glm::translate(_model, bills);
+		xPos = _model[3][0];
 
-    if ((count % 2) == 0)
-    {
-		// std::cout << "Enemy right\n";
-		if(moveRight() && direction == "right") {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-
-			if (x != 3)
-			y = 3;
-		}
-		else
-			direction = "left";
-
-
-		// std::cout << "Enemy left\n";
-		if(moveLeft() && direction == "left") {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-
-			if (x != 1)
-			y = 1; 
-		}
-		else 
-			direction = "right";
+		if (x != 3)
+		y = 3;
 	}
-	
-    if ((count % 2) == 0)
-    {	
-		// std::cout << "Enemy up \n";
-		
-		if(moveUp() && direction1 == "up"){
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
+	else
+		direction = "left";
 
-			if (x != 2)
-			y = 2;
-		}
-		else 
-			direction1 = "down";
-		
-		// std::cout << "Enemy Down\n";
-		
-		if(moveDown() && direction1 == "down") {
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
+	if(moveLeft() && direction == "left") {
+		_model = glm::translate(_model, bills);
+		xPos = _model[3][0];
 
-			if (x != 4)
-			y = 4;
-		}
-		else 
-		direction1 = "up";
-    }
+		if (x != 1)
+		y = 1; 
+	}
+	else 
+		direction = "right";
+
+	if(moveUp() && direction1 == "up"){
+		_model = glm::translate(_model, bills);
+		yPos = _model[3][1];
+
+		if (x != 2)
+		y = 2;
+	}
+	else 
+		direction1 = "down";
+
+	if(moveDown() && direction1 == "down") {
+		_model = glm::translate(_model, bills);
+		yPos = _model[3][1];
+
+		if (x != 4)
+		y = 4;
+	}
+	else 
+	direction1 = "up";
    
-	count++;
-	std::cout << "count: "<< count <<"\n";
-	std::cout << "direction1: "<< direction1 <<"\n";
-	std::cout << "direction: "<< direction <<"\n";
+
 }
 
 void Enemy::setDestructible(Destructible destructible)

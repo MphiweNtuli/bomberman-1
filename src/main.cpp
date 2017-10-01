@@ -21,6 +21,10 @@ MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Enemy *enemy;
+Enemy *enemy01;
+Enemy *enemy02;
+Enemy *enemy03;
+Enemy *enemy04;
 Bomb *bomb;
 Health health;
 Timer timer;
@@ -57,6 +61,21 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+void Player_colision()
+{
+	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy->get_xPos(), enemy->get_yPos())) <= 0.065f)
+		player->set_isdead(true);
+	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy01->get_xPos(), enemy01->get_yPos())) <= 0.065f)
+		player->set_isdead(true);
+	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy02->get_xPos(), enemy02->get_yPos())) <= 0.065f)
+		player->set_isdead(true);
+	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy03->get_xPos(), enemy03->get_yPos())) <= 0.065f)
+		player->set_isdead(true);
+	if(glm::distance(glm::vec2(player->get_xPos(),  player->get_yPos()) , glm::vec2(enemy04->get_xPos(), enemy04->get_yPos())) <= 0.065f)
+		player->set_isdead(true);
+
 }
 
 int main(void)
@@ -99,16 +118,31 @@ int main(void)
     timer.init();
 	staticWall.init();
 	player = new Player(staticWall.getWalls(), bomb);
-	enemy = new Enemy(staticWall.getWalls());
+	enemy = new Enemy(staticWall.getWalls(), -0.75f,  0.16f);
+	enemy01 = new Enemy(staticWall.getWalls(), 0.6f,  0.56f);
+	enemy02 = new Enemy(staticWall.getWalls(), -0.75f,  0.30f);	
+	enemy03 = new Enemy(staticWall.getWalls(), -0.75f,  -0.60f);	
+	enemy04 = new Enemy(staticWall.getWalls(), -0.05f,  0.0f);	
+	
 	portal.init();
     health.init();
     timer.init();
 	destructible.init3();
 	player->setDestructible(destructible);
 	enemy->setDestructible(destructible);
+	enemy01->setDestructible(destructible);
+	enemy02->setDestructible(destructible);
+	enemy03->setDestructible(destructible);
+	enemy04->setDestructible(destructible);
+	
     listOfWalls = player->getDestructible().getDestructibles();
 	player->setWalls(destructible.getWalls());
 	enemy->setWalls(destructible.getWalls());
+	enemy01->setWalls(destructible.getWalls());
+	enemy02->setWalls(destructible.getWalls());	
+	enemy03->setWalls(destructible.getWalls());	
+	enemy04->setWalls(destructible.getWalls());	
+	
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
     
@@ -173,12 +207,42 @@ int main(void)
                     bomb->setBombPlanted(false);
 					player->remove(removeWalls);
 					enemy->remove(removeWalls);
+					enemy01->remove(removeWalls);
+					enemy02->remove(removeWalls);
+					enemy03->remove(removeWalls);
+					enemy04->remove(removeWalls);
+					player->bomb_colision(bomb->get_x(), bomb->get_y());
+					enemy->bomb_colision(bomb->get_x(), bomb->get_y());
+					enemy01->bomb_colision(bomb->get_x(), bomb->get_y());
+					enemy02->bomb_colision(bomb->get_x(), bomb->get_y());
+					enemy03->bomb_colision(bomb->get_x(), bomb->get_y());
+					enemy04->bomb_colision(bomb->get_x(), bomb->get_y());
+
 				}
                 
 				player->init();
-				enemy->init();
+				if(!enemy->get_isdead())
+					enemy->init();
+				if(!enemy01->get_isdead())
+					enemy01->init();
+				if(!enemy02->get_isdead())
+					enemy02->init();
+				if(!enemy03->get_isdead())
+					enemy03->init();
+				if(!enemy04->get_isdead())
+					enemy04->init();
+				
+				
 				player->player_callback(window);
 				enemy->enemy_callback();
+				enemy01->enemy_callback();	
+				enemy02->enemy_callback();
+				enemy03->enemy_callback();
+				enemy04->enemy_callback();
+				Player_colision();
+				if(player->get_isdead())
+					graphics->setDrawMode(MAINMENU);
+				
 
 			default:
 				break;
@@ -198,7 +262,12 @@ int main(void)
 	// Cleanup VBO
 	delete graphics;
 	delete player;
-    delete bomb;
+	delete bomb;
+	delete enemy;
+	delete enemy01;
+	delete enemy02;
+	delete enemy03;
+	delete enemy04;
 	
 	mainMenu->menuCleanup();
 	//glDeleteProgram(programID);

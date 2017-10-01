@@ -30,7 +30,9 @@ public:
     void setDestructible(Destructible destructible);
     Destructible getDestructible(void);
     void setDestructible01(Destructible destructible01);
-    Destructible getDestructible01(void);
+	Destructible getDestructible01(void);
+	void set_isdead(bool death);
+	void bomb_colision(GLfloat bx, GLfloat by);
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
@@ -59,6 +61,7 @@ public:
 	std::vector<glm::vec3> getVertices() const;
 	std::vector<glm::vec2> getUvbuffer() const;
 	std::vector<glm::vec3> getNormals() const;
+	bool get_isdead(void) const;
 	int getX() const;
 	int getY() const;
 	std::vector<Wall> getWalls() const;
@@ -78,7 +81,7 @@ private:
 	std::vector<glm::vec3> normals;
 	int x;
 	int y;
-    bool load_result;
+    bool load_result, isdead;
 	std::vector<Wall> walls;
 	std::vector<float> _modelV;
     template <class archive> friend
