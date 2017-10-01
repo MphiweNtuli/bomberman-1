@@ -7,6 +7,8 @@ Player::Player()
 
 Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
+	_score = 0;
+	_life = 3;
     _bomb = bomb;
 	x = 0;
 	y = 0;
@@ -58,9 +60,20 @@ void	Player::remove(std::vector<int> removeWalls)
 		wall_it++;
 		if(wall_it > 64)
     		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
+    		{
 				if (wall_it - 64 == *iter)
+				{
 					it->setIsDestroyed(true);
+				}
+			}
 	}
+}
+
+void Player::refresh()
+{
+	std::vector<Wall> v;
+
+	walls.swap(v);
 }
 
 Player::~Player()
@@ -262,7 +275,6 @@ void Player::player_callback(GLFWwindow* window)
         _bomb->set_x(get_xPos());
         _bomb->set_y(get_yPos());
         _des.set_xy(get_xPos(), get_yPos());
-        _des01.set_xy(get_xPos(),get_yPos());
         _bomb->updateLocation();
         _bomb->drop();
         _bomb->setBombPlanted(true);
@@ -281,14 +293,24 @@ Destructible Player::getDestructible(void)
     return _des;
 }
 
-void Player::setDestructible01(Destructible destructible01)
+int 	Player::getPlayerLife(void)
 {
-    _des01 = destructible01;
+	return _life;
 }
 
-Destructible Player::getDestructible01(void)
+void	Player::setPlayerLife(int life)
 {
-    return _des01;
+	this->_life = life;
+}
+
+int 	Player::getPlayerScore(void)
+{
+	return _score;
+}
+
+void	Player::setPlayerScore(/*Enemy enemy*/)
+{
+	this->_score += 100;
 }
 
 GLuint Player::getProgramId() const
@@ -389,10 +411,13 @@ std::vector<float> Player::getModelV() const{
 	return (_modelV);
 }
 
-void Player::operator=(const Player &p)
+Player & Player::operator=(const Player &p)
 {
-    this->xPos = p.get_xPos();
-	this->yPos = p.get_yPos();
+ //    this->xPos = p.get_xPos();
+	// this->yPos = p.get_yPos();
+	if (this != &p)
+		*this = p;
+	return *this;
 }
 
 void Player::restorePosition(float x, float y)

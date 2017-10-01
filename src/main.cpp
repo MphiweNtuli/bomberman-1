@@ -14,15 +14,13 @@
 #include "Bomb.hpp"
 #include "health.hpp"
 #include "timer.hpp"
+#include "Levels.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
 Player *player;
 Bomb *bomb;
-Health health;
-Timer timer;
-Destructible destructible;
 std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
@@ -78,34 +76,34 @@ int main(void)
     if (myWindow.initializeGlew() == false)
         return -1;
 
+    Camera camera(cameraPos, cameraFront, cameraUp, window);
 	graphics = new Graphics();
     bomb = new Bomb(3);
-    // Health = new Token("Health");
-    // Timer = new Token("Timer");
+	mainMenu = new MainMenu(window, myWindow, graphics);
 	Wall wall;
 	StaticWall staticWall;
+	player = new Player(staticWall.getWalls(), bomb);
+
 	Portal portal;
     Health health;
     Timer timer;
     Floor floor;
-    Camera camera(cameraPos, cameraFront, cameraUp, window);
-	mainMenu = new MainMenu(window, myWindow, graphics);
-	mainMenu->initMenuImage();
+	Destructible destructible;
+	Levels level(destructible, player, portal, staticWall);
     
+    mainMenu->initMenuImage();
 	wall.init();
     health.init();
     timer.init();
-	staticWall.init();
-	player = new Player(staticWall.getWalls(), bomb);
-	portal.init();
-    health.init();
-    timer.init();
-	destructible.init3();
-    player->setDestructible(destructible);
-    listOfWalls = player->getDestructible().getDestructibles();
-	player->setWalls(destructible.getWalls());
-	// glfwSetKeyCallback(window, player->player_callback(window));
+	//staticWall.init();
     floor.init();
+    // portal.init();
+	// destructible.init1();
+ //    player->setDestructible(destructible);
+ //    listOfWalls = player->getDestructible().getDestructibles();
+	// player->setWalls(destructible.getWalls());
+    
+    
     
 	//======== load game state ========
 	gs.loadPlayerState(player);
@@ -150,15 +148,97 @@ int main(void)
                 camera.cameraFunction(shadersID);
                 floor.draw();
                 //---------------------------------
-				wall.draw();
-				
-				staticWall.draw();
-				portal.draw();
+				wall.draw();			
+				//staticWall.draw();
                 health.draw();
                 timer.draw();
-				player->getDestructible().draw(listOfWalls);
-                
-                if (timeout(1000) == true)
+                if (level.getLevel() == 1)
+                {
+                	std::cout << "level 1 baby\n";
+                	if (level.getStart() == 1)
+                	{
+                		level.levelOneInit();
+                		level.setStart(0);
+                		timeout(0);
+                	}
+                	level.advanceToLevelTwo();
+                	level.getStaticWall().draw();
+                	level.getPortal().draw();
+					level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+
+	                if (timeout(1000) == true)
+	                    graphics->setDrawMode(MAINMENU);
+	                if (bomb->get_bombStatus() != 0)
+						bomb->display();
+					else if (bomb->getBombPlanted())
+					{
+						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+                   		bomb->setBombPlanted(false);
+                    	level.getPlayer()->remove(removeWalls);
+					}
+                }
+				else if (level.getLevel() == 2)
+				{
+					std::cout << "level 2 baby\n";
+                	if (level.getStart() == 1)
+                	{
+                		level.levelTwoInit();
+                		timeout(0);
+                		level.setStart(0);
+                	}
+                	std::cout << "level 2 baby1\n";
+                	//level.advanceLevelUp();
+                	level.getStaticWall().draw();
+                	std::cout << "level 2 baby2\n";
+                	level.getPortal().draw();
+                	std::cout << "level 2 baby3\n";
+					level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+
+	                if (timeout(1000) == true)
+	                    graphics->setDrawMode(MAINMENU);
+	                if (bomb->get_bombStatus() != 0)
+						bomb->display();
+					else if (bomb->getBombPlanted())
+					{
+						std::cout << "level 2 baby4\n";
+						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+						std::cout << "level 2 baby5\n";
+                   		bomb->setBombPlanted(false);
+                   		std::cout << "level 2 baby6\n";
+                    	level.getPlayer()->remove(removeWalls);
+					}
+				}
+				else if (level.getLevel() == 3)
+				{
+					std::cout << "level 3 baby\n";
+                	if (level.getStart() == 1)
+                	{
+                		level.levelThreeInit();
+                		timeout(0);
+                		level.setStart(0);
+                	}
+                	level.getStaticWall().draw();
+                	level.getPortal().draw();
+					level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+
+	                if (timeout(1000) == true)
+	                    graphics->setDrawMode(MAINMENU);
+	                if (bomb->get_bombStatus() != 0)
+						bomb->display();
+					else if (bomb->getBombPlanted())
+					{
+						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+                   		bomb->setBombPlanted(false);
+                    	level.getPlayer()->remove(removeWalls);
+					}
+				}
+				else
+				{
+					graphics->setDrawMode(MAINMENU);
+					std::cout << "gameover baby\n";
+				}
+
+/*                if (timeout(1000) == true)
                     graphics->setDrawMode(MAINMENU);
                 if (bomb->get_bombStatus() != 0)
 					bomb->display();
@@ -167,10 +247,15 @@ int main(void)
 					removeWalls = player->getDestructible().destroy(listOfWalls);
                     bomb->setBombPlanted(false);
                     player->remove(removeWalls);
-				}
+				}*/
+
+				//std::cout << "player xpos = " << level.getPlayer()->get_xPos() << std::endl;
+				//std::cout << "player ypos = " << level.getPlayer()->get_yPos() << std::endl;
                 
-				player->init();
-				player->player_callback(window);
+				 //player->init();
+				level.getPlayer()->init();
+				level.getPlayer()->player_callback(window);
+				//player->player_callback(window);
 
 			default:
 				break;

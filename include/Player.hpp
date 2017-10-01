@@ -29,8 +29,11 @@ public:
 	void draw();
     void setDestructible(Destructible destructible);
     Destructible getDestructible(void);
-    void setDestructible01(Destructible destructible01);
-    Destructible getDestructible01(void);
+    void setPlayerLife(int life);
+    int getPlayerLife(void);
+    void setPlayerScore(/*Enemy enemy*/);
+    int getPlayerScore(void);
+    void refresh();
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
@@ -42,7 +45,7 @@ public:
     GLuint getPProgramId() const;
     GLuint getPTextureId() const;
 	GLuint getProgramId() const;
-    void operator=(const Player &p);
+    Player & operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
     void remove(std::vector<int> removeWalls);
 	int printVector();
@@ -65,7 +68,7 @@ public:
 
 private:
     Bomb *_bomb;
-    Destructible _des, _des01;
+    Destructible _des;
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
 	glm::mat4 _view;
@@ -78,6 +81,8 @@ private:
 	std::vector<glm::vec3> normals;
 	int x;
 	int y;
+	int _life;
+	int _score;
     bool load_result;
 	std::vector<Wall> walls;
 	std::vector<float> _modelV;
