@@ -56,7 +56,7 @@ void Screen::executeCommand(int input){
     switch(input){ 
         case command.Full :
             std::cout << "Full" << std::endl;
-            this->_gameWindow.changeWindowSize();
+            // this->_gameWindow.changeWindowSize();
             std::cout << "after the changeWindowSize has been called \n";
             glClear(GL_COLOR_BUFFER_BIT);
         break;
