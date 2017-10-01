@@ -12,7 +12,7 @@ Settings::Settings(GLFWwindow *window, Window &gameWindow, Graphics *g)
     this->_gameWindow = gameWindow;
     this->_dispChange = false;    
    graphics = g;
-    // _sound_val = 100;
+    _volumeLevel = 100;
 }
 
 Settings::~Settings(){
@@ -33,10 +33,18 @@ Window Settings::getGameWindow()
 }
 void Settings::modSound()
 {
-    if (_sound_val == 100)
+    if (_sound_val > 0)
         _sound_val = 0;
-    else if (_sound_val == 0)
-        _sound_val = 100;
+    else
+        _sound_val = _volumeLevel;
+}
+void Settings::modVolume()
+{
+    if (_volumeLevel >= 100)
+        _volumeLevel = 0;
+    else
+        _volumeLevel += 25;
+    _sound_val = _volumeLevel;
 }
 void Settings::modDisplay()
 {
@@ -63,6 +71,11 @@ void Settings::executeCommand(int input){
             // modDisplay(); 
             graphics->setDrawMode(SCREEN);
         break;
+        case command.Volume :
+            std::cout << "Volume:" << std::endl;
+            modVolume();
+            //glClear(GL_COLOR_BUFFER_BIT);
+            break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);
             std::cout << "Settings" << std::endl;
