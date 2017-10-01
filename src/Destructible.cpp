@@ -5481,7 +5481,7 @@ void Destructible::init2()
     while (_counter < _dataSize)
     {
         Wall wall(_destructiblevector2.at(_counter), _destructiblevector2.at(_counter + 1), true);
-        walls.push_back(wall);
+        walls2.push_back(wall);
         _counter += 180;
     }
 
@@ -8166,17 +8166,20 @@ void Destructible::init3()
     };
     
     //construct a vector from an array
-    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    _destructiblevector3.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructiblevector.size();
+    _dataSize = _destructiblevector3.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
-        walls.push_back(wall);
+        Wall wall(_destructiblevector3.at(_counter), _destructiblevector3.at(_counter + 1), true);
+        walls3.push_back(wall);
         _counter += 180;
     }
+    walls.swap(walls3);
+    _destructiblevector.swap(_destructiblevector3);
+    
 }
 
 

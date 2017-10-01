@@ -7,6 +7,7 @@ Player::Player()
 
 Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
+	std::cout << "In player con again\n";
 	_score = 0;
 	_life = 3;
     _bomb = bomb;
@@ -20,7 +21,7 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
-	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
+	_model = glm::translate(_model, glm::vec3(-0.9f,  -0.9f, -3.82f));
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	yPos = _model[3][1];
 	xPos = _model[3][0];
@@ -72,8 +73,13 @@ void	Player::remove(std::vector<int> removeWalls)
 void Player::refresh()
 {
 	std::vector<Wall> v;
-
 	walls.swap(v);
+}
+
+void Player::set_P_origin()
+{
+	std::cout << "Player resete\n";
+	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
 }
 
 Player::~Player()
@@ -210,9 +216,14 @@ bool Player::moveRight()
 
 	std::vector<Wall>::iterator it;
 	int wall_it = 0;
+	//std::cout << "number of walls \n";
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
+
+
+			//if(it->isDestroyed())
+			std::cout << " WALL N#" << wall_it << "  ===> " << it->getXPos()  <<  "    ;   " << it->getYPos() << std::endl;
 			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					return false;

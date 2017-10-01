@@ -15,6 +15,8 @@ public:
     Levels(Levels const &target);
     Levels &operator=(Levels const &target);
     void advanceToLevelTwo();
+    void advanceToLevelThree();
+    void advanceToLevelWin();
     void levelOneInit();
     void levelTwoInit();
     void levelThreeInit();

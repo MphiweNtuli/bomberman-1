@@ -33,6 +33,7 @@ public:
     int getPlayerLife(void);
     void setPlayerScore(/*Enemy enemy*/);
     int getPlayerScore(void);
+    void set_P_origin(void);
     void refresh();
     
     GLfloat get_xPos(void) const;

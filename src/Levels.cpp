@@ -53,9 +53,30 @@ void	Levels::advanceToLevelTwo()
 	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
 		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
 		{
-			//std::cout << "increase level \n";
+			_player->set_P_origin();
 			_start++;
 			_level = 2;
+		}
+}
+
+void	Levels::advanceToLevelThree()
+{
+	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
+		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
+		{
+			_player->set_P_origin();
+			_start++;
+			_level = 3;
+		}
+}
+
+void	Levels::advanceToLevelWin()
+{
+	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
+		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
+		{
+			_start++;
+			_level = 4;
 		}
 }
 
@@ -72,11 +93,10 @@ void Levels::levelOneInit()
 
 void Levels::levelTwoInit()
 {
-	//delete _player;
 	_listOfWalls.assign(_listOfWalls.size(), 10);
 	_portal.init();
-	_wall.init();
 	_destructible.init2();
+	//_player->set_P_origin();
 	_player->refresh();
 	_player->setWalls(_wall.getWalls());
 	_player->setWalls(_destructible.getWalls());
@@ -86,9 +106,10 @@ void Levels::levelTwoInit()
 
 void Levels::levelThreeInit()
 {
+	_listOfWalls.assign(_listOfWalls.size(), 10);
 	_portal.init();
-	_wall.init();
 	_destructible.init3();
+	_player->refresh();
 	_player->setWalls(_wall.getWalls());
 	_player->setWalls(_destructible.getWalls());
 	_player->setDestructible(_destructible);

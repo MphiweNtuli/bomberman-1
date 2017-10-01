@@ -149,12 +149,11 @@ int main(void)
                 floor.draw();
                 //---------------------------------
 				wall.draw();			
-				//staticWall.draw();
                 health.draw();
                 timer.draw();
                 if (level.getLevel() == 1)
                 {
-                	std::cout << "level 1 baby\n";
+                	std::cout << "level 2 baby\n";
                 	if (level.getStart() == 1)
                 	{
                 		level.levelOneInit();
@@ -186,12 +185,9 @@ int main(void)
                 		timeout(0);
                 		level.setStart(0);
                 	}
-                	std::cout << "level 2 baby1\n";
-                	//level.advanceLevelUp();
+                	level.advanceToLevelThree();
                 	level.getStaticWall().draw();
-                	std::cout << "level 2 baby2\n";
                 	level.getPortal().draw();
-                	std::cout << "level 2 baby3\n";
 					level.getPlayer()->getDestructible().draw(level.getListOfWalls());
 
 	                if (timeout(1000) == true)
@@ -200,7 +196,6 @@ int main(void)
 						bomb->display();
 					else if (bomb->getBombPlanted())
 					{
-						std::cout << "level 2 baby4\n";
 						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
 						std::cout << "level 2 baby5\n";
                    		bomb->setBombPlanted(false);
@@ -217,6 +212,7 @@ int main(void)
                 		timeout(0);
                 		level.setStart(0);
                 	}
+                	level.advanceToLevelWin();
                 	level.getStaticWall().draw();
                 	level.getPortal().draw();
 					level.getPlayer()->getDestructible().draw(level.getListOfWalls());
