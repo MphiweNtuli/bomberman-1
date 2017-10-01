@@ -38,7 +38,7 @@ Window Screen::getGameWindow()
 //     else if (_sound_val == 0)
 //         _sound_val = 100;
 // }
-void Screen::modDisplay()
+void Screen::modDisplay() 
 {
     _gameWindow.changeWindowSize();
     _dispChange = !(_dispChange);
@@ -56,8 +56,8 @@ void Screen::executeCommand(int input){
     switch(input){ 
         case command.Full :
             std::cout << "Full" << std::endl;
-            // this->_gameWindow.switchToFull(this->_window);
-            // modSound();
+            this->_gameWindow.changeWindowSize();
+            std::cout << "after the changeWindowSize has been called \n";
             glClear(GL_COLOR_BUFFER_BIT);
         break;
         case command.Windowed :
@@ -140,8 +140,15 @@ void Screen::initScreenImage()
     glBindVertexArray(menuVAO);
     
     // Create and compile our GLSL program from the shaders
+    std::cout << "inside the initScreenImage fuction before loading the shaders\n";
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
+    
+    std::cout << "after the shaders have been loaded\n";
+    
     Texture texture("BombermanModels/screen.png", &menuTexture);
+    
+    std::cout << "after the texture file has been loaded\n";
+
 
         static const GLfloat g_vertex_buffer_full[] = { 
         
@@ -213,11 +220,14 @@ void Screen::initScreenImage()
         4,5,6,
         //7,8,9
     };
+    std::cout << "before the buffers have been loaded\n";
 
     glGenBuffers(1, &menuEBO);
     glGenBuffers(1, &menuVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, menuVBO);
+    std::cout << "before glBufferData\n";
+
 
     if (this->_input == 0)
     {
@@ -268,6 +278,7 @@ void Screen::LoadScreenImage()
     // Draw the triangle !
 	glBindVertexArray(menuVAO);
     glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+    std::cout << "after drawing\n";
 }
 
 int Screen::getInput()

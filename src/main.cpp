@@ -32,7 +32,7 @@ Enemy *enemy;
 Graphics *graphics;
 Player *player;
 Bomb *bomb;
-Health health;
+Health health; 
 Timer timer;
 PowerUp power;
 Destructible destructible;
@@ -99,11 +99,12 @@ int main(void)
 	GameState gs;
 	float time;
 
+    // static int    window_state = 0;//0 for fullscreen mode
 	Window myWindow;
 	WindowKeyEvents *keyEvents;
 	std::vector<int> removeWalls;
 
-	myWindow.runGame();
+	myWindow.initiateSystemsWindowed();
 	sound = myWindow.getSound();
 	window = myWindow.getWindow();
 	keyEvents = myWindow.getEvents();
@@ -127,15 +128,15 @@ int main(void)
 
 	char hearts[256];
 	int hearts_num = 3;
-	sprintf(hearts, "Hearts: %d", hearts_num);
+	sprintf(hearts, "Lives: %d", hearts_num);
 
 	char pauseText[256];
 	// int hearts_num = 3;
-	sprintf(pauseText, "Press P");
+	sprintf(pauseText, "Press P To Pause");
 
-	char pausePress[256];
+	// char pausePress[256];
 	// int hearts_num = 3;
-	sprintf(pausePress, "Pause");
+	// sprintf(pausePress, "Pause");
 	// Health = new Token("Health");
 	// Timer = new Token("Timer");
 	Wall wall;
@@ -220,8 +221,11 @@ int main(void)
 				glfwSetKeyCallback(window, key_callback);
 				//reload the shaders each time the loop itarates in the main menu;
 				shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
+				std::cout << "1\n";
 				dispVal = settings->getDispChange();
+				std::cout << "2\n";
 				glUseProgram(shadersID);
+				std::cout << "3\n";
 				camera.perspectiveView(shadersID);
 
 				settings->setWindow(window, myWindow, graphics);
@@ -250,9 +254,9 @@ int main(void)
 			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case SCREEN:
-			sound->playMusicForvever(MUSIC_MENU1);
-			// settings->toggleCommands(window);
-			//settings->initSettingsImage();
+			sound->playMusicForvever( MUSIC_MENU1);
+			// settings->toggleCommands();
+			// settings->initSettingsImage();
 			screen->LoadScreenImage();
 			myWindow = screen->getGameWindow();
 
@@ -307,17 +311,17 @@ int main(void)
 				bomb->display();
 			else if (bomb->getBombPlanted())
 			{
-				std::cout << "i am here" << std::endl;
+				// std::cout << "i am here" << std::endl;
 				removeWalls = player->getDestructible().destroy(listOfWalls);
 				bomb->setBombPlanted(false);
 				player->remove(removeWalls);
 			}
-			sprintf(bomberman, "Your Quest has started  %.1f ", time); //Replaced glfwGetTime() with time variable
-			text->loadText(pauseText, 0, 450, 12);
-			text->loadText(pausePress, 0, 460, 16);
-			text->loadText(bomberman, 30, 580, 15); //(location left /right,location up / down ,size)
-			text->loadText(level, 450, 580, 15);
-			text->loadText(hearts, 670, 380, 15);
+			sprintf(bomberman, "Time Left %.1f ", time); //Replaced glfwGetTime() with time variable
+			text->loadText(pauseText, 0, 580, 13);
+			// text->loadText(pausePress, 0, 560, 13);
+			text->loadText(bomberman, 250, 580, 15); //(location left /right,location up / down ,size)
+			text->loadText(level, 470, 580, 15);
+			text->loadText(hearts, 660, 580, 15);
 
 			player->init();
 			player->player_callback(window);
@@ -331,8 +335,7 @@ int main(void)
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
-	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-		glfwWindowShouldClose(window) == 0);
+	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0);//
 	
 	//======================= save game state ==================
 	gs.saveGameState(*player, listOfWalls);
