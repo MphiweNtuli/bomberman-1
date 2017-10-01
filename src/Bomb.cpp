@@ -91,7 +91,7 @@ int Bomb::get_bombStatus(void)
 	return this->time_dropped;
 }
 
-void Bomb::explode(void)
+void Bomb::explode(Sound *snd)
 {
 	// print particles and collision here
 	if (this->time_dropped == 0)
@@ -109,6 +109,7 @@ void Bomb::explode(void)
 		_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		_model = glm::scale(_model, glm::vec3(0.12));
 
+		snd->playEffectOnce(EFFECT_EXPLOSION, EXPLOSION_CHANNEL);
 		display();
 
 		_vertices.swap(_vert);

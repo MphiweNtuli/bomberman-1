@@ -20,13 +20,17 @@ PauseMenu::~PauseMenu(){
 }
 
 void PauseMenu::Resume(){
-    
 }
 
 void PauseMenu::SaveGame(){
-
+    gs.saveGameState(*p, *walls);
 } 
 
+void PauseMenu::updateVals(Player *_p, std::vector<GLfloat> *w)
+{
+    p = _p;
+    walls = w;
+}
 
 Window PauseMenu::getGameWindow()
 {
@@ -47,6 +51,7 @@ void PauseMenu::executeCommand(int input){
             glClear(GL_COLOR_BUFFER_BIT);
         break;
         case command.SaveGame :
+            SaveGame();
             std::cout << "Save" << std::endl;
         break;
         case command.Return :

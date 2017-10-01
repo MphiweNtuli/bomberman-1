@@ -8,6 +8,8 @@
 
 #include "Window.hpp"
 #include "shader.hpp"
+#include "Player.hpp"
+#include "GameState.hpp"
 
 struct Input
 {
@@ -49,6 +51,7 @@ class MainMenu
         void menuCleanup();
 
         int getInput();
+        void loadSave(Player *p, std::vector<GLfloat> *w);
     
     private:
         int _input;
@@ -57,6 +60,11 @@ class MainMenu
         Graphics *graphics;
         int _sound_val;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;
+        Player *_p;
+        GameState gs;
+        bool isContinue;
+        std::vector<GLfloat> _w;
+        Player *p;
 };
 
 #endif

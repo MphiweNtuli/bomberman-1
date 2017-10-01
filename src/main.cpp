@@ -39,12 +39,11 @@ Destructible destructible;
 std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
+static int prev_time = glfwGetTime();
 
-static bool timeout(int seconds)
+static bool timeout(int seconds, int prev_time)
 {
-	static int time = glfwGetTime();
-
-	if (glfwGetTime() - time >= seconds)
+	if (glfwGetTime() - prev_time >= seconds)
 		return (true);
 	return (false);
 }
@@ -165,7 +164,6 @@ int main(void)
 	player = new Player(staticWall.getWalls(), bomb);
 	portal.init();
     health.init();
-    timer.init();
 	destructible.init3();
     player->setDestructible(destructible);
     listOfWalls = player->getDestructible().getDestructibles();
@@ -174,7 +172,7 @@ int main(void)
     floor.init();
     
 	//======== load game state ========
-	gs.loadGameState(player, listOfWalls);
+	// gs.loadGameState(player, listOfWalls);
 	//=================================
 	//set the initial sound value
 	soundVal = mainMenu->getSoundVal();
@@ -190,8 +188,9 @@ int main(void)
 		// Clear the screen
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		bomb->explode();
+		bomb->explode(sound);
 		keyEvents->keyEventsWrapper(window, sound, graphics);
+		pauseMenu->updateVals(player, &listOfWalls);
 
 		switch (graphics->getDrawMode())
 		{
@@ -200,6 +199,7 @@ int main(void)
 			mainMenu->LoadMainMenuImage();
 			myWindow = mainMenu->getGameWindow();
 			window = myWindow.getWindow();
+			mainMenu->loadSave(player, &listOfWalls);
 			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case SETTINGS:
@@ -305,8 +305,13 @@ int main(void)
                 
 			player->getDestructible().draw(listOfWalls);
 			enemy->display();
-			if (timeout(100) == true)
+			if (timeout(100, prev_time) == true)
+			{
+				sound->stopMusic(MUSIC_BACK);
+				sound->playMusicForvever(MUSIC_MENU1);
 				graphics->setDrawMode(MAINMENU);
+				prev_time = glfwGetTime();
+			}
 			if (bomb->get_bombStatus() != 0)
 				bomb->display();
 			else if (bomb->getBombPlanted())
@@ -338,7 +343,7 @@ int main(void)
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0);//
 	
 	//======================= save game state ==================
-	gs.saveGameState(*player, listOfWalls);
+	// gs.saveGameState(*player, listOfWalls);
 	//==========================================================
 	// Cleanup VBO
 	delete graphics;

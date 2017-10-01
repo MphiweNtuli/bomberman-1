@@ -1,6 +1,11 @@
 *.txt
 *.dat
-*.vscode
+.vscode*
+*.json
+*.mp4
+*.mp3
+*.wav
+
 # Prerequisites
 *.d
 *.dat

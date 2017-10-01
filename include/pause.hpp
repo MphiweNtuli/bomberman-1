@@ -8,6 +8,8 @@
 
 #include "Window.hpp"
 #include "shader.hpp"
+#include "Player.hpp"
+#include "GameState.hpp"
 
 struct pauseInput
 {
@@ -43,6 +45,7 @@ class PauseMenu
         void initPauseImage();
         void LoadPauseImage();
         void PauseCleanup();
+        void updateVals(Player *p, std::vector<GLfloat> *w);
 
         int getInput();
     
@@ -53,6 +56,9 @@ class PauseMenu
         Graphics *graphics;
         int _sound_val;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;
+        Player *p;
+        GameState gs;
+        std::vector<GLfloat> *walls;
 };
 
 #endif
