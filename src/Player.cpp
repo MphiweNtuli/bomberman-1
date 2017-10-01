@@ -50,6 +50,25 @@ void	Player::setWalls(std::vector<Wall> walls)
 	}
 }
 
+void Player::bomb_colision(GLfloat bx, GLfloat by)
+{
+	std::cout << "BOMBING ENEMIES$%%$$%%$$$$$$%%$$$$\n";
+
+	if(glm::distance(glm::vec2(bx,  by) , glm::vec2(xPos, yPos)) <= 0.12f)
+		set_isdead(true);
+
+}
+
+bool	Player::get_isdead(void) const
+{
+	return this->isdead;
+}
+
+void	Player::set_isdead(bool death)
+{
+	this->isdead = death;
+}
+
 void	Player::remove(std::vector<int> removeWalls)
 {
 	std::vector<Wall>::iterator it;

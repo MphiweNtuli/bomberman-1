@@ -38,6 +38,9 @@ public:
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
+    bool	get_isdead(void) const;
+    void	set_isdead(bool death);
+    void 	bomb_colision(GLfloat bx, GLfloat by);
 	void setWalls(std::vector<Wall> walls);
     GLuint getPVAO() const;
     GLuint getPUVO() const;
@@ -85,6 +88,7 @@ private:
 	int _life;
 	int _score;
     bool load_result;
+    bool isdead;
 	std::vector<Wall> walls;
 	std::vector<float> _modelV;
     template <class archive> friend

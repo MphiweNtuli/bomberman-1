@@ -1,7 +1,8 @@
 #include "Levels.hpp"
 
-Levels::Levels(Destructible dest, Player *player, Portal portal, StaticWall staticwall) : _destructible(dest), _player(player), _portal(portal), _wall(staticwall)
+Levels::Levels(Destructible dest, Player *player, std::vector<Enemy> &enemies, Portal portal, StaticWall staticwall) : _destructible(dest), _player(player), _portal(portal), _wall(staticwall)
 {
+	_enemies = enemies;
 	_start = 1;
 	_level = 1;
 }
@@ -48,6 +49,12 @@ std::vector<GLfloat> & Levels::getListOfWalls()
 	return _listOfWalls;
 }
 
+std::vector<Enemy> & Levels::getEnemies()
+{
+
+	return _enemies;
+}
+
 void	Levels::advanceToLevelTwo()
 {
 	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
@@ -89,6 +96,18 @@ void Levels::levelOneInit()
 	_player->setWalls(_destructible.getWalls());
 	_player->setDestructible(_destructible);
     _listOfWalls = _player->getDestructible().getDestructibles();
+    _enemies.push_back(Enemy(_wall.getWalls(), -0.75f,  0.16f));
+	_enemies.push_back(Enemy(_wall.getWalls(), 0.6f,  0.56f));
+	_enemies.push_back(Enemy(_wall.getWalls(), -0.75f,  0.30f));
+	_enemies.push_back(Enemy(_wall.getWalls(), -0.75f,  -0.60f));
+	_enemies.push_back(Enemy(_wall.getWalls(), -0.05f,  0.0f));
+	_enemies.push_back(Enemy(_wall.getWalls(), -0.07f,  0.0f));
+
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		iter->setDestructible(_destructible);
+
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		iter->setWalls(_destructible.getWalls());
 }
 
 void Levels::levelTwoInit()
@@ -102,6 +121,19 @@ void Levels::levelTwoInit()
 	_player->setWalls(_destructible.getWalls());
 	_player->setDestructible(_destructible);
     _listOfWalls = _player->getDestructible().getDestructibles();
+
+    for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+    	iter->refresh();
+
+    for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		iter->setDestructible(_destructible);
+
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+	{
+		iter->setWalls(_wall.getWalls());
+		iter->setWalls(_destructible.getWalls());
+	}
+
 }
 
 void Levels::levelThreeInit()

@@ -15,10 +15,13 @@
 #include "health.hpp"
 #include "timer.hpp"
 #include "Levels.hpp"
+#include "enemy.hpp"
 
 GLFWwindow* window;
 MainMenu *mainMenu;
 Graphics *graphics;
+std::vector<Enemy> enemies;
+std::vector<Enemy>::iterator it;
 Player *player;
 Bomb *bomb;
 std::vector <GLfloat> listOfWalls;
@@ -32,6 +35,15 @@ static bool timeout(int seconds)
     if (glfwGetTime() - time >= seconds)
         return (true);
     return (false);
+}
+
+void Player_colision(Player *player1, std::vector<Enemy> enemies1)
+{
+
+	for (it = enemies1.begin(); it != enemies1.end(); ++it)
+		if(glm::distance(glm::vec2(player1->get_xPos(),  player1->get_yPos()) , glm::vec2(it->get_xPos(), it->get_yPos())) <= 0.065f)
+			player1->set_isdead(true);
+
 }
 
 // camera
@@ -89,7 +101,21 @@ int main(void)
     Timer timer;
     Floor floor;
 	Destructible destructible;
-	Levels level(destructible, player, portal, staticWall);
+
+	Levels level(destructible, player,enemies, portal, staticWall);
+
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), -0.75f,  0.16f));
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), 0.6f,  0.56f));
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), -0.75f,  0.30f));
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), -0.75f,  -0.60f));
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), -0.05f,  0.0f));
+	// enemies.push_back(Enemy(level.getStaticWall().getWalls(), -0.07f,  0.0f));
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setDestructible(level.getDestructible());
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setWalls(level.getDestructible().getWalls());
     
     mainMenu->initMenuImage();
 	wall.init();
@@ -153,7 +179,7 @@ int main(void)
                 timer.draw();
                 if (level.getLevel() == 1)
                 {
-                	std::cout << "level 2 baby\n";
+                	std::cout << "level 1 baby\n";
                 	if (level.getStart() == 1)
                 	{
                 		level.levelOneInit();
@@ -174,6 +200,14 @@ int main(void)
 						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
                    		bomb->setBombPlanted(false);
                     	level.getPlayer()->remove(removeWalls);
+
+                    	for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->remove(removeWalls);
+
+						level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+						for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->bomb_colision(bomb->get_x(), bomb->get_y());
 					}
                 }
 				else if (level.getLevel() == 2)
@@ -201,6 +235,7 @@ int main(void)
                    		bomb->setBombPlanted(false);
                    		std::cout << "level 2 baby6\n";
                     	level.getPlayer()->remove(removeWalls);
+
 					}
 				}
 				else if (level.getLevel() == 3)
@@ -251,6 +286,16 @@ int main(void)
 				 //player->init();
 				level.getPlayer()->init();
 				level.getPlayer()->player_callback(window);
+				for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+					if(!it->get_isdead())
+						it->init();
+
+				for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+					it->enemy_callback();
+
+				Player_colision(level.getPlayer(), level.getEnemies());
+				if(level.getPlayer()->get_isdead())
+					graphics->setDrawMode(MAINMENU);
 				//player->player_callback(window);
 
 			default:

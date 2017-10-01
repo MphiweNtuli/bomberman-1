@@ -6,11 +6,12 @@
 #include "Destructible.hpp"
 #include "Portal.hpp"
 #include "StaticWall.hpp"
+#include "enemy.hpp"
 
 class Levels
 {
 public:
-    Levels(Destructible destruct, Player *player, Portal portal, StaticWall staticwall/*, Enemy enemy*/);
+    Levels(Destructible destruct, Player *player, std::vector<Enemy> &enemies, Portal portal, StaticWall staticwall/*, Enemy enemy*/);
     ~Levels();
     Levels(Levels const &target);
     Levels &operator=(Levels const &target);
@@ -29,6 +30,7 @@ public:
     Portal getPortal();
     StaticWall getStaticWall();
     std::vector<GLfloat> & getListOfWalls();
+    std::vector<Enemy> & getEnemies();
      //void loadLevel();
     //void chooseDestructibles();
     //Destructible getLevelDestructible();
@@ -37,6 +39,8 @@ private:
 	int _level;
 	int _start;
 	Destructible _destructible;
+    std::vector<Enemy> _enemies;
+    std::vector<Enemy>::iterator iter;
 	Player *_player;
 	Portal _portal;
 	StaticWall _wall;
