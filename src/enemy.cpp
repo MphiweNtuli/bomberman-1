@@ -15,7 +15,6 @@ Enemy::Enemy(std::vector<Wall> walls, GLfloat x_in, GLfloat y_in)
 
 	Texture text("BombermanModels/enemies/e1/enemy1Text.png", &enemyTextId);
 
-    std::cout << "update \n";
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
@@ -43,11 +42,8 @@ Enemy::Enemy(std::vector<Wall> walls, GLfloat x_in, GLfloat y_in)
 
 void Enemy::bomb_colision(GLfloat bx, GLfloat by)
 {
-	std::cout << "BOMBING ENEMIES$%%$$%%$$$$$$%%$$$$\n";
-
 	if(glm::distance(glm::vec2(bx,  by) , glm::vec2(xPos, yPos)) <= 0.12f)
 		set_isdead(true);
-
 }
 
 bool	Enemy::get_isdead(void)const
@@ -257,7 +253,6 @@ void Enemy::init(void)
 
 void	Enemy::setWalls(std::vector<Wall> walls)
 {
-	std::cout << "set Walls" << std::endl;
 	std::vector<Wall>::iterator it;
 
 	for (it = walls.begin(); it != walls.end(); ++it)
@@ -268,7 +263,6 @@ void	Enemy::setWalls(std::vector<Wall> walls)
 
 void Enemy::enemy_callback()
 {
-	std::cout << "Enemy enemy_callback" << std::endl;
 	glm::vec3 bills(0.0,0.0,0.006);
 	if(moveRight() && direction == "right") {
 		_model = glm::translate(_model, bills);
