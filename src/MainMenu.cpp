@@ -12,6 +12,7 @@ MainMenu::MainMenu(GLFWwindow *window, Window &gameWindow, Graphics *g)
     this->_gameWindow = gameWindow;
    graphics = g;
     _sound_val = 100;
+    isContinue = false;
     // settings = new Settings(window, gameWindow, g);
     // settings->initSettingsImage();
 }
@@ -56,6 +57,8 @@ void MainMenu::executeCommand(int input){
 			graphics->setDrawMode(GAMEPLAY);
         break;
         case command.Continue :
+            isContinue = true;
+            glClear(GL_COLOR_BUFFER_BIT);
             std::cout << "Continue" << std::endl;
         break;
         case command.Settings :
@@ -67,6 +70,17 @@ void MainMenu::executeCommand(int input){
         break;
     }
 }
+
+void MainMenu::loadSave(Player *p, std::vector<GLfloat> *w)
+{
+    if (isContinue)
+    {
+        isContinue = false;
+        gs.loadGameState(p, *w);
+        graphics->setDrawMode(GAMEPLAY);
+    }
+}
+
 void MainMenu::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
     this->_window = nWindow;
     this->_gameWindow = nGameWindow;

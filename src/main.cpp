@@ -170,7 +170,7 @@ int main(void)
     floor.init();
     
 	//======== load game state ========
-	gs.loadGameState(player, listOfWalls);
+	// gs.loadGameState(player, listOfWalls);
 	//=================================
 	//set the initial sound value
 	soundVal = mainMenu->getSoundVal();
@@ -188,6 +188,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		bomb->explode(sound);
 		keyEvents->keyEventsWrapper(window, sound, graphics);
+		pauseMenu->updateVals(player, &listOfWalls);
 
 		switch (graphics->getDrawMode())
 		{
@@ -196,6 +197,7 @@ int main(void)
 			mainMenu->LoadMainMenuImage();
 			myWindow = mainMenu->getGameWindow();
 			window = myWindow.getWindow();
+			mainMenu->loadSave(player, &listOfWalls);
 			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case SETTINGS:
@@ -337,7 +339,7 @@ int main(void)
 		glfwWindowShouldClose(window) == 0);
 	
 	//======================= save game state ==================
-	gs.saveGameState(*player, listOfWalls);
+	// gs.saveGameState(*player, listOfWalls);
 	//==========================================================
 	// Cleanup VBO
 	delete graphics;
