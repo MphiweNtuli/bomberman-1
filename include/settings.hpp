@@ -14,6 +14,7 @@ struct settingsInput
     enum GameCommands{
         Sound,
         Screen,
+        Volume,
         Return,
     };
 };

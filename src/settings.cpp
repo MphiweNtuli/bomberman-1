@@ -153,6 +153,18 @@ void Settings::initSettingsImage()
         -0.65f, -0.04f, -0.25f,       0.0f, 0.0f,
     };
 
+    static const GLfloat g_vertex_buffer_volume[] = { 
+        
+        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
+        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
+        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
+
+        -0.65f, -0.12f, -0.35f,   0.0f, 0.0f,
+        -0.55f, -0.16f, -0.35f,  0.0f, 0.0f, //volume
+        -0.65f, -0.19f, -0.35f,  0.0f, 0.0f
+    };
+
     static const GLfloat g_vertex_buffer_return[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
@@ -164,7 +176,7 @@ void Settings::initSettingsImage()
         -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //return
         -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
     };
-        
+
     // };
 
     GLuint indeces[] =
@@ -172,7 +184,7 @@ void Settings::initSettingsImage()
         0,1,3,
         1,2,3,
         4,5,6,
-        //7,8,9
+        //7,8,9,
     };
 
     glGenBuffers(1, &menuEBO);
@@ -189,6 +201,10 @@ void Settings::initSettingsImage()
         glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
     }
     else if (this->_input == 2)
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_volume), g_vertex_buffer_volume, GL_STATIC_DRAW);   
+    }
+    else if (this->_input == 3)
     {
         glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_return), g_vertex_buffer_return, GL_STATIC_DRAW);   
     }
