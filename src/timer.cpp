@@ -21,6 +21,11 @@ float Timer::returnTime(){
     return (time - glfwGetTime());
 }
 
+void Timer::setTime(float time)
+{
+    this->time = time;
+}
+
 void Timer::init()
 {
 	Texture texture("BombermanModels/powerUps/cl.jpg", &timerTexture);

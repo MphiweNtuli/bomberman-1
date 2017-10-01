@@ -11,11 +11,10 @@
 /* ************************************************************************** */
 
 #include "Destructible.hpp"
-#include <map>
-#include <algorithm>
 
 Destructible::Destructible()
 {
+    _isVec = 0;
 }
 
 Destructible::~Destructible()
@@ -30,7 +29,6 @@ void Destructible::set_xy(GLfloat x, GLfloat y)
 
 void Destructible::removeDestructible(std::vector<GLfloat> &dest, int destNo)
 {
-
     int start = 180 * (destNo - 1);
     int end = start + 180;
 
@@ -47,11 +45,18 @@ void Destructible::removeDestructible(std::vector<GLfloat> &dest, int destNo)
 
 std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
 {
+    std::cout << "whats in walls ";
+    for (std::vector<GLfloat>::iterator it = dest.begin(); it != dest.end(); ++it)
+    {
+        std::cout << " " << *it;
+    }
+    std::cout << "\n";
     std::vector<int> removeWalls;
     std::vector<Wall>::iterator it;
     int wall_it = 0;
     for (it = walls.begin(); it != walls.end(); ++it)
     {
+         std::cout << "WALL IT :  " << wall_it << "\n";
         wall_it++;
         if((y  > it->getYPos() + OFS_Y && y - 0.1 < it->getYPos() + OFS_Y ) && !it->isDestroyed()) 
             if((x > it->getXPos() + OFS_X - 0.01 && x < it->getXPos() + OFS_X  + 0.06))
@@ -82,14 +87,18 @@ std::vector<int> Destructible::destroy(std::vector<GLfloat> &dest)
                 it->setIsDestroyed(true);
                 removeWalls.push_back(wall_it);
             }
+        // if(wall_it > 53)
+        //     break;
     }
-
+ std::cout << "OUT OF IT :  " << wall_it << "\n";
     return removeWalls;
 }
 
 void Destructible::init1()
 {
     Texture texture("crate.png", &destructibleTexture);
+
+    _isVec = 1;
 
     GLfloat vertexData[] ={
 
@@ -2762,17 +2771,19 @@ void Destructible::init1()
     };
     
     //construct a vector from an array
-    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    _destructiblevector1.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructiblevector.size();
+    _dataSize = _destructiblevector1.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
-        walls.push_back(wall);
+        Wall wall(_destructiblevector1.at(_counter), _destructiblevector1.at(_counter + 1), true);
+        walls1.push_back(wall);
         _counter += 180;
     }
+    walls.swap(walls1);
+    _destructiblevector.swap(_destructiblevector1);
 }
 
 std::vector<GLfloat>     Destructible::getDestructibles(void)
@@ -2788,6 +2799,8 @@ std::vector<Wall>     Destructible::getWalls() const
 void Destructible::init2()
 {
     Texture texture("crate.png", &destructibleTexture);
+
+    _isVec = 2;
 
     GLfloat vertexData[] ={
 
@@ -5460,17 +5473,20 @@ void Destructible::init2()
     };
     
     //construct a vector from an array
-    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    _destructiblevector2.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructiblevector.size();
+    _dataSize = _destructiblevector2.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
-        walls.push_back(wall);
+        Wall wall(_destructiblevector2.at(_counter), _destructiblevector2.at(_counter + 1), true);
+        walls2.push_back(wall);
         _counter += 180;
     }
+
+    walls.swap(walls2);
+    _destructiblevector.swap(_destructiblevector2);
     
 }
 
@@ -8150,17 +8166,20 @@ void Destructible::init3()
     };
     
     //construct a vector from an array
-    _destructiblevector.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
+    _destructiblevector3.assign(vertexData, vertexData + sizeof(vertexData) / sizeof(GLfloat) );
     
-    _dataSize = _destructiblevector.size();
+    _dataSize = _destructiblevector3.size();
     _counter = 20;
     
     while (_counter < _dataSize)
     {
-        Wall wall(_destructiblevector.at(_counter), _destructiblevector.at(_counter + 1), true);
-        walls.push_back(wall);
+        Wall wall(_destructiblevector3.at(_counter), _destructiblevector3.at(_counter + 1), true);
+        walls3.push_back(wall);
         _counter += 180;
     }
+    walls.swap(walls3);
+    _destructiblevector.swap(_destructiblevector3);
+    
 }
 
 

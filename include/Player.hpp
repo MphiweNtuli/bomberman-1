@@ -13,12 +13,8 @@
 #define OFS_X 0.017f
 #define OFS_Y -0.02f
 
-#define KEY_ARROWS -100
-#define KEY_WASD -101
-#define KEY_IJKL -102
-
 class Player
-{ 
+{
 public:
     Player();
 	Player(std::vector<Wall> walls, Bomb *bomb);
@@ -33,11 +29,18 @@ public:
 	void draw();
     void setDestructible(Destructible destructible);
     Destructible getDestructible(void);
-    void setDestructible01(Destructible destructible01);
-    Destructible getDestructible01(void);
+    void setPlayerLife(int life);
+    int getPlayerLife(void);
+    void setPlayerScore(/*Enemy enemy*/);
+    int getPlayerScore(void);
+    void set_P_origin(void);
+    void refresh();
     
     GLfloat get_xPos(void) const;
     GLfloat get_yPos(void) const;
+    bool	get_isdead(void) const;
+    void	set_isdead(bool death);
+    void 	bomb_colision(GLfloat bx, GLfloat by);
 	void setWalls(std::vector<Wall> walls);
     GLuint getPVAO() const;
     GLuint getPUVO() const;
@@ -46,7 +49,7 @@ public:
     GLuint getPProgramId() const;
     GLuint getPTextureId() const;
 	GLuint getProgramId() const;
-    void operator=(const Player &p);
+    Player & operator=(const Player &p);
     void setCoordinates(GLfloat x, GLfloat y);
     void remove(std::vector<int> removeWalls);
 	int printVector();
@@ -54,7 +57,7 @@ public:
 	void mat4ToVector();
 	void printMatrix(std::string s);
 	std::vector<float> getModelV() const;
-	void restoreState(Player &p);
+	void restorePosition(float x, float y);
 	glm::mat4 getView() const;
 	glm::mat4 getModel() const;
 	glm::mat4 getProjection() const;
@@ -66,16 +69,15 @@ public:
 	int getX() const;
 	int getY() const;
 	std::vector<Wall> getWalls() const;
-	int keySet;
 
 private:
     Bomb *_bomb;
-    Destructible _des, _des01;
+    Destructible _des;
 	GLfloat xPos, yPos;
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
-
 	glm::mat4 _view;
     glm::mat4 _model;
+    glm::mat4 _model2;
     glm::mat4 _projection;
 	unsigned int _modelLoc;
 	unsigned int _vmodelLoc;
@@ -84,7 +86,10 @@ private:
 	std::vector<glm::vec3> normals;
 	int x;
 	int y;
+	int _life;
+	int _score;
     bool load_result;
+    bool isdead;
 	std::vector<Wall> walls;
 	std::vector<float> _modelV;
     template <class archive> friend

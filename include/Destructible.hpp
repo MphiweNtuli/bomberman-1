@@ -26,9 +26,17 @@ public:
 private:
     GLuint destructibleTexture, vao, vbo;
     GLfloat x,y;
+    int _isVec;
     std::vector<Wall> walls;
+    std::vector<Wall> walls1;
+    std::vector<Wall> walls2;
+    std::vector<Wall> walls3;
     int _counter, _dataSize;
     std::vector<GLfloat> _destructiblevector;
+    std::vector<GLfloat> _destructiblevector1;
+    std::vector<GLfloat> _destructiblevector2;
+    std::vector<GLfloat> _destructiblevector3;
+
 };
 
 #endif

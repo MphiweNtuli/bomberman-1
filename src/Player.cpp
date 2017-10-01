@@ -7,8 +7,10 @@ Player::Player()
 
 Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
+	std::cout << "In player con again\n";
+	_score = 0;
+	_life = 3;
     _bomb = bomb;
-
 	x = 0;
 	y = 0;
 	texture_programID = LoadShaders("TransformationFragmentShader.hlsl", "TextureFragmentShader.hlsl");
@@ -19,13 +21,14 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
 	_model = glm::mat4(1.0);
 
 	_projection = glm::perspective(glm::radians(30.0f), (float)WIDTH / (float) HEIGHT, 0.1f, 100.0f);
-	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
+	_model = glm::translate(_model, glm::vec3(-0.9f,  -0.9f, -3.82f));
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
 	yPos = _model[3][1];
 	xPos = _model[3][0];
+	_model2 = _model;
 	
 	_model = glm::scale(_model, glm::vec3(0.12));
+	_model2 = _model;
 
 	_view       = glm::lookAt(
 		glm::vec3(-1.0f, 2.0f,  3.0f), // Camera is at (4,3,-3), in World Space
@@ -37,7 +40,6 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
     if (load_result != true)
         std::cout << "failed to load model" << std::endl;
    this->walls = walls;
-   this->keySet = KEY_ARROWS;
 }
 
 void	Player::setWalls(std::vector<Wall> walls)
@@ -48,6 +50,28 @@ void	Player::setWalls(std::vector<Wall> walls)
 	{
 		this->walls.push_back(*it);
 	}
+}
+
+void Player::bomb_colision(GLfloat bx, GLfloat by)
+{
+	std::cout << "BOMBING ENEMIES$%%$$%%$$$$$$%%$$$$\n";
+
+	if(glm::distance(glm::vec2(bx,  by) , glm::vec2(xPos, yPos)) <= 0.12f)
+		set_isdead(true);
+
+}
+
+bool	Player::get_isdead(void) const
+{
+	return this->isdead;
+}
+
+void	Player::set_isdead(bool death)
+{
+	if (_life > 0)
+		_life--;
+	(void)death;
+	set_P_origin();
 }
 
 void	Player::remove(std::vector<int> removeWalls)
@@ -61,9 +85,32 @@ void	Player::remove(std::vector<int> removeWalls)
 		wall_it++;
 		if(wall_it > 64)
     		for (iter = removeWalls.begin(); iter != removeWalls.end(); ++iter)
+    		{
 				if (wall_it - 64 == *iter)
+				{
 					it->setIsDestroyed(true);
+				}
+			}
 	}
+}
+
+void Player::refresh()
+{
+	std::vector<Wall> v;
+	walls.swap(v);
+}
+
+void Player::set_P_origin()
+{
+	std::cout << "Player resete\n";
+	// _model = glm::translate(_model, glm::vec3(-0.5f,  0.6f, -3.82f));
+	// yPos = -0.5f;
+	// xPos = 0.6f;
+	_model = _model2;//glm::translate(_model, glm::vec3(initX,  initY, -3.82f));
+	yPos = _model[3][1];
+	xPos = _model[3][0];
+	x = 0;
+	y = 0;
 }
 
 Player::~Player()
@@ -151,8 +198,11 @@ bool Player::moveUp()
 		}
 		if (yPos + 0.098 > 0.87)
 			return false;
-    
+		
+	
+	
 		return true;
+	
 }
 
 bool Player::moveDown()
@@ -170,6 +220,7 @@ bool Player::moveDown()
 			return false;
 	
 		return true;
+
 }
 
 bool Player::moveLeft()
@@ -184,7 +235,7 @@ bool Player::moveLeft()
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 						return false;
 		}
-		if (xPos - 0.098 < -0.98)
+		if (xPos - 0.098 < -0.97)
 			return false;
 		
 		return true;
@@ -196,9 +247,14 @@ bool Player::moveRight()
 
 	std::vector<Wall>::iterator it;
 	int wall_it = 0;
+	//std::cout << "number of walls \n";
 		for (it = walls.begin(); it != walls.end(); ++it)
 		{
 			wall_it++;
+
+
+			//if(it->isDestroyed())
+			std::cout << " WALL N#" << wall_it << "  ===> " << it->getXPos()  <<  "    ;   " << it->getYPos() << std::endl;
 			if((xPos + 0.05 > it->getXPos() + OFS_X && xPos - 0.02 < it->getXPos() + OFS_X + 0.07) && !it->isDestroyed())
 				if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 					return false;
@@ -211,7 +267,7 @@ bool Player::moveRight()
 
 void Player::player_callback(GLFWwindow* window)
 {
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && this->keySet == KEY_ARROWS)
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		if(moveLeft()) {
@@ -221,7 +277,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 1)
 			y = 1;
     }
-    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && this->keySet == KEY_ARROWS)
+    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
 
 		glm::vec3 bills(0.0,0.0,0.03);
@@ -234,7 +290,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 3)
 			y = 3;
     }
-    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && this->keySet == KEY_ARROWS)
+    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
@@ -245,7 +301,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 2)
 			y = 2;
     }
-    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS && this->keySet == KEY_ARROWS)
+    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
@@ -256,111 +312,11 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 4)
 			y = 4;
     }
-
-
-
-
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && this->keySet == KEY_WASD)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		if(moveLeft()) {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-		}
-		if (x != 1)
-			y = 1;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && this->keySet == KEY_WASD)
-    {
-
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveRight()) {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-		}
-
-		if (x != 3)
-			y = 3;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && this->keySet == KEY_WASD)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveUp()){
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
-		}
-		if (x != 2)
-			y = 2;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && this->keySet == KEY_WASD)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveDown()) {
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
-		}
-		if (x != 4)
-			y = 4;
-    }
-
-
-
-if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS && this->keySet == KEY_IJKL)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		if(moveLeft()) {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-		}
-		if (x != 1)
-			y = 1;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && this->keySet == KEY_IJKL)
-    {
-
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveRight()) {
-			_model = glm::translate(_model, bills);
-			xPos = _model[3][0];
-		}
-
-		if (x != 3)
-			y = 3;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && this->keySet == KEY_IJKL)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveUp()){
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
-		}
-		if (x != 2)
-			y = 2;
-    }
-    else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS && this->keySet == KEY_IJKL)
-    {
-		glm::vec3 bills(0.0,0.0,0.03);
-		
-		if(moveDown()) {
-			_model = glm::translate(_model, bills);
-			yPos = _model[3][1];
-		}
-		if (x != 4)
-			y = 4;
-    }
-
-
     else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && _bomb->get_bombStatus() == 0)
     {
         _bomb->set_x(get_xPos());
         _bomb->set_y(get_yPos());
         _des.set_xy(get_xPos(), get_yPos());
-        _des01.set_xy(get_xPos(),get_yPos());
         _bomb->updateLocation();
         _bomb->drop();
         _bomb->setBombPlanted(true);
@@ -379,14 +335,24 @@ Destructible Player::getDestructible(void)
     return _des;
 }
 
-void Player::setDestructible01(Destructible destructible01)
+int 	Player::getPlayerLife(void)
 {
-    _des01 = destructible01;
+	return _life;
 }
 
-Destructible Player::getDestructible01(void)
+void	Player::setPlayerLife(int life)
 {
-    return _des01;
+	this->_life = life;
+}
+
+int 	Player::getPlayerScore(void)
+{
+	return _score;
+}
+
+void	Player::setPlayerScore(/*Enemy enemy*/)
+{
+	this->_score += 100;
 }
 
 GLuint Player::getProgramId() const
@@ -487,19 +453,21 @@ std::vector<float> Player::getModelV() const{
 	return (_modelV);
 }
 
-void Player::operator=(const Player &p)
+Player & Player::operator=(const Player &p)
 {
-    this->xPos = p.get_xPos();
-	this->yPos = p.get_yPos();
+ //    this->xPos = p.get_xPos();
+	// this->yPos = p.get_yPos();
+	if (this != &p)
+		*this = p;
+	return *this;
 }
 
-void Player::restoreState(Player &p)
+void Player::restorePosition(float x, float y)
 {
-	_model[3][0] = p.get_xPos();
-	_model[3][1] = p.get_yPos();
-	xPos = _model[3][0];
-	yPos = _model[3][1];
-	walls = p.getWalls();
+	_model[3][0] = x;
+	_model[3][1] = y;
+	xPos = x;
+	yPos = y;
 }
 void Player::mat4ToVector()
 {

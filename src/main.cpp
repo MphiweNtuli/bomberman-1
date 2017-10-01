@@ -21,6 +21,7 @@
 #include "screen.hpp"
 #include "PowerUp.hpp"
 #include "keyBinding.hpp"
+#include "Levels.hpp"
 
 GLFWwindow *window;
 MainMenu *mainMenu;
@@ -32,6 +33,8 @@ Keys *keys;
 Text *text;
 Enemy *enemy;
 Graphics *graphics;
+std::vector<Enemy> enemies;
+std::vector<Enemy>::iterator it;
 Player *player;
 Bomb *bomb;
 Health health; 
@@ -41,13 +44,14 @@ Destructible destructible;
 std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
-static int prev_time = glfwGetTime();
 
-static bool timeout(int seconds, int prev_time)
+void Player_colision(Player *player1, std::vector<Enemy> enemies1)
 {
-	if (glfwGetTime() - prev_time >= seconds)
-		return (true);
-	return (false);
+
+	for (it = enemies1.begin(); it != enemies1.end(); ++it)
+		if(glm::distance(glm::vec2(player1->get_xPos(),  player1->get_yPos()) , glm::vec2(it->get_xPos(), it->get_yPos())) <= 0.065f)
+			player1->set_isdead(true);
+
 }
 
 // camera
@@ -121,16 +125,16 @@ int main(void)
 	if (myWindow.initializeGlew() == false)
 		return -1;
 
+    Camera camera(cameraPos, cameraFront, cameraUp, window);
 	graphics = new Graphics();
 	bomb = new Bomb(3);
-	enemy = new Enemy();
 	text = new Text();
 
 	char bomberman[256];
 
-	char level[256];
+	char level_[256];
 	int level_num = 1;
-	sprintf(level, " Level : %d", level_num);
+	sprintf(level_, " level_ : %d", level_num);
 
 	char hearts[256];
 	int hearts_num = 3;
@@ -140,18 +144,14 @@ int main(void)
 	// int hearts_num = 3;
 	sprintf(pauseText, "Press P To Pause");
 
-	// char pausePress[256];
-	// int hearts_num = 3;
-	// sprintf(pausePress, "Pause");
-	// Health = new Token("Health");
-	// Timer = new Token("Timer");
 	Wall wall;
 	StaticWall staticWall;
+	player = new Player(staticWall.getWalls(), bomb);
+
 	Portal portal;
     Health health;
     Timer timer;
     Floor floor;
-    Camera camera(cameraPos, cameraFront, cameraUp, window);
 	mainMenu = new MainMenu(window, myWindow, graphics);
 	mainMenu->initMenuImage();
 
@@ -163,24 +163,24 @@ int main(void)
 
 	screen = new Screen(window, myWindow, graphics);
 	screen->initScreenImage();
-
-	
-
-	wall.init();
-	health.init();
-	timer.init();
-	staticWall.init();
-	player = new Player(staticWall.getWalls(), bomb);
-	portal.init();
-    health.init();
-	destructible.init3();
-    player->setDestructible(destructible);
-    listOfWalls = player->getDestructible().getDestructibles();
-	player->setWalls(destructible.getWalls());
-	// glfwSetKeyCallback(window, player->player_callback(window));
-    floor.init();
     keys = new Keys(window, myWindow, graphics, player);
 	keys->initKeysImage();
+	Destructible destructible;
+
+	Levels level(destructible, player,enemies, portal, staticWall);
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setDestructible(level.getDestructible());
+
+	for (it = enemies.begin(); it != enemies.end(); ++it)
+		it->setWalls(level.getDestructible().getWalls());
+    
+    mainMenu->initMenuImage();
+	wall.init();
+    health.init();
+    timer.init();
+    floor.init();
+    
     
 	//======== load game state ========
 	// gs.loadGameState(player, listOfWalls);
@@ -201,7 +201,7 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		bomb->explode(sound);
 		keyEvents->keyEventsWrapper(window, sound, graphics);
-		pauseMenu->updateVals(player, &listOfWalls);
+		pauseMenu->updateVals(player, &level.getListOfWalls());
 
 		switch (graphics->getDrawMode())
 		{
@@ -210,27 +210,23 @@ int main(void)
 			mainMenu->LoadMainMenuImage();
 			myWindow = mainMenu->getGameWindow();
 			window = myWindow.getWindow();
-			mainMenu->loadSave(player, &listOfWalls);
-			// glfwSetKeyCallback(window, key_callback);
+			mainMenu->loadSave(player, &level.getListOfWalls());
 			break;
 		case SETTINGS:
 			sound->playMusicForvever(MUSIC_MENU1);
 			settings->LoadSettingsImage();
 			myWindow = settings->getGameWindow();
-			//only reset the sound setting if the value is different
 			if (soundVal != settings->getSoundVal())
 			{
 				soundVal = settings->getSoundVal();
 				Mix_VolumeMusic(soundVal);
 			}
-			//only reset the display setting if the value is different
 			if (dispVal != settings->getDispChange())
 			{
 				myWindow = settings->getGameWindow();
 				window = myWindow.getWindow();
 				keyEvents->keyEventsWrapper(window, sound, graphics);
 				glfwSetKeyCallback(window, key_callback);
-				//reload the shaders each time the loop itarates in the main menu;
 				shadersID = LoadShaders("shaderVertexCoordinate.vs", "shaderFragCoordinate.fs");
 				std::cout << "1\n";
 				dispVal = settings->getDispChange();
@@ -247,58 +243,29 @@ int main(void)
 				timer.init();
 				staticWall.init();
 				player = new Player(staticWall.getWalls(), bomb);
-				//portal.init();
-				//health.init();
-				//timer.init();
 				destructible.init3();
-				// destructible01.init1();
 			}
 			break;
 		case PAUSE:
 			sound->playMusicForvever(MUSIC_MENU1);
-			// settings->toggleCommands(window);
-			//settings->initSettingsImage();
 			pauseMenu->LoadPauseImage();
 			myWindow = pauseMenu->getGameWindow();
 
-			// window = myWindow.getWindow();
-			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case SCREEN:
 			sound->playMusicForvever( MUSIC_MENU1);
-			// settings->toggleCommands();
-			// settings->initSettingsImage();
 			screen->LoadScreenImage();
 			myWindow = screen->getGameWindow();
 
-			// window = myWindow.getWindow();
-			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case KEYS:
 			sound->playMusicForvever( MUSIC_MENU1);
-			// settings->toggleCommands();
-			// settings->initSettingsImage();
 			keys->LoadKeysImage();
 			myWindow = keys->getGameWindow();
 
-			// window = myWindow.getWindow();
-			// glfwSetKeyCallback(window, key_callback);
 			break;
 		case GAMEPLAY:
 			sound->playMusicForvever(MUSIC_BACK);
-			//------------------------------
-			camera.processKeyInput();
-			glUseProgram(shadersID);
-			camera.cameraTimeLogic();
-			camera.cameraFunction(shadersID);
-			floor.draw();
-			//---------------------------------
-			wall.draw();
-
-			staticWall.draw();
-			portal.draw();
-                
-			// IMPORTANT
 			if ((player->get_yPos() > 0.708 && player->get_yPos() < 0.8124)
 				&& (player->get_xPos() > 0.5556 && player->get_xPos() < 0.7284))
 			{
@@ -319,41 +286,124 @@ int main(void)
 				if (power.HealthDisplay(1) == 1)
 					health.draw();
 			}
-			// IMPORTANT
-			
-			// Time displayed
 			time = timer.returnTime();
-                
-			player->getDestructible().draw(listOfWalls);
-			enemy->display();
-			if (timeout(100, prev_time) == true)
-			{
-				sound->stopMusic(MUSIC_BACK);
-				sound->playMusicForvever(MUSIC_MENU1);
-				graphics->setDrawMode(MAINMENU);
-				prev_time = glfwGetTime();
-			}
-			if (bomb->get_bombStatus() != 0)
-				bomb->display();
-			else if (bomb->getBombPlanted())
-			{
-				// std::cout << "i am here" << std::endl;
-				removeWalls = player->getDestructible().destroy(listOfWalls);
-				bomb->setBombPlanted(false);
-				player->remove(removeWalls);
-			}
+
 			sprintf(bomberman, "Time Left %.1f ", time); //Replaced glfwGetTime() with time variable
 			text->loadText(pauseText, 0, 580, 13);
-			// text->loadText(pausePress, 0, 560, 13);
 			text->loadText(bomberman, 250, 580, 15); //(location left /right,location up / down ,size)
-			text->loadText(level, 470, 580, 15);
+			text->loadText(level_, 470, 580, 15);
 			text->loadText(hearts, 660, 580, 15);
+			sound->playMusicForvever(MUSIC_BACK);
+			//------------------------------
+			camera.processKeyInput();
+			glUseProgram(shadersID);
+			camera.cameraTimeLogic();
+			camera.cameraFunction(shadersID);
+			floor.draw();
+			//---------------------------------
+			wall.draw();			
+			health.draw();
+			timer.draw();
+			if (level.getLevel() == 1)
+			{
+				if (level.getStart() == 1)
+				{
+					level.levelOneInit();
+					level.setStart(0);
+					timer.setTime(90);
+				}
+				level.advanceToLevelTwo();
+				level.getStaticWall().draw();
+				level.getPortal().draw();
+				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
 
-			player->init();
-			player->player_callback(window);
+				if (time == 90)
+					graphics->setDrawMode(MAINMENU); // waiting for billy
+				if (bomb->get_bombStatus() != 0)
+					bomb->display();
+				else if (bomb->getBombPlanted())
+				{
+					removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+					   bomb->setBombPlanted(false);
+					level.getPlayer()->remove(removeWalls);
 
-		default:
-			break;
+					for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+						it->remove(removeWalls);
+
+					level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+					for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+						it->bomb_colision(bomb->get_x(), bomb->get_y());
+				}
+			}
+			else if (level.getLevel() == 2)
+			{
+				if (level.getStart() == 1)
+				{
+					level.levelTwoInit();
+					timer.setTime(90);
+					level.setStart(0);
+				}
+				level.advanceToLevelThree();
+				level.getStaticWall().draw();
+				level.getPortal().draw();
+				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+
+				if (time == 90)
+					graphics->setDrawMode(MAINMENU);
+				if (bomb->get_bombStatus() != 0)
+					bomb->display();
+				else if (bomb->getBombPlanted())
+				{
+					removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+					   bomb->setBombPlanted(false);
+					level.getPlayer()->remove(removeWalls);
+				}
+			}
+			else if (level.getLevel() == 3)
+			{
+				if (level.getStart() == 1)
+				{
+					level.levelThreeInit();
+					timer.setTime(90);
+					level.setStart(0);
+				}
+				level.advanceToLevelWin();
+				level.getStaticWall().draw();
+				level.getPortal().draw();
+				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+
+				if (time == 90)
+					graphics->setDrawMode(MAINMENU);
+				if (bomb->get_bombStatus() != 0)
+					bomb->display();
+				else if (bomb->getBombPlanted())
+				{
+					removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
+					   bomb->setBombPlanted(false);
+					level.getPlayer()->remove(removeWalls);
+				}
+			}
+			else
+			{
+				graphics->setDrawMode(MAINMENU);
+				std::cout << "gameover baby\n";
+			}
+			level.getPlayer()->init();
+			level.getPlayer()->player_callback(window);
+			for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+				if(!it->get_isdead())
+					it->init();
+
+			for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+				it->enemy_callback();
+
+			Player_colision(level.getPlayer(), level.getEnemies());
+                if(level.getPlayer()->getPlayerLife() == 0)
+                    graphics->setDrawMode(MAINMENU);
+
+	default:
+		break;
 		}
 
 		// Swap buffers
