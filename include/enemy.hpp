@@ -41,6 +41,7 @@ class Enemy
 		Destructible getDestructible01(void);
 		void remove(std::vector<int> removeWalls);
 		void refresh();
+		void refresh2();
 		
 		
 
@@ -61,6 +62,7 @@ class Enemy
 		GLuint enemy_programID, pUVO, pVAO, pVBO, pEBO, enemyTextId;
 		glm::mat4 _view;
 	    glm::mat4 _model;
+	    glm::mat4 _model2;
 	    glm::mat4 _projection;
 		unsigned int _modelLoc;
 		std::vector<glm::vec3> _vertices;

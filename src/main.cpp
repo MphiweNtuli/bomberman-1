@@ -236,6 +236,14 @@ int main(void)
                    		std::cout << "level 2 baby6\n";
                     	level.getPlayer()->remove(removeWalls);
 
+                    	for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->remove(removeWalls);
+
+						level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+						for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->bomb_colision(bomb->get_x(), bomb->get_y());
+
 					}
 				}
 				else if (level.getLevel() == 3)
@@ -261,6 +269,14 @@ int main(void)
 						removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
                    		bomb->setBombPlanted(false);
                     	level.getPlayer()->remove(removeWalls);
+
+                    	for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->remove(removeWalls);
+
+						level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+						for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+							it->bomb_colision(bomb->get_x(), bomb->get_y());
 					}
 				}
 				else
@@ -294,8 +310,8 @@ int main(void)
 					it->enemy_callback();
 
 				Player_colision(level.getPlayer(), level.getEnemies());
-				if(level.getPlayer()->get_isdead())
-					graphics->setDrawMode(MAINMENU);
+				// if(level.getPlayer()->get_isdead())
+				// 	graphics->setDrawMode(MAINMENU);
 				//player->player_callback(window);
 
 			default:

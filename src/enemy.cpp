@@ -25,8 +25,9 @@ Enemy::Enemy(std::vector<Wall> walls, GLfloat x_in, GLfloat y_in)
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	yPos = _model[3][1];
 	xPos = _model[3][0];
-	
+	_model2 = _model;
 	_model = glm::scale(_model, glm::vec3(0.8));
+	// _model2 = _model;
  
 	_view       = glm::lookAt(
 		glm::vec3(-1.0f, 2.0f,  3.0f), // Camera is at (4,3,-3), in World Space
@@ -50,10 +51,14 @@ void Enemy::bomb_colision(GLfloat bx, GLfloat by)
 
 void Enemy::refresh()
 {
+	x = 0;
+	y = 0;
 	isdead = false;
 	std::vector<Wall> v;
 	walls.swap(v);
-	_model = glm::translate(_model, glm::vec3(initX,  initY, -3.82f));
+	_model = _model2;//glm::translate(_model, glm::vec3(initX,  initY, -3.82f));
+	yPos = _model[3][1];
+	xPos = _model[3][0];
 }
 
 bool	Enemy::get_isdead(void)const

@@ -38,6 +38,7 @@ public:
 private:
 	int _level;
 	int _start;
+    int _numEnemies;
 	Destructible _destructible;
     std::vector<Enemy> _enemies;
     std::vector<Enemy>::iterator iter;

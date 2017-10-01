@@ -5,6 +5,7 @@ Levels::Levels(Destructible dest, Player *player, std::vector<Enemy> &enemies, P
 	_enemies = enemies;
 	_start = 1;
 	_level = 1;
+	_numEnemies = 6;
 }
 
 Levels::Levels(Levels const &target)
@@ -57,33 +58,56 @@ std::vector<Enemy> & Levels::getEnemies()
 
 void	Levels::advanceToLevelTwo()
 {
+	int i = 0;
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		if (iter->get_isdead())
+			i++;
 	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
 		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
 		{
-			_player->set_P_origin();
-			_start++;
-			_level = 2;
+			if (i == _numEnemies)
+			{
+				_player->set_P_origin();
+				_start++;
+				_level = 2;
+			}
 		}
 }
 
 void	Levels::advanceToLevelThree()
 {
+	int i = 0;
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		if (iter->get_isdead())
+			i++;
+
 	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
 		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
 		{
-			_player->set_P_origin();
-			_start++;
-			_level = 3;
+			if (i == _numEnemies)
+			{
+				_player->set_P_origin();
+				_start++;
+				_level = 3;
+			}
 		}
 }
 
 void	Levels::advanceToLevelWin()
 {
+	int i = 0;
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		if (iter->get_isdead())
+			i++;
+
 	if ((_player->get_yPos() < 0.726 && _player->get_yPos() > 0.6) 
 		&& (_player->get_xPos() > -0.8844 && _player->get_xPos() < -0.8240))
 		{
-			_start++;
-			_level = 4;
+			if (i == _numEnemies)
+			{
+				_start++;
+				_level = 4;
+			}
 		}
 }
 
@@ -146,6 +170,18 @@ void Levels::levelThreeInit()
 	_player->setWalls(_destructible.getWalls());
 	_player->setDestructible(_destructible);
     _listOfWalls = _player->getDestructible().getDestructibles();
+
+    for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+    	iter->refresh();
+
+    for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+		iter->setDestructible(_destructible);
+
+	for (iter = _enemies.begin(); iter != _enemies.end(); ++iter)
+	{
+		iter->setWalls(_wall.getWalls());
+		iter->setWalls(_destructible.getWalls());
+	}
 }
 
 Destructible Levels::getDestructible(void)
