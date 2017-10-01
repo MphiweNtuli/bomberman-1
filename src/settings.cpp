@@ -69,7 +69,12 @@ void Settings::executeCommand(int input){
         case command.Screen :
             std::cout << "Screen" << std::endl;
             // modDisplay(); 
-            graphics->setDrawMode(SCREEN);
+            graphics->setDrawMode(KEYS);
+        break;
+        // case command.Screen :
+        //     std::cout << "Screen" << std::endl;
+        //     // modDisplay(); 
+        //     graphics->setDrawMode(SCREEN);
         break;
         case command.Volume :
             std::cout << "Volume:" << std::endl;

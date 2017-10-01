@@ -23,6 +23,7 @@ enum GameMode
 	SETTINGS, 
 	PAUSE,
 	SCREEN,
+	KEYS,
 };
 
 class Graphics

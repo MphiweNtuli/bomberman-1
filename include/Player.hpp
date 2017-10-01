@@ -13,6 +13,10 @@
 #define OFS_X 0.017f
 #define OFS_Y -0.02f
 
+#define KEY_ARROWS -100
+#define KEY_WASD -101
+#define KEY_IJKL -102
+
 class Player
 { 
 public:
@@ -62,6 +66,7 @@ public:
 	int getX() const;
 	int getY() const;
 	std::vector<Wall> getWalls() const;
+	int keySet;
 
 private:
     Bomb *_bomb;

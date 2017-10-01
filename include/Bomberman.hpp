@@ -7,6 +7,8 @@
 # define FULLHEIGHT 1080
 #define  FULLWIDTH 1920
 
+
+
 #define GLEW_STATIC
 
 #include "glew.h"
@@ -22,6 +24,7 @@
 #include "Texture.hpp"
 #include "shader.hpp"
 #include "controls.hpp"
+// #include "Window.hpp"
 #include <list>
 #include "Sound.hpp"
 #include "Wall.hpp"
