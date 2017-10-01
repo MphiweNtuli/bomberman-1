@@ -1,125 +1,126 @@
-#include "settings.hpp"
+#include "keyBinding.hpp"
 #include "Texture.hpp"
 
-Settings::Settings() {}
+Keys::Keys() {}
 
-Settings::Settings(GLFWwindow *window, Window &gameWindow, Graphics *g)
+Keys::Keys(GLFWwindow *window, Window &gameWindow, Graphics *g, Player *_player)
 {
-   settingsInput command;
+   keyInput command;
 
-   this->_input = command.Sound;
+   this->_input = command.Arrows;
    this->_window = window;
     this->_gameWindow = gameWindow;
     this->_dispChange = false;    
    graphics = g;
-    _volumeLevel = 100;
+   player = _player;
+    // _sound_val = 100;
 }
 
-Settings::~Settings(){
+Keys::~Keys(){
 	delete graphics;
 }
 
-void Settings::Music(){
-    
+
+ void Keys::ArrowKeys()
+ {
+    player->keySet = KEY_ARROWS;
+ }
+
+
+void Keys::WASDKeys()
+{
+    player->keySet = KEY_WASD;
+    std::cout << "inside the fun\n";
 }
 
-void Settings::Screen(){
 
-} 
+void Keys::IJKLKeys()
+{
+        player->keySet = KEY_IJKL;
+}
 
-Window Settings::getGameWindow()
+Window Keys::getGameWindow()
 {
     return (_gameWindow);
 }
-void Settings::modSound()
-{
-    if (_sound_val > 0)
-        _sound_val = 0;
-    else
-        _sound_val = _volumeLevel;
-}
-void Settings::modVolume()
-{
-    if (_volumeLevel >= 100)
-        _volumeLevel = 0;
-    else
-        _volumeLevel += 25;
-    _sound_val = _volumeLevel;
-}
-void Settings::modDisplay()
-{
-    _gameWindow.changeWindowSize();
-    _dispChange = !(_dispChange);
-}
-int Settings::getSoundVal()
-{
-    return (_sound_val);
-}
-bool Settings::getDispChange(){
-    return (_dispChange);
-}
-void Settings::executeCommand(int input){
-    settingsInput command;
+// void Settings::modSound()
+// {
+//     if (_sound_val == 100)
+//         _sound_val = 0;
+//     else if (_sound_val == 0)
+//         _sound_val = 100;
+// }
+// void Settings::modDisplay()
+// {
+//     _gameWindow.changeWindowSize();
+//     _dispChange = !(_dispChange);
+// }
+// int Settings::getSoundVal()
+// {
+//     return (_sound_val);
+// }
+// bool Settings::getDispChange(){
+//     return (_dispChange);
+// }
+void Keys::executeCommand(int input){
+    keyInput command;
     switch(input){ 
-        case command.Sound :
-            std::cout << "Sound:" << std::endl;
-            modSound();
+        case command.Arrows :
+            std::cout << "Arrows:" << std::endl;
+            ArrowKeys();
             glClear(GL_COLOR_BUFFER_BIT);
         break;
-        case command.Keys :
-            std::cout << "KEYS" << std::endl;
+        case command.WASD :
+            std::cout << "WASD" << std::endl;
+            player->keySet = KEY_WASD;//WASDKeys();
+            std::cout << "out side \n";
             // modDisplay(); 
-            graphics->setDrawMode(KEYS);
+            // graphics->setDrawMode(SCREEN);
         break;
-        case command.Screen :
-            std::cout << "Screen" << std::endl;
-            // modDisplay(); 
-            graphics->setDrawMode(SCREEN);
-        break;
-        case command.Volume :
-            std::cout << "Volume:" << std::endl;
-            modVolume();
-            //glClear(GL_COLOR_BUFFER_BIT);
-            break;
+        case command.IJKL:
+            std::cout << "IJKL\n";
+            IJKLKeys();
+            // graphics->setDrawMode(MAINMENU);
+            // std::cou
         case command.Return :
             graphics->setDrawMode(MAINMENU);
-            std::cout << "Settings" << std::endl;
+            // std::cout << "Settings" << std::endl;
             
         break;
     }
 }
-void Settings::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
+void Keys::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
     this->_window = nWindow;
     this->_gameWindow = nGameWindow;
     graphics = g;
 }
 
-void Settings::toggleCommands(/*GLFWwindow* window,*/ int key)
+void Keys::toggleCommands(/*GLFWwindow* window,*/ int key)
 {
-     settingsInput command;
+     keyInput command;
       switch(key){
         case GLFW_KEY_DOWN :
             this->_input++;
             if(_input > command.Return)
-                this->_input = command.Sound;
+                this->_input = command.Arrows;
             std::cout << _input << std::endl;
             break;
         
         case GLFW_KEY_UP :
             this->_input--;
-            if(_input < command.Sound)
+            if(_input < command.Arrows)
                 this->_input = command.Return;
             std::cout << _input << std::endl;
             break;
         case GLFW_KEY_ENTER :
                executeCommand(_input);
     }
-    initSettingsImage();
+    initKeysImage();
     
 }
 
 
-void Settings::setGraphics(Graphics *g)
+void Keys::setGraphics(Graphics *g)
 {
     graphics = g;
 }
@@ -136,20 +137,21 @@ void Settings::setGraphics(Graphics *g)
 //     return (_sound_val);
 // }
 
-void Settings::initSettingsImage()
+void Keys::initKeysImage()
 {
     glGenVertexArrays(1, &menuVAO);
     glBindVertexArray(menuVAO);
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("BombermanModels/settings_new.png", &menuTexture);
+    Texture texture("BombermanModels/keys.png", &menuTexture);
 
-    static const GLfloat g_vertex_buffer_sound[] = { 
+
+    static const GLfloat g_vertex_buffer_arrow[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,//sound
+        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
         -0.65f, 0.0f, -0.25f,    0.0f, 0.0f,
@@ -158,20 +160,20 @@ void Settings::initSettingsImage()
         
     };
 
-    static const GLfloat g_vertex_buffer_screen[] = { 
+    static const GLfloat g_vertex_buffer_wasd[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f 
+        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
         
 
-        -0.65f, -0.11f, -0.25f,       0.0f, 0.0f,
-        -0.55f, -0.07f, -0.25f,       0.0f, 0.0f, //screen
-        -0.65f, -0.04f, -0.25f,       0.0f, 0.0f,
+        -0.65f, -0.11f, -0.25f,      0.0f, 0.0f,
+        -0.55f, -0.07f, -0.25f,      0.0f, 0.0f, //continue
+        -0.65f, -0.04f, -0.25f,      0.0f, 0.0f,
     };
 
-    static const GLfloat g_vertex_buffer_volume[] = { 
+    static const GLfloat g_vertex_buffer_ijkl[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -179,40 +181,29 @@ void Settings::initSettingsImage()
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
 
         -0.65f, -0.12f, -0.35f,   0.0f, 0.0f,
-        -0.55f, -0.16f, -0.35f,  0.0f, 0.0f, //volume
+        -0.55f, -0.16f, -0.35f,  0.0f, 0.0f, //settings
         -0.65f, -0.19f, -0.35f,  0.0f, 0.0f
     };
 
-    static const GLfloat g_vertex_buffer_key[] = { 
+    static const GLfloat g_vertex_buffer_exit[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
         1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
         1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
 
-        -0.65f, -0.25f, -0.35f,  0.0f, 0.0f,
-        -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //return
+        -0.65f, -0.25f, -0.35f,   0.0f, 0.0f,
+        -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //Settings
         -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
-    };
-    static const GLfloat g_vertex_buffer_return[] = { 
-        
-        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-        
-        -0.65f, -0.37f, -0.35f,   0.0f, 0.0f,
-        -0.55f, -0.43f, -0.35f,  0.0f, 0.0f, //Exit
-        -0.65f, -0.47f, -0.35f,  0.0f, 0.0f,
-
-    };
+    }; 
+    // };
 
     GLuint indeces[] =
     {
         0,1,3,
         1,2,3,
         4,5,6,
-        //7,8,9,
+        //7,8,9
     };
 
     glGenBuffers(1, &menuEBO);
@@ -222,23 +213,19 @@ void Settings::initSettingsImage()
 
     if (this->_input == 0)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_sound), g_vertex_buffer_sound, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_arrow), g_vertex_buffer_arrow, GL_STATIC_DRAW);
     }
     else if (this->_input == 1)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_wasd), g_vertex_buffer_wasd, GL_STATIC_DRAW);
     }
     else if (this->_input == 2)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_volume), g_vertex_buffer_volume, GL_STATIC_DRAW);   
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_ijkl), g_vertex_buffer_ijkl, GL_STATIC_DRAW);   
     }
     else if (this->_input == 3)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_key), g_vertex_buffer_key, GL_STATIC_DRAW);   
-    }
-    else if (this->_input == 4)
-    {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_return), g_vertex_buffer_return, GL_STATIC_DRAW);   
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_exit), g_vertex_buffer_exit, GL_STATIC_DRAW);   
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, menuEBO);
@@ -259,7 +246,7 @@ void Settings::initSettingsImage()
     glEnableVertexAttribArray(1);
 }
 
-void Settings::LoadSettingsImage()
+void Keys::LoadKeysImage()
 {       
    // glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	glBindTexture(GL_TEXTURE_2D, menuTexture);
@@ -271,12 +258,12 @@ void Settings::LoadSettingsImage()
     glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 }
 
-int Settings::getInput()
+int Keys::getInput()
 {
 	return _input;
 }
 
-void Settings::SettingsCleanup()
+void Keys::KeysCleanup()
 {
     // Cleanup VBO
     glDeleteBuffers(1, &menuVBO);

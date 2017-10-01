@@ -12,7 +12,7 @@ Settings::Settings(GLFWwindow *window, Window &gameWindow, Graphics *g)
     this->_gameWindow = gameWindow;
     this->_dispChange = false;    
    graphics = g;
-    _volumeLevel = 100;
+    // _sound_val = 100;
 }
 
 Settings::~Settings(){
@@ -33,18 +33,10 @@ Window Settings::getGameWindow()
 }
 void Settings::modSound()
 {
-    if (_sound_val > 0)
+    if (_sound_val == 100)
         _sound_val = 0;
-    else
-        _sound_val = _volumeLevel;
-}
-void Settings::modVolume()
-{
-    if (_volumeLevel >= 100)
-        _volumeLevel = 0;
-    else
-        _volumeLevel += 25;
-    _sound_val = _volumeLevel;
+    else if (_sound_val == 0)
+        _sound_val = 100;
 }
 void Settings::modDisplay()
 {
@@ -66,21 +58,11 @@ void Settings::executeCommand(int input){
             modSound();
             glClear(GL_COLOR_BUFFER_BIT);
         break;
-        case command.Keys :
-            std::cout << "KEYS" << std::endl;
-            // modDisplay(); 
-            graphics->setDrawMode(KEYS);
-        break;
         case command.Screen :
             std::cout << "Screen" << std::endl;
             // modDisplay(); 
             graphics->setDrawMode(SCREEN);
         break;
-        case command.Volume :
-            std::cout << "Volume:" << std::endl;
-            modVolume();
-            //glClear(GL_COLOR_BUFFER_BIT);
-            break;
         case command.Return :
             graphics->setDrawMode(MAINMENU);
             std::cout << "Settings" << std::endl;
@@ -143,7 +125,7 @@ void Settings::initSettingsImage()
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("BombermanModels/settings_new.png", &menuTexture);
+    Texture texture("BombermanModels/settings.png", &menuTexture);
 
     static const GLfloat g_vertex_buffer_sound[] = { 
         
@@ -171,19 +153,7 @@ void Settings::initSettingsImage()
         -0.65f, -0.04f, -0.25f,       0.0f, 0.0f,
     };
 
-    static const GLfloat g_vertex_buffer_volume[] = { 
-        
-        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-
-        -0.65f, -0.12f, -0.35f,   0.0f, 0.0f,
-        -0.55f, -0.16f, -0.35f,  0.0f, 0.0f, //volume
-        -0.65f, -0.19f, -0.35f,  0.0f, 0.0f
-    };
-
-    static const GLfloat g_vertex_buffer_key[] = { 
+    static const GLfloat g_vertex_buffer_return[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -194,25 +164,15 @@ void Settings::initSettingsImage()
         -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //return
         -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
     };
-    static const GLfloat g_vertex_buffer_return[] = { 
         
-        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-        
-        -0.65f, -0.37f, -0.35f,   0.0f, 0.0f,
-        -0.55f, -0.43f, -0.35f,  0.0f, 0.0f, //Exit
-        -0.65f, -0.47f, -0.35f,  0.0f, 0.0f,
-
-    };
+    // };
 
     GLuint indeces[] =
     {
         0,1,3,
         1,2,3,
         4,5,6,
-        //7,8,9,
+        //7,8,9
     };
 
     glGenBuffers(1, &menuEBO);
@@ -229,14 +189,6 @@ void Settings::initSettingsImage()
         glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_screen), g_vertex_buffer_screen, GL_STATIC_DRAW);
     }
     else if (this->_input == 2)
-    {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_volume), g_vertex_buffer_volume, GL_STATIC_DRAW);   
-    }
-    else if (this->_input == 3)
-    {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_key), g_vertex_buffer_key, GL_STATIC_DRAW);   
-    }
-    else if (this->_input == 4)
     {
         glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_return), g_vertex_buffer_return, GL_STATIC_DRAW);   
     }

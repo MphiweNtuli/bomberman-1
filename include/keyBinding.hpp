@@ -1,5 +1,5 @@
-#ifndef SETTINGS_HPP
-# define SETTINGS_HPP
+#ifndef KEYBINDING_HPP
+# define KEYBINDING_HPP
 
 //# include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -8,56 +8,62 @@
 
 #include "Window.hpp"
 #include "shader.hpp"
+#include "Graphics.hpp"
+#include "Bomberman.hpp"
+#include "Player.hpp"
 
-struct settingsInput
+#define KEY_ARROWS -100
+#define KEY_WASD -101
+#define KEY_IJKL -102
+
+struct keyInput
 {
     enum GameCommands{
-        Sound,
-        Screen,
-        Volume,
-        Keys,
+        Arrows,
+        WASD,
+        IJKL,
         Return,
-
     };
 };
  
-class Settings
+class Keys
 {
     public:
-		Settings();
-        Settings(GLFWwindow *window, Window &, Graphics *g);
-        ~Settings();
+		Keys();
+        Keys(GLFWwindow *window, Window &, Graphics *g, Player *_player);
+        ~Keys();
  
-        Settings(Settings& obj);
-        Settings& operator=(Settings& obj);
-        void Music();
-        void Screen(/*int input*/);
+        Keys(Keys& obj);
+        Keys& operator=(Keys& obj);
+        void ArrowKeys();
+        void WASDKeys();
+        void IJKLKeys();
+        // void Screen(/*int input*/);
         // void gameContinue();
         // void modSound();
+        // // int getSoundVal();
+        // void Return();
+        // void modSound();
+        // void modDisplay();
         // int getSoundVal();
-        void Return();
-        void modSound();
-        void modVolume();
-        void modDisplay();
-        int getSoundVal();
-        bool getDispChange();
+        // bool getDispChange();
         void setWindow(GLFWwindow *, Window &, Graphics *);
         Window getGameWindow();
         void toggleCommands(/*GLFWwindow* window, */int key);
         void executeCommand(int command);
         void setGraphics(Graphics *g);
         // void gameHighScore();
-        void initSettingsImage();
-        void LoadSettingsImage();
-        void SettingsCleanup();
+        void initKeysImage();
+        void LoadKeysImage();
+        void KeysCleanup();
         int getInput();
     
     private:
-        int _volumeLevel;
         int _input;
         bool _dispChange;
         int _sound_val;      
         GLFWwindow* _window;
+        Player *player;
         Window _gameWindow;
         Graphics *graphics;
         GLuint menuVAO, menuTexture, menuEBO, menuVBO, programID;

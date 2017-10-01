@@ -14,10 +14,7 @@ struct settingsInput
     enum GameCommands{
         Sound,
         Screen,
-        Volume,
-        Keys,
         Return,
-
     };
 };
  
@@ -37,7 +34,6 @@ class Settings
         // int getSoundVal();
         void Return();
         void modSound();
-        void modVolume();
         void modDisplay();
         int getSoundVal();
         bool getDispChange();
@@ -53,7 +49,6 @@ class Settings
         int getInput();
     
     private:
-        int _volumeLevel;
         int _input;
         bool _dispChange;
         int _sound_val;      
