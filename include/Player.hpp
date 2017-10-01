@@ -77,6 +77,7 @@ private:
 	GLuint texture_programID, pUVO, pVAO, pVBO, pEBO, pTextureId, programID;
 	glm::mat4 _view;
     glm::mat4 _model;
+    glm::mat4 _model2;
     glm::mat4 _projection;
 	unsigned int _modelLoc;
 	unsigned int _vmodelLoc;

@@ -310,8 +310,8 @@ int main(void)
 					it->enemy_callback();
 
 				Player_colision(level.getPlayer(), level.getEnemies());
-				// if(level.getPlayer()->get_isdead())
-				// 	graphics->setDrawMode(MAINMENU);
+				if(level.getPlayer()->getPlayerLife() == 0)
+					graphics->setDrawMode(MAINMENU);
 				//player->player_callback(window);
 
 			default:

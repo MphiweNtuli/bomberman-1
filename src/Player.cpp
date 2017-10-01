@@ -25,8 +25,10 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
 	_model = glm::rotate(_model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	yPos = _model[3][1];
 	xPos = _model[3][0];
+	_model2 = _model;
 	
 	_model = glm::scale(_model, glm::vec3(0.12));
+	_model2 = _model;
 
 	_view       = glm::lookAt(
 		glm::vec3(-1.0f, 2.0f,  3.0f), // Camera is at (4,3,-3), in World Space
@@ -66,7 +68,10 @@ bool	Player::get_isdead(void) const
 
 void	Player::set_isdead(bool death)
 {
-	this->isdead = death;
+	if (_life > 0)
+		_life--;
+	(void)death;
+	set_P_origin();
 }
 
 void	Player::remove(std::vector<int> removeWalls)
@@ -98,7 +103,14 @@ void Player::refresh()
 void Player::set_P_origin()
 {
 	std::cout << "Player resete\n";
-	_model = glm::translate(_model, glm::vec3(-0.6f,  0.6f, -3.82f));
+	// _model = glm::translate(_model, glm::vec3(-0.5f,  0.6f, -3.82f));
+	// yPos = -0.5f;
+	// xPos = 0.6f;
+	_model = _model2;//glm::translate(_model, glm::vec3(initX,  initY, -3.82f));
+	yPos = _model[3][1];
+	xPos = _model[3][0];
+	x = 0;
+	y = 0;
 }
 
 Player::~Player()
@@ -223,7 +235,7 @@ bool Player::moveLeft()
 					if(yPos - 0.03 < it->getYPos() + OFS_Y && yPos + 0.03 > it->getYPos() + OFS_Y - 0.06)
 						return false;
 		}
-		if (xPos - 0.098 < -0.98)
+		if (xPos - 0.098 < -0.97)
 			return false;
 		
 		return true;
