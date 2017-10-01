@@ -37,6 +37,7 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
     if (load_result != true)
         std::cout << "failed to load model" << std::endl;
    this->walls = walls;
+   this->keySet = KEY_ARROWS;
 }
 
 void	Player::setWalls(std::vector<Wall> walls)
@@ -210,7 +211,7 @@ bool Player::moveRight()
 
 void Player::player_callback(GLFWwindow* window)
 {
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS && this->keySet == KEY_ARROWS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		if(moveLeft()) {
@@ -220,7 +221,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 1)
 			y = 1;
     }
-    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS && this->keySet == KEY_ARROWS)
     {
 
 		glm::vec3 bills(0.0,0.0,0.03);
@@ -233,7 +234,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 3)
 			y = 3;
     }
-    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && this->keySet == KEY_ARROWS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
@@ -244,7 +245,7 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 2)
 			y = 2;
     }
-    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS && this->keySet == KEY_ARROWS)
     {
 		glm::vec3 bills(0.0,0.0,0.03);
 		
@@ -255,6 +256,105 @@ void Player::player_callback(GLFWwindow* window)
 		if (x != 4)
 			y = 4;
     }
+
+
+
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && this->keySet == KEY_WASD)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		if(moveLeft()) {
+			_model = glm::translate(_model, bills);
+			xPos = _model[3][0];
+		}
+		if (x != 1)
+			y = 1;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS && this->keySet == KEY_WASD)
+    {
+
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveRight()) {
+			_model = glm::translate(_model, bills);
+			xPos = _model[3][0];
+		}
+
+		if (x != 3)
+			y = 3;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && this->keySet == KEY_WASD)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveUp()){
+			_model = glm::translate(_model, bills);
+			yPos = _model[3][1];
+		}
+		if (x != 2)
+			y = 2;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS && this->keySet == KEY_WASD)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveDown()) {
+			_model = glm::translate(_model, bills);
+			yPos = _model[3][1];
+		}
+		if (x != 4)
+			y = 4;
+    }
+
+
+
+if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS && this->keySet == KEY_IJKL)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		if(moveLeft()) {
+			_model = glm::translate(_model, bills);
+			xPos = _model[3][0];
+		}
+		if (x != 1)
+			y = 1;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS && this->keySet == KEY_IJKL)
+    {
+
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveRight()) {
+			_model = glm::translate(_model, bills);
+			xPos = _model[3][0];
+		}
+
+		if (x != 3)
+			y = 3;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS && this->keySet == KEY_IJKL)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveUp()){
+			_model = glm::translate(_model, bills);
+			yPos = _model[3][1];
+		}
+		if (x != 2)
+			y = 2;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS && this->keySet == KEY_IJKL)
+    {
+		glm::vec3 bills(0.0,0.0,0.03);
+		
+		if(moveDown()) {
+			_model = glm::translate(_model, bills);
+			yPos = _model[3][1];
+		}
+		if (x != 4)
+			y = 4;
+    }
+
+
     else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && _bomb->get_bombStatus() == 0)
     {
         _bomb->set_x(get_xPos());

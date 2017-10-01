@@ -20,12 +20,14 @@
 #include "pause.hpp"
 #include "screen.hpp"
 #include "PowerUp.hpp"
+#include "keyBinding.hpp"
 
 GLFWwindow *window;
 MainMenu *mainMenu;
 Settings *settings;
 PauseMenu *pauseMenu;
 Screen *screen;
+Keys *keys;
 
 Text *text;
 Enemy *enemy;
@@ -80,6 +82,11 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         {
         	std::cout << "inside \n";
         	screen->toggleCommands(/*window,*/ key);
+        }
+         else if (graphics->getDrawMode() == KEYS)
+        {
+        	std::cout << "inside \n";
+        	keys->toggleCommands(/*window,*/ key);
         }
 	}
 	else if (key == GLFW_KEY_P)
@@ -158,6 +165,8 @@ int main(void)
 	screen = new Screen(window, myWindow, graphics);
 	screen->initScreenImage();
 
+	
+
 	wall.init();
 	health.init();
 	timer.init();
@@ -172,6 +181,8 @@ int main(void)
 	player->setWalls(destructible.getWalls());
 	// glfwSetKeyCallback(window, player->player_callback(window));
     floor.init();
+    keys = new Keys(window, myWindow, graphics, player);
+	keys->initKeysImage();
     
 	//======== load game state ========
 	gs.loadGameState(player, listOfWalls);
@@ -259,6 +270,16 @@ int main(void)
 			// settings->initSettingsImage();
 			screen->LoadScreenImage();
 			myWindow = screen->getGameWindow();
+
+			// window = myWindow.getWindow();
+			// glfwSetKeyCallback(window, key_callback);
+			break;
+		case KEYS:
+			sound->playMusicForvever( MUSIC_MENU1);
+			// settings->toggleCommands();
+			// settings->initSettingsImage();
+			keys->LoadKeysImage();
+			myWindow = keys->getGameWindow();
 
 			// window = myWindow.getWindow();
 			// glfwSetKeyCallback(window, key_callback);
