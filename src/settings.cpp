@@ -125,7 +125,7 @@ void Settings::initSettingsImage()
     
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    Texture texture("BombermanModels/settings.png", &menuTexture);
+    Texture texture("BombermanModels/settings_new.png", &menuTexture);
 
     static const GLfloat g_vertex_buffer_sound[] = { 
         
