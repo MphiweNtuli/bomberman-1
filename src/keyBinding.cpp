@@ -1,33 +1,45 @@
-#include "screen.hpp"
+#include "keyBinding.hpp"
 #include "Texture.hpp"
 
-Screen::Screen() {}
+Keys::Keys() {}
 
-Screen::Screen(GLFWwindow *window, Window &gameWindow, Graphics *g)
+Keys::Keys(GLFWwindow *window, Window &gameWindow, Graphics *g, Player *_player)
 {
-   screenInput command;
+   keyInput command;
 
-   this->_input = command.Full;
+   this->_input = command.Arrows;
    this->_window = window;
     this->_gameWindow = gameWindow;
     this->_dispChange = false;    
    graphics = g;
+   player = _player;
     // _sound_val = 100;
 }
 
-Screen::~Screen(){
+Keys::~Keys(){
 	delete graphics;
 }
 
-// void Settings::Music(){
-    
-// }
 
-// void Settings::Screen(){
+ void Keys::ArrowKeys()
+ {
+    player->keySet = KEY_ARROWS;
+ }
 
-// } 
 
-Window Screen::getGameWindow()
+void Keys::WASDKeys()
+{
+    player->keySet = KEY_WASD;
+    std::cout << "inside the fun\n";
+}
+
+
+void Keys::IJKLKeys()
+{
+        player->keySet = KEY_IJKL;
+}
+
+Window Keys::getGameWindow()
 {
     return (_gameWindow);
 }
@@ -38,119 +50,104 @@ Window Screen::getGameWindow()
 //     else if (_sound_val == 0)
 //         _sound_val = 100;
 // }
-void Screen::modDisplay() 
-{
-    _gameWindow.changeWindowSize();
-    _dispChange = !(_dispChange);
-}
-int Screen::getSoundVal()
-{ 
-    return (_sound_val);
-}
-bool Screen::getDispChange(){
-    return (_dispChange);
-}
-
-void Screen::executeCommand(int input){
-    screenInput command;
+// void Settings::modDisplay()
+// {
+//     _gameWindow.changeWindowSize();
+//     _dispChange = !(_dispChange);
+// }
+// int Settings::getSoundVal()
+// {
+//     return (_sound_val);
+// }
+// bool Settings::getDispChange(){
+//     return (_dispChange);
+// }
+void Keys::executeCommand(int input){
+    keyInput command;
     switch(input){ 
-        case command.Full :
-            std::cout << "Full" << std::endl;
-            // this->_gameWindow.changeWindowSize();
-            std::cout << "after the changeWindowSize has been called \n";
+        case command.Arrows :
+            std::cout << "Arrows:" << std::endl;
+            ArrowKeys();
             glClear(GL_COLOR_BUFFER_BIT);
         break;
-        case command.Windowed :
-            std::cout << "Windowed" << std::endl;
-            this->_gameWindow.switchToWindowed(this->_window);
+        case command.WASD :
+            std::cout << "WASD" << std::endl;
+            player->keySet = KEY_WASD;//WASDKeys();
+            std::cout << "out side \n";
+            // modDisplay(); 
+            // graphics->setDrawMode(SCREEN);
         break;
-        case command.Medium :
+        case command.IJKL:
+            std::cout << "IJKL\n";
+            IJKLKeys();
             // graphics->setDrawMode(MAINMENU);
-            std::cout << "Medium" << std::endl;
-            this->_gameWindow.switchToMedium(this->_window, 800 , 600);
-            
-        break;
-         case command.Large :
-            std::cout << " Large" << std::endl;
-             this->_gameWindow.switchToLarge(this->_window, 1026, 768);
-            modSound();
-            glClear(GL_COLOR_BUFFER_BIT);
-        break;
-        case command.ReturnSetting :
-            graphics->setDrawMode(SETTINGS);
-            // modDisplay();
-        break;
-        case command.ReturnMenu :
-            graphics->setDrawMode(SETTINGS);
+            // std::cou
+        case command.Return :
+            graphics->setDrawMode(MAINMENU);
+            // std::cout << "Settings" << std::endl;
             
         break;
     }
 }
-void Screen::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
+void Keys::setWindow(GLFWwindow *nWindow, Window &nGameWindow, Graphics *g){
     this->_window = nWindow;
     this->_gameWindow = nGameWindow;
     graphics = g;
 }
 
-void Screen::toggleCommands(/*GLFWwindow* window,*/ int key)
+void Keys::toggleCommands(/*GLFWwindow* window,*/ int key)
 {
-     screenInput command;
+     keyInput command;
       switch(key){
         case GLFW_KEY_DOWN :
             this->_input++;
-            if(_input > command.ReturnMenu)
-                this->_input = command.Full;
+            if(_input > command.Return)
+                this->_input = command.Arrows;
             std::cout << _input << std::endl;
             break;
         
         case GLFW_KEY_UP :
             this->_input--;
-            if(_input < command.Full)
-                this->_input = command.ReturnMenu;
+            if(_input < command.Arrows)
+                this->_input = command.Return;
             std::cout << _input << std::endl;
             break;
         case GLFW_KEY_ENTER :
                executeCommand(_input);
     }
-    initScreenImage();
+    initKeysImage();
     
 }
 
 
-void Screen::setGraphics(Graphics *g)
+void Keys::setGraphics(Graphics *g)
 {
     graphics = g;
 }
 
-void Screen::modSound()
-{
-    if (_sound_val == 100)
-        _sound_val = 0;
-    else if (_sound_val == 0)
-        _sound_val = 100;
-}
+// void Settings::modSound()
+// {
+//     if (_sound_val == 100)
+//         _sound_val = 0;
+//     else if (_sound_val == 0)
+//         _sound_val = 100;
+// }
 // int Settings::getSoundVal()
 // {
 //     return (_sound_val);
 // }
 
-void Screen::initScreenImage()
+void Keys::initKeysImage()
 {
     glGenVertexArrays(1, &menuVAO);
     glBindVertexArray(menuVAO);
     
     // Create and compile our GLSL program from the shaders
-    std::cout << "inside the initScreenImage fuction before loading the shaders\n";
     programID = LoadShaders( "MenuVertexShader.vertexshader", "MenuFragmentShader.fragmentshader" );
-    
-    std::cout << "after the shaders have been loaded\n";
-    
-    Texture texture("BombermanModels/screen.png", &menuTexture);
-    
-    std::cout << "after the texture file has been loaded\n";
+    Texture texture("BombermanModels/keys.png", &menuTexture);
 
 
-        static const GLfloat g_vertex_buffer_full[] = { 
+    static const GLfloat g_vertex_buffer_arrow[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -163,7 +160,7 @@ void Screen::initScreenImage()
         
     };
 
-    static const GLfloat g_vertex_buffer_windowed[] = { 
+    static const GLfloat g_vertex_buffer_wasd[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -176,7 +173,7 @@ void Screen::initScreenImage()
         -0.65f, -0.04f, -0.25f,      0.0f, 0.0f,
     };
 
-    static const GLfloat g_vertex_buffer_medium[] = { 
+    static const GLfloat g_vertex_buffer_ijkl[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -188,7 +185,7 @@ void Screen::initScreenImage()
         -0.65f, -0.19f, -0.35f,  0.0f, 0.0f
     };
 
-    static const GLfloat g_vertex_buffer_large[] = { 
+    static const GLfloat g_vertex_buffer_exit[] = { 
         
         -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
         -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
@@ -198,20 +195,8 @@ void Screen::initScreenImage()
         -0.65f, -0.25f, -0.35f,   0.0f, 0.0f,
         -0.55f, -0.30f, -0.35f,  0.0f, 0.0f, //Settings
         -0.65f, -0.35f, -0.35f,  0.0f, 0.0f
-    };
-
-    static const GLfloat g_vertex_buffer_returnMenu[] = { 
-        
-        -1.0f, -1.0f, 0.0f,       0.0f, 1.0f, //1.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f,      0.0f, 0.0f, //1.0f, 0.0f
-        1.0f, 1.0f, 0.0f,       1.0f, 0.0f, //0.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,      1.0f, 1.0f, //0.0f, 1.0f
-        
-        -0.65f, -0.37f, -0.35f,   0.0f, 0.0f,
-        -0.55f, -0.43f, -0.35f,  0.0f, 0.0f, //Exit
-        -0.65f, -0.47f, -0.35f,  0.0f, 0.0f,
-        
-    };
+    }; 
+    // };
 
     GLuint indeces[] =
     {
@@ -220,34 +205,27 @@ void Screen::initScreenImage()
         4,5,6,
         //7,8,9
     };
-    std::cout << "before the buffers have been loaded\n";
 
     glGenBuffers(1, &menuEBO);
     glGenBuffers(1, &menuVBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, menuVBO);
-    std::cout << "before glBufferData\n";
-
 
     if (this->_input == 0)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_full), g_vertex_buffer_full, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_arrow), g_vertex_buffer_arrow, GL_STATIC_DRAW);
     }
     else if (this->_input == 1)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_windowed), g_vertex_buffer_windowed, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_wasd), g_vertex_buffer_wasd, GL_STATIC_DRAW);
     }
     else if (this->_input == 2)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_medium), g_vertex_buffer_medium, GL_STATIC_DRAW);   
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_ijkl), g_vertex_buffer_ijkl, GL_STATIC_DRAW);   
     }
     else if (this->_input == 3)
     {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_large), g_vertex_buffer_large, GL_STATIC_DRAW);
-    }
-    else if (this->_input == 4)
-    {
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_returnMenu), g_vertex_buffer_returnMenu, GL_STATIC_DRAW);   
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_exit), g_vertex_buffer_exit, GL_STATIC_DRAW);   
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, menuEBO);
@@ -268,7 +246,7 @@ void Screen::initScreenImage()
     glEnableVertexAttribArray(1);
 }
 
-void Screen::LoadScreenImage()
+void Keys::LoadKeysImage()
 {       
    // glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 	glBindTexture(GL_TEXTURE_2D, menuTexture);
@@ -278,15 +256,14 @@ void Screen::LoadScreenImage()
     // Draw the triangle !
 	glBindVertexArray(menuVAO);
     glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
-    std::cout << "after drawing\n";
 }
 
-int Screen::getInput()
+int Keys::getInput()
 {
 	return _input;
 }
 
-void Screen::ScreenCleanup()
+void Keys::KeysCleanup()
 {
     // Cleanup VBO
     glDeleteBuffers(1, &menuVBO);
