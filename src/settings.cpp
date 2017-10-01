@@ -35,7 +35,6 @@ void Settings::modSound()
 {
     if (_sound_val > 0)
         _sound_val = 0;
-<<<<<<< Updated upstream
     else
         _sound_val = _volumeLevel;
 }
@@ -47,11 +46,6 @@ void Settings::modVolume()
         _volumeLevel += 25;
     _sound_val = _volumeLevel;
 }
-=======
-    else if (_sound_val == 0)
-        _sound_val = 100;
-} 
->>>>>>> Stashed changes
 void Settings::modDisplay()
 {
     _gameWindow.changeWindowSize();
