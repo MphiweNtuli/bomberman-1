@@ -45,12 +45,24 @@ std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
 
+static bool timeout(int seconds)
+{
+    static int time = glfwGetTime();
+    
+    if (glfwGetTime() - time >= seconds)
+        return (true);
+    return (false);
+}
+
 void Player_colision(Player *player1, std::vector<Enemy> enemies1)
 {
 
 	for (it = enemies1.begin(); it != enemies1.end(); ++it)
 		if(glm::distance(glm::vec2(player1->get_xPos(),  player1->get_yPos()) , glm::vec2(it->get_xPos(), it->get_yPos())) <= 0.065f)
+        {
 			player1->set_isdead(true);
+            //player1->setPlayerLife(player1->getPlayerLife() - 1);
+        }
 
 }
 
@@ -137,8 +149,8 @@ int main(void)
 	sprintf(level_, " level_ : %d", level_num);
 
 	char hearts[256];
-	int hearts_num = 3;
-	sprintf(hearts, "Lives: %d", hearts_num);
+	//int hearts_num = 3;
+	//sprintf(hearts, "Lives: %d", hearts_num);
 
 	char pauseText[256];
 	// int hearts_num = 3;
@@ -180,6 +192,8 @@ int main(void)
     health.init();
     timer.init();
     floor.init();
+    
+   
     
     
 	//======== load game state ========
@@ -288,6 +302,7 @@ int main(void)
 			}
 			time = timer.returnTime();
 
+            sprintf(hearts, "Lives: %d", level.getPlayer()->getPlayerLife());
 			sprintf(bomberman, "Time Left %.1f ", time); //Replaced glfwGetTime() with time variable
 			text->loadText(pauseText, 0, 580, 13);
 			text->loadText(bomberman, 250, 580, 15); //(location left /right,location up / down ,size)
@@ -310,15 +325,21 @@ int main(void)
 				{
 					level.levelOneInit();
 					level.setStart(0);
-					timer.setTime(90);
+					timer.setTime(20);
+                    timeout(10);
 				}
 				level.advanceToLevelTwo();
 				level.getStaticWall().draw();
 				level.getPortal().draw();
 				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
 
-				if (time == 90)
-					graphics->setDrawMode(MAINMENU); // waiting for billy
+				if (timeout(10) == true)
+                {
+                    level.getPlayer()->setPlayerLife(level.getPlayer()->getPlayerLife() - 1);
+                    timer.setTime(90);
+                    if (level.getPlayer()->getPlayerLife() == 0)
+                        ;//graphics->setDrawMode(MAINMENU);
+                }
 				if (bomb->get_bombStatus() != 0)
 					bomb->display();
 				else if (bomb->getBombPlanted())

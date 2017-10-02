@@ -9,7 +9,7 @@ Player::Player(std::vector<Wall> walls, Bomb *bomb)
 {
 	std::cout << "In player con again\n";
 	_score = 0;
-	_life = 3;
+	_life = 5;
     _bomb = bomb;
 	x = 0;
 	y = 0;
@@ -462,13 +462,15 @@ Player & Player::operator=(const Player &p)
 	return *this;
 }
 
-void Player::restorePosition(float x, float y)
+void Player::restoreState(Player &p)
 {
-	_model[3][0] = x;
-	_model[3][1] = y;
-	xPos = x;
-	yPos = y;
+    _model[3][0] = p.get_xPos();
+    _model[3][1] = p.get_yPos();
+    xPos = _model[3][0];
+    yPos = _model[3][1];
+    walls = p.getWalls();
 }
+
 void Player::mat4ToVector()
 {
     int len = 0;
