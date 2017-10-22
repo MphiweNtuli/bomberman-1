@@ -45,14 +45,14 @@ std::vector <GLfloat> listOfWalls;
 
 bool clockTimer = false;
 
-static bool timeout(int seconds)
+/*static bool timeout(int seconds)
 {
     static int time = glfwGetTime();
     
     if (glfwGetTime() - time >= seconds)
         return (true);
     return (false);
-}
+}*/
 
 void Player_colision(Player *player1, std::vector<Enemy> enemies1)
 {
@@ -301,6 +301,7 @@ int main(void)
 					health.draw();
 			}
 			time = timer.returnTime();
+			std::cout << "time testing: " << time << std::endl;
 
             sprintf(hearts, "Lives: %d", level.getPlayer()->getPlayerLife());
 			sprintf(bomberman, "Time Left %.1f ", time); //Replaced glfwGetTime() with time variable
@@ -325,20 +326,23 @@ int main(void)
 				{
 					level.levelOneInit();
 					level.setStart(0);
-					timer.setTime(20);
-                    timeout(10);
+					timer.setTime(13);
+                    //timeout(10);
 				}
 				level.advanceToLevelTwo();
 				level.getStaticWall().draw();
 				level.getPortal().draw();
 				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
+				std::cout << "timer get time: " << timer.returnTime() << std::endl;
 
-				if (timeout(10) == true)
+				if (timer.returnTime() == 0.0)
                 {
                     level.getPlayer()->setPlayerLife(level.getPlayer()->getPlayerLife() - 1);
-                    timer.setTime(90);
+                    timer.setTime(13);
+					std::cout << "player life" << level.getPlayer()->getPlayerLife()<< std::endl;
+					std::cout << "timer after setting: " << timer.returnTime()<< std::endl;
                     if (level.getPlayer()->getPlayerLife() == 0)
-                        ;//graphics->setDrawMode(MAINMENU);
+                        graphics->setDrawMode(MAINMENU);
                 }
 				if (bomb->get_bombStatus() != 0)
 					bomb->display();

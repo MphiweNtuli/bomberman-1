@@ -14,8 +14,9 @@ public:
     void    displayTime();
     float returnTime();
     void setTime(float time);
+	float getTime();
     void    increaseTime();
-    int     time;
+    float     time;
 
 private:
     GLuint timerTexture, vao, vbo;
