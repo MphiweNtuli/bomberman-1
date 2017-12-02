@@ -61,7 +61,7 @@ void Player_colision(Player *player1, std::vector<Enemy> enemies1)
 		if(glm::distance(glm::vec2(player1->get_xPos(),  player1->get_yPos()) , glm::vec2(it->get_xPos(), it->get_yPos())) <= 0.065f)
         {
 			player1->set_isdead(true);
-            //player1->setPlayerLife(player1->getPlayerLife() - 1);
+            player1->setPlayerLife(player1->getPlayerLife() - 1);
         }
 
 }
@@ -190,7 +190,7 @@ int main(void)
     mainMenu->initMenuImage();
 	wall.init();
     health.init();
-    timer.init();
+    //timer.init();
     floor.init();
     
    
@@ -326,24 +326,35 @@ int main(void)
 				{
 					level.levelOneInit();
 					level.setStart(0);
-					timer.setTime(13);
-                    //timeout(10);
+					timer.setTime(26);
 				}
 				level.advanceToLevelTwo();
 				level.getStaticWall().draw();
 				level.getPortal().draw();
 				level.getPlayer()->getDestructible().draw(level.getListOfWalls());
 				std::cout << "timer get time: " << timer.returnTime() << std::endl;
+				std::cout << "get time function: " << timer.getTime() << std::endl;
+				std::cout << "get time glfw: " << glfwGetTime() << std::endl;
 
-				if (timer.returnTime() == 0.0)
+
+				if (timer.returnTime() == 0.00)
                 {
+                	std::cout <<"YEEEEEEEEES!!!!!!!!!!!!!\n";
+                	std::cout <<"YEEEEEEEEES!!!!!!!!!!!!!\n";
+                	std::cout <<"YEEEEEEEEES!!!!!!!!!!!!!\n";
+                	std::cout <<"YEEEEEEEEES!!!!!!!!!!!!!\n";
                     level.getPlayer()->setPlayerLife(level.getPlayer()->getPlayerLife() - 1);
-                    timer.setTime(13);
+                    timer.setTime(26);
+                    std::cout <<"SET TIME!!!!!!!!!!!!!\n";
+                    std::cout <<"SET TIME!!!!!!!!!!!!!\n";
+                    std::cout <<"SET TIME!!!!!!!!!!!!!\n";
 					std::cout << "player life" << level.getPlayer()->getPlayerLife()<< std::endl;
 					std::cout << "timer after setting: " << timer.returnTime()<< std::endl;
                     if (level.getPlayer()->getPlayerLife() == 0)
                         graphics->setDrawMode(MAINMENU);
                 }
+                
+
 				if (bomb->get_bombStatus() != 0)
 					bomb->display();
 				else if (bomb->getBombPlanted())
@@ -383,6 +394,11 @@ int main(void)
 					removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
 					   bomb->setBombPlanted(false);
 					level.getPlayer()->remove(removeWalls);
+
+					level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+					for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+						it->bomb_colision(bomb->get_x(), bomb->get_y());
 				}
 			}
 			else if (level.getLevel() == 3)
@@ -407,6 +423,11 @@ int main(void)
 					removeWalls = level.getPlayer()->getDestructible().destroy(level.getListOfWalls());
 					   bomb->setBombPlanted(false);
 					level.getPlayer()->remove(removeWalls);
+
+					level.getPlayer()->bomb_colision(bomb->get_x(), bomb->get_y());
+
+					for (it = level.getEnemies().begin(); it != level.getEnemies().end(); ++it)
+						it->bomb_colision(bomb->get_x(), bomb->get_y());
 				}
 			}
 			else

@@ -16,15 +16,13 @@ void Timer::increaseTime(){
 }
 
 float Timer::returnTime(){
-    if ((time - glfwGetTime()) < 0)
-        return (0);
-	std::cout << "time to display " << (time - glfwGetTime()) << std::endl;
-    return (time - glfwGetTime());
+    return (time - glfwGetTime() < 0) ? 0.00 : time - glfwGetTime();
 }
 
 void Timer::setTime(float time)
 {
-    this->time = time;
+    glfwSetTime(0.0);
+    this->time = (time - glfwGetTime());
 }
 
 float Timer::getTime()
